@@ -60,14 +60,28 @@ class _MedicationListState extends State<MedicationList> {
       );
     } else {
       return loading ? Loading() : Container(
-        height: 80,
-        width: 300,
+        height: 190,
+        width: 500,
         padding: const EdgeInsets.fromLTRB(30, 15, 30, 15),
-        child: Text('You have not added anything to this list yet',
-          textAlign: TextAlign.center,
-          style: new TextStyle(
-          color: Colors.blue, fontSize: 20.0),
-        ),
+        child: Column(
+          children: [
+            Text('This is your medication tracker.',
+            textAlign: TextAlign.center,
+            style: new TextStyle(
+            color: Colors.grey[900], fontSize: 25.0),
+          ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+            ),
+            Text('You can add medications or supplements that you take daily'
+            ' to the tracker by clicking the button below. Everyday you should check'
+            ' your medication off the list when you take it!',
+              textAlign: TextAlign.center,
+              style: new TextStyle(
+                  color: Colors.grey[600], fontSize: 20.0),
+            ),
+
+        ]),
       );
     }
   }

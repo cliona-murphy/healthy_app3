@@ -184,9 +184,17 @@ class _MedicationTileState extends State<MedicationTile> {
         margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
           child: CheckboxListTile(
             title: Text(widget.medication.medicineName,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),),
-            subtitle: widget.taken ? Text("Taken at ${widget.timeTaken}") :
-            Text("Take at ${widget.medication.timeToTake}"),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),),
+            subtitle: widget.taken ? Text("Taken at ${widget.timeTaken}",
+            style: TextStyle(
+              fontSize: 20,
+            ),
+            ) :
+            Text("Take at ${widget.medication.timeToTake}",
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ),
             secondary: IconButton(
               icon: Icon(Icons.edit),
               onPressed: (){

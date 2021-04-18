@@ -46,7 +46,11 @@ class _MedicationTrackerState extends State<MedicationTracker> {
         initialEntryMode: TimePickerEntryMode.input,
       );
       timeSelected = true;
-      timeString = "${selectedTime.hour}:${selectedTime.minute}";
+      String selectedTimeMinuteString = selectedTime.minute.toString();
+      if (selectedTime.minute < 10){
+        selectedTimeMinuteString = "0${selectedTime.minute}";
+      }
+      timeString = "${selectedTime.hour}:${selectedTimeMinuteString}";
   }
 
 
@@ -171,18 +175,25 @@ class _MedicationTrackerState extends State<MedicationTracker> {
             child: Center(
               child: Column(
                   children: [
-                      Padding(padding: EdgeInsets.only(top: 30.0)),
+                      Padding(padding: EdgeInsets.fromLTRB(0, 30.0, 0, 0.0)),
                       StreamProvider<List<MedicationChecklist>>.value(
                           value: DatabaseService(uid: userId).getLoggedMedications(),
                         child: MedicationList(),
                       ),
+                      Padding(padding: EdgeInsets.fromLTRB(0, 30.0, 0, 0.0)),
                       Container(
+                        width: 150,
+                        height: 60,
                         padding: const EdgeInsets.all(10.0),
                         child: ElevatedButton(
                           onPressed: (){
                             addItem(context);
                           },
-                          child: Text("Add Item"),
+                          child: Text("Add Item",
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
+                          ),
                         ),
                       ),
                   ]),
