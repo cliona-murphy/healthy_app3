@@ -73,7 +73,7 @@ class _MedicationListState extends State<MedicationList> {
             Padding(
               padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
             ),
-            Text('You can add medications or supplements'
+            Text('You can add medications or supplements that you take daily'
             ' to the tracker by clicking the button below. Everyday you should check'
             ' your medication off the list when you take it!',
               textAlign: TextAlign.center,

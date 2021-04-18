@@ -171,11 +171,12 @@ class _MedicationTrackerState extends State<MedicationTracker> {
             child: Center(
               child: Column(
                   children: [
-                      Padding(padding: EdgeInsets.only(top: 30.0)),
+                      Padding(padding: EdgeInsets.fromLTRB(0, 30.0, 0, 0.0)),
                       StreamProvider<List<MedicationChecklist>>.value(
                           value: DatabaseService(uid: userId).getLoggedMedications(),
                         child: MedicationList(),
                       ),
+                      Padding(padding: EdgeInsets.fromLTRB(0, 30.0, 0, 0.0)),
                       Container(
                         width: 150,
                         height: 60,
