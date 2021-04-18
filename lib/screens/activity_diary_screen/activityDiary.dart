@@ -89,13 +89,18 @@ class _ActivityDiaryState extends State<ActivityDiary> {
                     Padding(padding: EdgeInsets.only(top: 30.0)),
                     ActivityList(),
                     Container(
+                      height: 60,
+                      width: 150,
                       padding: const EdgeInsets.all(10.0),
                       child: ElevatedButton(
                         onPressed: (){
                           addItem(context);
                           //addItem(context);
                         },
-                        child: Text("Add Item"),
+                        child: Text("Add Item",
+                          style: TextStyle(
+                          fontSize: 20,
+                        ),),
                       ),
                     ),
                   ]),
