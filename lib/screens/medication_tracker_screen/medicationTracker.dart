@@ -177,12 +177,18 @@ class _MedicationTrackerState extends State<MedicationTracker> {
                         child: MedicationList(),
                       ),
                       Container(
+                        width: 150,
+                        height: 60,
                         padding: const EdgeInsets.all(10.0),
                         child: ElevatedButton(
                           onPressed: (){
                             addItem(context);
                           },
-                          child: Text("Add Item"),
+                          child: Text("Add Item",
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
+                          ),
                         ),
                       ),
                   ]),
