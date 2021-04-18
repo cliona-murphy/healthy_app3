@@ -26,21 +26,6 @@ class _SignInState extends State<SignIn> {
   Widget build(BuildContext context) {
     return loading ? Loading() : Scaffold(
       backgroundColor: Colors.grey[200],
-      //Colors.lightBlue[50],
-      // appBar: AppBar(
-      //   backgroundColor: Colors.lightBlue,
-      //   elevation: 0.0,
-      //   title: Text("Sign in to Healthy App"),
-      //   actions: <Widget>[
-      //     FlatButton.icon(
-      //       icon: Icon(Icons.person),
-      //       label: Text("Register"),
-      //       onPressed: () {
-      //         widget.toggleView();
-      //       },
-      //     ),
-      //   ],
-      // ),
       body: Column(
         children: [
           Padding(padding: EdgeInsets.only(top:50)),
