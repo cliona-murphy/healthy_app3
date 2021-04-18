@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:healthy_app/models/arguments.dart';
 import 'package:healthy_app/screens/home/settings_list.dart';
 import 'package:healthy_app/screens/home/settings_page.dart';
+import 'package:healthy_app/screens/home/wrapper.dart';
 import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/services/database.dart';
 import 'package:healthy_app/shared/ConstantVars.dart';
@@ -104,25 +105,10 @@ class _HomeState extends State<Home> {
   }
 
   Widget build(BuildContext context){
-    return StreamBuilder(
-      stream: Firestore.instance.collection('settings').document(userId).snapshots(),
-        builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          var country, age, weight;
-          if (snapshot.hasData) {
-            country = snapshot.data['country'];
-            age = snapshot.data['age'].toDouble();
-            weight = snapshot.data['weight'].toDouble();
-          } else {
-            country = "";
-            age = 0.0;
-            weight = 0.0;
-          }
           return Scaffold(
             appBar: AppBar(
               leading: GestureDetector(
                 onTap: () {
-                  /* Write listener code here */
-                  print("Calendar View Selected");
                   renderCalendar();
                 },
                 child: Icon(
@@ -179,7 +165,6 @@ class _HomeState extends State<Home> {
               currentIndex: _selectedIndex,
             ),
           );
-        });
   }
   void choiceAction(String choice){
     if(choice == ConstantVars.Settings){
@@ -191,8 +176,13 @@ class _HomeState extends State<Home> {
     }
     else if(choice == ConstantVars.SignOut){
       _auth.signOut();
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Wrapper(),
+          ));
+      }
       print('SignOut');
-    }
   }
 
   String getCurrentDate(){
