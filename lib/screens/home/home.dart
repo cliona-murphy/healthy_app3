@@ -105,19 +105,6 @@ class _HomeState extends State<Home> {
   }
 
   Widget build(BuildContext context){
-    return StreamBuilder(
-      stream: Firestore.instance.collection('settings').document(userId).snapshots(),
-        builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          var country, age, weight;
-          if (snapshot.hasData) {
-            country = snapshot.data['country'];
-            age = snapshot.data['age'].toDouble();
-            weight = snapshot.data['weight'].toDouble();
-          } else {
-            country = "";
-            age = 0.0;
-            weight = 0.0;
-          }
           return Scaffold(
             appBar: AppBar(
               leading: GestureDetector(
@@ -178,7 +165,6 @@ class _HomeState extends State<Home> {
               currentIndex: _selectedIndex,
             ),
           );
-        });
   }
   void choiceAction(String choice){
     if(choice == ConstantVars.Settings){
