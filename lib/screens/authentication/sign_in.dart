@@ -1,3 +1,4 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/shared/constants.dart';
@@ -78,19 +79,20 @@ class _SignInState extends State<SignIn> {
                       if (result == null) {
                         setState(() {
                         error = "could not sign in with those credentials";
+
                         loading = false;
                         });
+                          return Flushbar(
+                            backgroundColor: Colors.red[600],
+                            duration: Duration(seconds: 2),
+                            flushbarPosition: FlushbarPosition.TOP,
+                            title: 'Error',
+                            message: "Could not sign in with those credentials.",
+                          )..show(context);
                       }
                     }
                   }
                 ),
-                SizedBox(height: 12.0),
-                Text(
-                  error,
-                  style: TextStyle(
-                    color: Colors.red,
-                  ),
-                )
               ],
             ),
           ),
