@@ -45,8 +45,10 @@ class _NutrientTileState extends State<NutrientTile> {
         margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
         child: CheckboxListTile(
           title: Text(widget.tile.tileContent,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),),
-          subtitle: Text(widget.tile.hintText),
+            style: TextStyle(fontSize: 23.0),),
+          subtitle: Text(widget.tile.hintText,
+            style: TextStyle(fontSize: 17.0),
+          ),
           value: isSelected,
           onChanged: (bool newValue) {
             setState(() {
