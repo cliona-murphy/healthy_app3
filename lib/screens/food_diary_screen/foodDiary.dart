@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:healthy_app/models/food.dart';
 import 'package:healthy_app/services/database.dart';
 import 'package:healthy_app/shared/loading.dart';
@@ -47,9 +48,11 @@ class _FoodDiaryState extends State<FoodDiary> {
             child : SingleChildScrollView(
               child: Column(
                 children: [
-                  //Text("Food name"),
                   TextField(
                     controller: customController,
+                    maxLength: 50,
+                    maxLengthEnforced: true,
+                    inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[a-zA-Z ]")),],
                     decoration: InputDecoration(
                       hintText: "food name",
                     ),
@@ -57,6 +60,9 @@ class _FoodDiaryState extends State<FoodDiary> {
                   TextField(
                     controller: calorieController,
                     keyboardType: TextInputType.number,
+                    inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[0-9]")),],
+                    maxLength: 4,
+                    maxLengthEnforced: true,
                     decoration: InputDecoration(
                       hintText: "calories",
                     ),

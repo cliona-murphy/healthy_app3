@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:healthy_app/models/medication.dart';
 import 'package:healthy_app/models/medication_checklist.dart';
 import 'package:healthy_app/services/auth.dart';
@@ -59,12 +60,15 @@ class _MedicationTrackerState extends State<MedicationTracker> {
         return AlertDialog(
           title: Text("Enter details here:"),
           content: Container(
-            height: 100,
+            height: 130,
             child : SingleChildScrollView(
               child: Column(
                 children: [
                   TextField(
                     controller: nameController,
+                    maxLength: 15,
+                    maxLengthEnforced: true,
+                    inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[a-zA-Z 0-9]")),],
                     decoration: InputDecoration(
                       hintText: "medication/supplement name",
                     ),
