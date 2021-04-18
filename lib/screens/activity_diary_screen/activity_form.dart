@@ -154,7 +154,7 @@ class _ActivityFormState extends State<ActivityForm> {
                     child: Text(
                       "What type of activity did you do?",
                       style: TextStyle(
-                          color: Colors.grey, fontWeight: FontWeight.w500),
+                          color: Colors.grey, fontWeight: FontWeight.w500, fontSize: 15),
                     ),
                   ),
                    Padding(padding: const EdgeInsets.only(top: 10.0),),
@@ -176,11 +176,11 @@ class _ActivityFormState extends State<ActivityForm> {
                         showAsSingleSetting: false),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 10.0, top: 10.0),
+                    padding: const EdgeInsets.only(left: 10.0, top: 15.0),
                     child: Text(
                       "What distance did you do?",
                       style: TextStyle(
-                          color: Colors.grey, fontWeight: FontWeight.w500),
+                          color: Colors.grey, fontWeight: FontWeight.w500, fontSize: 15),
                     ),
                   ),
                   Padding(padding: const EdgeInsets.only(top: 10.0),),
@@ -218,7 +218,7 @@ class _ActivityFormState extends State<ActivityForm> {
                     child: Text(
                       "How long did it take you?",
                       style: TextStyle(
-                          color: Colors.grey, fontWeight: FontWeight.w500),
+                          color: Colors.grey, fontWeight: FontWeight.w500, fontSize: 15),
                     ),
                   ),
                   Padding(padding: const EdgeInsets.only(top: 10.0),),
@@ -256,7 +256,7 @@ class _ActivityFormState extends State<ActivityForm> {
                     child: Text(
                       "How many calories did you burn?",
                       style: TextStyle(
-                          color: Colors.grey, fontWeight: FontWeight.w500),
+                          color: Colors.grey, fontWeight: FontWeight.w500, fontSize: 15),
                     ),
                   ),
                   Padding(padding: const EdgeInsets.only(top: 10.0),),

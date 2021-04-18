@@ -61,14 +61,23 @@ class _ActivityListState extends State<ActivityList> {
       );
     } else {
       return loading ? Loading() : Container(
-        height: 80,
-        width: 300,
+        height: 130,
+        width: 500,
         padding: const EdgeInsets.fromLTRB(30, 15, 30, 15),
-        child: Text('You have not added anything to this list yet',
-          textAlign: TextAlign.center,
-          style: new TextStyle(
-              color: Colors.blue, fontSize: 20.0),
-        ),
+        child: Column(
+          children: [
+            Text('This is your activity diary.',
+            textAlign: TextAlign.center,
+            style: new TextStyle(
+                color: Colors.grey[900], fontSize: 25.0),
+          ),
+            Padding(padding: const EdgeInsets.fromLTRB(30, 5, 30, 15),),
+            Text('You can add an activity to the diary by clicking the button below.',
+              textAlign: TextAlign.center,
+              style: new TextStyle(
+                  color: Colors.grey[600], fontSize: 20.0),
+            ),
+        ]),
       );
     }
   }

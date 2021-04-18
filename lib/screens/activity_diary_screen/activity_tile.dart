@@ -194,16 +194,16 @@ class _ActivityTileState extends State<ActivityTile> {
           children: [
             ListTile(
               leading: Icon(Icons.arrow_drop_down_circle),
-              title: Text(widget.activity.activityType.toString()),
+              title: Text(widget.activity.activityType.toString(), style: TextStyle(fontSize: 23),),
               subtitle: Text("${widget.activity.calories.toInt()} calories",
-                style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                style: TextStyle(color: Colors.black.withOpacity(0.6), fontSize: 17),
               ),
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
               child: Text(
                 'You ${checkActivityType(widget.activity.activityType)} ${widget.activity.distance.toInt()} km in ${widget.activity.duration.toInt()} minutes',
-                style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                style: TextStyle(color: Colors.black.withOpacity(0.6), fontSize: 17),
               ),
             ),
             ButtonBar(
