@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:healthy_app/models/arguments.dart';
 import 'package:healthy_app/screens/home/settings_list.dart';
 import 'package:healthy_app/screens/home/settings_page.dart';
+import 'package:healthy_app/screens/home/wrapper.dart';
 import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/services/database.dart';
 import 'package:healthy_app/shared/ConstantVars.dart';
@@ -121,8 +122,6 @@ class _HomeState extends State<Home> {
             appBar: AppBar(
               leading: GestureDetector(
                 onTap: () {
-                  /* Write listener code here */
-                  print("Calendar View Selected");
                   renderCalendar();
                 },
                 child: Icon(
@@ -191,8 +190,13 @@ class _HomeState extends State<Home> {
     }
     else if(choice == ConstantVars.SignOut){
       _auth.signOut();
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Wrapper(),
+          ));
+      }
       print('SignOut');
-    }
   }
 
   String getCurrentDate(){
