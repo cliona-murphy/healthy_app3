@@ -125,8 +125,16 @@ class _FoodTileState extends State<FoodTile> {
             });
           },
         ),
-        title: Text(widget.food.foodName),
-        subtitle: Text("${widget.food.calories.toString()} calories"),
+        title: Text(widget.food.foodName,
+        style: TextStyle(
+          fontSize: 20,
+        ),
+        ),
+        subtitle: Text("${widget.food.calories.toString()} calories",
+          style: TextStyle(
+            fontSize: 15,
+          ),
+        ),
       );
   }
 }

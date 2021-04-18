@@ -26,12 +26,20 @@ class _FoodListState extends State<FoodList> {
       return Container(
         height: 80,
         width: 300,
-        padding: const EdgeInsets.fromLTRB(30, 20, 30, 15),
-        child: Text('Click to log a food',
-          textAlign: TextAlign.center,
-          style: new TextStyle(
-              color: Colors.grey, fontSize: 15.0),
-        ),
+        padding: const EdgeInsets.fromLTRB(30, 10, 30, 15),
+        child: Column(
+          children: [
+            Text('What did you eat?',
+            textAlign: TextAlign.center,
+            style: new TextStyle(
+                color: Colors.grey, fontSize: 20.0),
+          ),
+            Text('Click to log a food.',
+              textAlign: TextAlign.center,
+              style: new TextStyle(
+                  color: Colors.grey, fontSize: 20.0),
+            ),
+        ]),
       );
     }
   }
