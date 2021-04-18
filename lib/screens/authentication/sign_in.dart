@@ -27,11 +27,11 @@ class _SignInState extends State<SignIn> {
     return loading ? Loading() : Scaffold(
       backgroundColor: Colors.grey[200],
       body: Column(
+        // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Padding(padding: EdgeInsets.only(top:50)),
+          Padding(padding: EdgeInsets.only(top:40)),
           Text("Welcome Back!",
           style: TextStyle(
-            //fontFamily: 'Raleway',
             fontWeight: FontWeight.bold,
             fontSize: 30,
           ),
