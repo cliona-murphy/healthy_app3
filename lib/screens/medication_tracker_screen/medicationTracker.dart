@@ -46,7 +46,11 @@ class _MedicationTrackerState extends State<MedicationTracker> {
         initialEntryMode: TimePickerEntryMode.input,
       );
       timeSelected = true;
-      timeString = "${selectedTime.hour}:${selectedTime.minute}";
+      String selectedTimeMinuteString = selectedTime.minute.toString();
+      if (selectedTime.minute < 10){
+        selectedTimeMinuteString = "0${selectedTime.minute}";
+      }
+      timeString = "${selectedTime.hour}:${selectedTimeMinuteString}";
   }
 
 
