@@ -13,6 +13,7 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:healthy_app/models/pie_data.dart';
 import 'package:healthy_app/shared/globals.dart' as globals;
 import 'package:healthy_app/models/activity.dart';
+import 'package:healthy_app/models/medication_checklist.dart';
 
 import '../food_diary_screen/food_list.dart';
 import 'dashboard_item.dart';
@@ -96,9 +97,11 @@ class _ProgressState extends State<Progress> {
     final foods = Provider.of<List<Food>>(context) ?? [];
     final activities = Provider.of<List<Activity>>(context) ?? [];
     final loggedNutrients = Provider.of<List<LoggedNutrient>>(context) ?? [];
+    final loggedMedications = Provider.of<List<MedicationChecklist>>(context) ?? [];
     var totalCaloriesConsumed = 0;
     var totalCaloriesBurned = 0;
     var noLoggedNutrients = 0;
+    var noLoggedMedications = 0;
 
     if (foods.isNotEmpty) {
       for (var food in foods)
@@ -112,6 +115,12 @@ class _ProgressState extends State<Progress> {
       for (var nutrient in loggedNutrients)
         if(nutrient.taken){
           noLoggedNutrients++;
+        }
+    }
+    if (loggedMedications.isNotEmpty) {
+      for (var med in loggedMedications)
+        if(med.taken){
+          noLoggedMedications++;
         }
     }
       return StreamBuilder(
@@ -135,7 +144,7 @@ class _ProgressState extends State<Progress> {
                   DashboardItem(title: "Consumed", data: totalCaloriesConsumed.toString(), units: "kcal"),
                   DashboardItem(title: "Burned", data: totalCaloriesBurned.toString(), units:"kcal"),
                   DashboardItem(title: "Checked", data: noLoggedNutrients.toString(), units: "items"),
-                  DashboardItem(title: "Taken", data: "alarm", units: ""),
+                  DashboardItem(title: "Taken", data: noLoggedMedications.toString(), units: "medications"),
                   // makeDashboardItem("Alphabet", Icons.alarm),
                   // makeDashboardItem("Alphabet", Icons.alarm)
                 ],
