@@ -146,7 +146,7 @@ class _HomeState extends State<Home> {
                   label: 'Progress',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.no_food),
+                  icon: Icon(Icons.fastfood),
                   label: 'Food',
                 ),
                 BottomNavigationBarItem(
@@ -154,11 +154,11 @@ class _HomeState extends State<Home> {
                   label: 'Activity',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.wb_sunny),
+                  icon: Icon(Icons.check),
                   label: 'Nutrients',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.check),
+                  icon: Icon(Icons.medical_services_outlined),
                   label: 'Meds',
                 ),
               ],
