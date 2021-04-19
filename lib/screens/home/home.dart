@@ -105,7 +105,9 @@ class _HomeState extends State<Home> {
   }
 
   Widget build(BuildContext context){
-          return Scaffold(
+          return StreamProvider.value(
+              value: DatabaseService(uid: userId).allFoods,
+            child: Scaffold(
             appBar: AppBar(
               leading: GestureDetector(
                 onTap: () {
@@ -164,6 +166,7 @@ class _HomeState extends State<Home> {
               ],
               currentIndex: _selectedIndex,
             ),
+          )
           );
   }
   void choiceAction(String choice){

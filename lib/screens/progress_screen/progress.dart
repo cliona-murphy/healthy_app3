@@ -13,6 +13,7 @@ import 'package:healthy_app/models/pie_data.dart';
 import 'package:healthy_app/shared/globals.dart' as globals;
 
 import '../food_diary_screen/food_list.dart';
+import 'dashboard_item.dart';
 
 class Progress extends StatefulWidget {
 
@@ -24,16 +25,17 @@ class _ProgressState extends State<Progress> {
   final AuthService _auth = AuthService();
   final FirebaseAuth auth = FirebaseAuth.instance;
   bool loading = true;
+  //var totalCalories = 0;
 
   String userId = "";
 
   void initState() {
-     super.initState();
-     getUid();
-     updateBoolean();
+    super.initState();
+    getUid();
+    updateBoolean();
   }
 
-  updateBoolean(){
+  updateBoolean() {
     Future.delayed(const Duration(milliseconds: 1000), () {
       setState(() {
         loading = false;
@@ -50,60 +52,121 @@ class _ProgressState extends State<Progress> {
     return uid;
   }
 
-  Widget build(BuildContext context){
-    return StreamBuilder(
-      stream: Firestore.instance.collection('settings').document(userId).snapshots(),
-      builder:  (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-        var target;
-        if (snapshot.hasData) {
-          //if (snapshot.data['kcalIntakeTarget'])
-          target = snapshot.data['kcalIntakeTarget'];
-        } else {
-          target = 2000;
-        }
-        return loading ? Loading() : Scaffold(
-          backgroundColor: Colors.white,
-          body: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: Column(
-                  children: [
-                    Padding(padding: EdgeInsets.only(top: 15.0)),
-                    Text("Calories Consumed",
+  Card makeDashboardItem(String title, String data) {
+    return Card(
+        elevation: 1.0,
+        margin: new EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(color: Color.fromRGBO(220, 220, 220, 1.0)),
+          child: new InkWell(
+            onTap: () {},
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              verticalDirection: VerticalDirection.down,
+              children: <Widget>[
+                SizedBox(height: 50.0),
+                Center(
+                    child: Text("1000",
                       style: TextStyle(
-                          color: Colors.grey[600],
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15),
-                    ),
-                    StreamProvider<List<Food>>.value(
-                      value: DatabaseService(uid: userId).allFoods,
-                      child: CalorieCount(calorieTarget: target),
-                    )
-                  ],
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      ),)
                 ),
-              ),
-              Expanded(
-                child: Column(
-                  children: [
-                    Padding(padding: EdgeInsets.only(top: 15.0)),
-                    Text("Calories Burned",
-                      style: TextStyle(
-                          color: Colors.grey[600],
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15),
-                    ),
-                    //This should listen to activity diary when it is developed
-                    StreamProvider<List<Food>>.value(
-                      value: DatabaseService(uid: userId).allFoods,
-                      child: CalorieCount(calorieTarget: target),
-                    )
-                  ],
-                ),
-              ),
-            ],
+                // child: Icon(
+                //   icon,
+                //   size: 40.0,
+                //   color: Colors.black,
+                // )),
+                SizedBox(height: 20.0),
+                new Center(
+                  child: new Text(title,
+                      style:
+                      new TextStyle(fontSize: 18.0, color: Colors.black)),
+                )
+              ],
+            ),
           ),
-        );
-      });
+        ));
   }
-}
+
+  Widget build(BuildContext context) {
+    final foods = Provider.of<List<Food>>(context) ?? [];
+    var totalCalories = 0;
+    if (foods.isNotEmpty) {
+      for (var food in foods)
+        totalCalories += food.calories;
+    }
+      return StreamBuilder(
+          stream: Firestore.instance.collection('settings')
+              .document(userId)
+              .snapshots(),
+          builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            var target;
+            if (snapshot.hasData) {
+              //if (snapshot.data['kcalIntakeTarget'])
+              target = snapshot.data['kcalIntakeTarget'];
+            } else {
+              target = 2000;
+            }
+            return Container(
+              padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 2.0),
+              child: GridView.count(
+                crossAxisCount: 2,
+                padding: EdgeInsets.all(3.0),
+                children: <Widget>[
+                  DashboardItem(title: "Consumed", data: totalCalories.toString(), units: "kcal"),
+                  DashboardItem(title: "Burned", data: "100", units:"kcal"),
+                  DashboardItem(title: "Checked", data: "alarm", units: "items"),
+                  DashboardItem(title: "Taken", data: "alarm", units: ""),
+                  // makeDashboardItem("Alphabet", Icons.alarm),
+                  // makeDashboardItem("Alphabet", Icons.alarm)
+                ],
+              ),
+            );
+            // return loading ? Loading() : Scaffold(
+            //   backgroundColor: Colors.white,
+            //   body: Row(
+            //     crossAxisAlignment: CrossAxisAlignment.stretch,
+            //     children: [
+            //       Expanded(
+            //         child: Column(
+            //           children: [
+            //             Padding(padding: EdgeInsets.only(top: 15.0)),
+            //             Text("Calories Consumed",
+            //               style: TextStyle(
+            //                   color: Colors.grey[600],
+            //                   fontWeight: FontWeight.bold,
+            //                   fontSize: 15),
+            //             ),
+            //             StreamProvider<List<Food>>.value(
+            //               value: DatabaseService(uid: userId).allFoods,
+            //               child: CalorieCount(calorieTarget: target),
+            //             )
+            //           ],
+            //         ),
+            //       ),
+            //       Expanded(
+            //         child: Column(
+            //           children: [
+            //             Padding(padding: EdgeInsets.only(top: 15.0)),
+            //             Text("Calories Burned",
+            //               style: TextStyle(
+            //                   color: Colors.grey[600],
+            //                   fontWeight: FontWeight.bold,
+            //                   fontSize: 15),
+            //             ),
+            //             //This should listen to activity diary when it is developed
+            //             StreamProvider<List<Food>>.value(
+            //               value: DatabaseService(uid: userId).allFoods,
+            //               child: CalorieCount(calorieTarget: target),
+            //             )
+            //           ],
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // );
+          });
+    }
+  }
