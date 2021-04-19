@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:healthy_app/models/pie_data.dart';
 import 'package:healthy_app/shared/globals.dart' as globals;
+import 'package:healthy_app/models/activity.dart';
 
 import '../food_diary_screen/food_list.dart';
 import 'dashboard_item.dart';
@@ -92,10 +93,16 @@ class _ProgressState extends State<Progress> {
 
   Widget build(BuildContext context) {
     final foods = Provider.of<List<Food>>(context) ?? [];
-    var totalCalories = 0;
+    final activities = Provider.of<List<Activity>>(context) ?? [];
+    var totalCaloriesConsumed = 0;
+    var totalCaloriesBurned = 0;
     if (foods.isNotEmpty) {
       for (var food in foods)
-        totalCalories += food.calories;
+        totalCaloriesConsumed += food.calories;
+    }
+    if (activities.isNotEmpty) {
+      for (var activity in activities)
+        totalCaloriesBurned += activity.calories.toInt();
     }
       return StreamBuilder(
           stream: Firestore.instance.collection('settings')
@@ -115,8 +122,8 @@ class _ProgressState extends State<Progress> {
                 crossAxisCount: 2,
                 padding: EdgeInsets.all(3.0),
                 children: <Widget>[
-                  DashboardItem(title: "Consumed", data: totalCalories.toString(), units: "kcal"),
-                  DashboardItem(title: "Burned", data: "100", units:"kcal"),
+                  DashboardItem(title: "Consumed", data: totalCaloriesConsumed.toString(), units: "kcal"),
+                  DashboardItem(title: "Burned", data: totalCaloriesBurned.toString(), units:"kcal"),
                   DashboardItem(title: "Checked", data: "alarm", units: "items"),
                   DashboardItem(title: "Taken", data: "alarm", units: ""),
                   // makeDashboardItem("Alphabet", Icons.alarm),
