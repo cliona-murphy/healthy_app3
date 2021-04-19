@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_app/models/logged_nutrient.dart';
 import 'package:healthy_app/models/settings.dart';
 import 'package:healthy_app/screens/progress_screen/calorie_count.dart';
 import 'package:healthy_app/services/auth.dart';
@@ -94,8 +95,11 @@ class _ProgressState extends State<Progress> {
   Widget build(BuildContext context) {
     final foods = Provider.of<List<Food>>(context) ?? [];
     final activities = Provider.of<List<Activity>>(context) ?? [];
+    final loggedNutrients = Provider.of<List<LoggedNutrient>>(context) ?? [];
     var totalCaloriesConsumed = 0;
     var totalCaloriesBurned = 0;
+    var noLoggedNutrients = 0;
+
     if (foods.isNotEmpty) {
       for (var food in foods)
         totalCaloriesConsumed += food.calories;
@@ -103,6 +107,12 @@ class _ProgressState extends State<Progress> {
     if (activities.isNotEmpty) {
       for (var activity in activities)
         totalCaloriesBurned += activity.calories.toInt();
+    }
+    if (loggedNutrients.isNotEmpty) {
+      for (var nutrient in loggedNutrients)
+        if(nutrient.taken){
+          noLoggedNutrients++;
+        }
     }
       return StreamBuilder(
           stream: Firestore.instance.collection('settings')
@@ -124,7 +134,7 @@ class _ProgressState extends State<Progress> {
                 children: <Widget>[
                   DashboardItem(title: "Consumed", data: totalCaloriesConsumed.toString(), units: "kcal"),
                   DashboardItem(title: "Burned", data: totalCaloriesBurned.toString(), units:"kcal"),
-                  DashboardItem(title: "Checked", data: "alarm", units: "items"),
+                  DashboardItem(title: "Checked", data: noLoggedNutrients.toString(), units: "items"),
                   DashboardItem(title: "Taken", data: "alarm", units: ""),
                   // makeDashboardItem("Alphabet", Icons.alarm),
                   // makeDashboardItem("Alphabet", Icons.alarm)
