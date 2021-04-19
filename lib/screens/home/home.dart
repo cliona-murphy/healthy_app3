@@ -178,7 +178,7 @@ class _HomeState extends State<Home> {
                       ],
                       currentIndex: _selectedIndex,
                     ),
-      ),
+                   ),
                   ),
                 ),
               ),
@@ -191,9 +191,6 @@ class _HomeState extends State<Home> {
     if(choice == ConstantVars.Settings){
       renderSettingsPage();
       print('Settings');
-    }
-    else if(choice == ConstantVars.Subscribe){
-      print('Subscribe');
     }
     else if(choice == ConstantVars.SignOut){
       _auth.signOut();
