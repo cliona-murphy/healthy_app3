@@ -2,20 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/models/logged_nutrient.dart';
+import 'package:healthy_app/models/medication.dart';
+import 'package:healthy_app/models/nutrient.dart';
 import 'package:healthy_app/models/settings.dart';
 import 'package:healthy_app/screens/progress_screen/calorie_count.dart';
 import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/models/food.dart';
-import 'package:healthy_app/services/database.dart';
-import 'package:healthy_app/shared/loading.dart';
 import 'package:provider/provider.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:healthy_app/models/pie_data.dart';
-import 'package:healthy_app/shared/globals.dart' as globals;
 import 'package:healthy_app/models/activity.dart';
 import 'package:healthy_app/models/medication_checklist.dart';
-
-import '../food_diary_screen/food_list.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'dashboard_item.dart';
 
 class Progress extends StatefulWidget {
@@ -55,53 +51,19 @@ class _ProgressState extends State<Progress> {
     return uid;
   }
 
-  Card makeDashboardItem(String title, String data) {
-    return Card(
-        elevation: 1.0,
-        margin: new EdgeInsets.all(8.0),
-        child: Container(
-          decoration: BoxDecoration(color: Color.fromRGBO(220, 220, 220, 1.0)),
-          child: new InkWell(
-            onTap: () {},
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              verticalDirection: VerticalDirection.down,
-              children: <Widget>[
-                SizedBox(height: 50.0),
-                Center(
-                    child: Text("1000",
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),)
-                ),
-                // child: Icon(
-                //   icon,
-                //   size: 40.0,
-                //   color: Colors.black,
-                // )),
-                SizedBox(height: 20.0),
-                new Center(
-                  child: new Text(title,
-                      style:
-                      new TextStyle(fontSize: 18.0, color: Colors.black)),
-                )
-              ],
-            ),
-          ),
-        ));
-  }
-
   Widget build(BuildContext context) {
     final foods = Provider.of<List<Food>>(context) ?? [];
     final activities = Provider.of<List<Activity>>(context) ?? [];
     final loggedNutrients = Provider.of<List<LoggedNutrient>>(context) ?? [];
+    final nutrients = Provider.of<List<Nutrient>>(context) ?? [];
     final loggedMedications = Provider.of<List<MedicationChecklist>>(context) ?? [];
+    final medications = Provider.of<List<Medication>>(context) ?? [];
     var totalCaloriesConsumed = 0;
     var totalCaloriesBurned = 0;
     var noLoggedNutrients = 0;
+    var totalNutrients = 0;
     var noLoggedMedications = 0;
+    var totalMedications = 0;
 
     if (foods.isNotEmpty) {
       for (var food in foods)
@@ -117,23 +79,33 @@ class _ProgressState extends State<Progress> {
           noLoggedNutrients++;
         }
     }
+    if (nutrients.isNotEmpty) {
+      for (var nutrient in nutrients)
+        totalNutrients++;
+    }
     if (loggedMedications.isNotEmpty) {
       for (var med in loggedMedications)
         if(med.taken){
           noLoggedMedications++;
         }
     }
+    if (medications.isNotEmpty) {
+      for (var med in medications)
+        totalMedications++;
+    }
       return StreamBuilder(
           stream: Firestore.instance.collection('settings')
               .document(userId)
               .snapshots(),
           builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-            var target;
+            int targetIntake;
+            int targetOutput;
             if (snapshot.hasData) {
-              //if (snapshot.data['kcalIntakeTarget'])
-              target = snapshot.data['kcalIntakeTarget'];
+              targetIntake = snapshot.data['kcalIntakeTarget'].toInt();
+              targetOutput = snapshot.data['kcalOutputTarget'].toInt();
             } else {
-              target = 2000;
+              targetIntake = 2000;
+              targetOutput = 2000;
             }
             return Container(
               padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 2.0),
@@ -141,10 +113,10 @@ class _ProgressState extends State<Progress> {
                 crossAxisCount: 2,
                 padding: EdgeInsets.all(3.0),
                 children: <Widget>[
-                  DashboardItem(title: "Consumed", data: totalCaloriesConsumed.toString(), units: "kcal"),
-                  DashboardItem(title: "Burned", data: totalCaloriesBurned.toString(), units:"kcal"),
-                  DashboardItem(title: "Checked", data: noLoggedNutrients.toString(), units: "items"),
-                  DashboardItem(title: "Taken", data: noLoggedMedications.toString(), units: "medications"),
+                  DashboardItem(title: "Consumed", data: totalCaloriesConsumed.toString(), units: "kcal", target: targetIntake,),
+                  DashboardItem(title: "Burned", data: totalCaloriesBurned.toString(), units:"kcal", target: targetOutput),
+                  DashboardItem(title: "Checked", data: noLoggedNutrients.toString(), units: "items", target: totalNutrients),
+                  DashboardItem(title: "Taken", data: noLoggedMedications.toString(), units: "medications", target: totalMedications),
                   // makeDashboardItem("Alphabet", Icons.alarm),
                   // makeDashboardItem("Alphabet", Icons.alarm)
                 ],
