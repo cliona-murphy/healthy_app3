@@ -47,9 +47,6 @@ class _ProgressState extends State<Progress> {
     setState(() {
       userId = uid;
     });
-    // setState(() {
-    //   userIdSet = true;
-    // });
     return uid;
   }
 
@@ -59,6 +56,7 @@ class _ProgressState extends State<Progress> {
       builder:  (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         var target;
         if (snapshot.hasData) {
+          //if (snapshot.data['kcalIntakeTarget'])
           target = snapshot.data['kcalIntakeTarget'];
         } else {
           target = 2000;
