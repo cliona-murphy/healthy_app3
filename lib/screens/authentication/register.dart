@@ -77,7 +77,7 @@ class _RegisterState extends State<Register> {
                             if (val.length < 6) {
                               return "Enter a password of 6 character or more";
                             }
-                            else if (!val.contains(RegExp("[A-Z0-9]!.,{}@?/"))){
+                            else if (!val.contains(RegExp("[A-Z0-9!.,{}@?/]"))){
                               return "Include a capital letter, digit and special character.";
                             }
                             else {
