@@ -1,4 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/models/arguments.dart';
 import 'package:healthy_app/screens/home/settings_list.dart';
@@ -36,12 +38,48 @@ class _HomeState extends State<Home> {
   String selectedDate = "";
   bool newDate = false;
   String userId = "";
+  String messageTitle = "Empty";
+
+  String notificationAlert = "alert";
+
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
+
+
+  showSnackbar() {
+    return Flushbar(
+      duration: Duration(seconds: 2),
+      flushbarPosition: FlushbarPosition.TOP,
+      title: 'Success',
+      message: "Your activity was successfully logged!",
+    )..show(context);
+  }
+
+  printToConsole() {
+    print("title = " + messageTitle + " msg = " + notificationAlert);
+  }
 
   void initState() {
     super.initState();
     getUid();
-    print("initState date = " + widget.date.toString());
     newDate = globals.newDateSelected;
+    _firebaseMessaging.configure(
+      onMessage: (message) async{
+        setState(() {
+          messageTitle = message["notification"]["title"];
+          notificationAlert = "New Notification Alert";
+        });
+
+      },
+      onResume: (message) async{
+        setState(() {
+          messageTitle = message["data"]["title"];
+          notificationAlert = "Application opened from Notification";
+        });
+
+      },
+    );
+    printToConsole();
   }
 
   Future<String> getUid() async {

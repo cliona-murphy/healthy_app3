@@ -22,8 +22,8 @@ class myApp extends StatelessWidget {
            routes: {
             '/second': (context) => Home(),
            },
-          // home: Wrapper(),
-        home: Home(),
+          home: Wrapper(),
+        // home: Home(),
       ),
     );
   }

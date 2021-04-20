@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/models/logged_nutrient.dart';
 import 'package:healthy_app/models/medication.dart';
@@ -28,10 +29,32 @@ class _ProgressState extends State<Progress> {
 
   String userId = "";
 
+  String messageTitle = "Empty";
+  String notificationAlert = "alert";
+
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
   void initState() {
     super.initState();
     getUid();
     updateBoolean();
+
+    _firebaseMessaging.configure(
+      onMessage: (message) async{
+        setState(() {
+          messageTitle = message["notification"]["title"];
+          notificationAlert = "New Notification Alert";
+        });
+
+      },
+      onResume: (message) async{
+        setState(() {
+          messageTitle = message["data"]["title"];
+          notificationAlert = "Application opened from Notification";
+        });
+
+      },
+    );
   }
 
   updateBoolean() {
@@ -113,6 +136,7 @@ class _ProgressState extends State<Progress> {
                 crossAxisCount: 2,
                 padding: EdgeInsets.all(3.0),
                 children: <Widget>[
+                  Text("title = " + messageTitle + " msg = " + notificationAlert),
                   DashboardItem(title: "Consumed", data: totalCaloriesConsumed.toString(), units: "kcal", target: targetIntake,),
                   DashboardItem(title: "Burned", data: totalCaloriesBurned.toString(), units:"kcal", target: targetOutput),
                   DashboardItem(title: "Checked", data: noLoggedNutrients.toString(), units: "items", target: totalNutrients),
