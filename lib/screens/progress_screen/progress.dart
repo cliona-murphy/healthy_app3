@@ -115,8 +115,8 @@ class _ProgressState extends State<Progress> {
                 children: <Widget>[
                   DashboardItem(title: "Consumed", data: totalCaloriesConsumed.toString(), units: "kcal", target: targetIntake,),
                   DashboardItem(title: "Burned", data: totalCaloriesBurned.toString(), units:"kcal", target: targetOutput),
-                  DashboardItem(title: "Checked", data: noLoggedNutrients.toString(), units: "items", target: totalNutrients),
-                  DashboardItem(title: "Taken", data: noLoggedMedications.toString(), units: "medications", target: totalMedications),
+                  DashboardItem(title: "Checked", data: noLoggedNutrients.toString(), units: noLoggedNutrients != 1 ? "nutrients" : "nutrient", target: totalNutrients),
+                  DashboardItem(title: "Taken", data: noLoggedMedications.toString(), units: noLoggedMedications != 1 ? "medications" : "medication", target: totalMedications),
                   // makeDashboardItem("Alphabet", Icons.alarm),
                   // makeDashboardItem("Alphabet", Icons.alarm)
                 ],
