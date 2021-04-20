@@ -50,6 +50,15 @@ class _ActivityTileState extends State<ActivityTile> {
     )..show(context);
   }
 
+  showSnackBarUpdate(){
+    return Flushbar(
+      duration: Duration(seconds: 2),
+      flushbarPosition: FlushbarPosition.TOP,
+      title: 'Success',
+      message: "Your activity was successfully updated!",
+    )..show(context);
+  }
+
   updateDatabase(bool checked, String medName) async {
     String userId = await getUserid();
     DatabaseService(uid: userId).medTaken(medName, checked);
@@ -68,6 +77,28 @@ class _ActivityTileState extends State<ActivityTile> {
     String userId = await getUserid();
     DatabaseService(uid: userId).deleteActivity(widget.activity.docId);
     showSnackBarDelete();
+  }
+
+  renderActivityFormToEdit(BuildContext context) async{
+    final result = await
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ActivityForm(action: 'Edit', activity: widget.activity),
+        ));
+    if(result.isNotEmpty){
+      setState(() {
+        showSnackBar();
+      });
+    }
+  }
+  showSnackBar(){
+    return Flushbar(
+      duration: Duration(seconds: 2),
+      flushbarPosition: FlushbarPosition.TOP,
+      title: 'Success',
+      message: "Your activity was successfully edited!",
+    )..show(context);
   }
 
   Future<String> editItem(BuildContext context, String medName, String timeToTake) {
@@ -212,11 +243,12 @@ class _ActivityTileState extends State<ActivityTile> {
                 FlatButton(
                   textColor: const Color(0xFF6200EE),
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ActivityForm(action: "Edit", activity: widget.activity),
-                        ));
+                    renderActivityFormToEdit(context);
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) => ActivityForm(action: "Edit", activity: widget.activity),
+                    //     ));
                     // if(result.isNotEmpty){
                     //   setState(() {
                     //     showSnackBar();

@@ -71,6 +71,7 @@ class _ActivityDiaryState extends State<ActivityDiary> {
     )..show(context);
   }
 
+
   void addItem(BuildContext context){
     renderActivityForm(context);
   }

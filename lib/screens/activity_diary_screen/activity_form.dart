@@ -119,6 +119,7 @@ class _ActivityFormState extends State<ActivityForm> {
               } else {
                 if(widget.action == "Edit"){
                   updateActivity();
+                  Navigator.pop(context, "test");
                 } else {
                   addActivity();
                   Navigator.pop(context, "test");

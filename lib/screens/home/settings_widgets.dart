@@ -27,6 +27,7 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
   double _kcalIntake = 0;
   double _kcalOutput = 0;
   double _waterIntake = 0;
+  String waterIntake = "";
 
 
   void initState() {
@@ -48,7 +49,14 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
     setState(() {
       _searchAreaResult = data;
     });
-    DatabaseService(uid: userId).enterUserCountry(_searchAreaResult);
+    //DatabaseService(uid: userId).enterUserCountry(_searchAreaResult);
+  }
+
+  void onWaterSearchAreaChange(String data){
+    setState(() {
+      waterIntake = data;
+    });
+    //DatabaseService(uid: userId).enterUserCountry(waterIntake);
   }
 
   void pushChangesToDatabase(){
@@ -193,14 +201,20 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
           ),
           SizedBox(height: _titleOnTop ? 10.0 : 0.0),
           new SettingRow(
-            rowData: SettingsSliderConfig(
-              title: 'Daily Water Intake Target',
-              from: 2,
-              to: 5,
-              initialValue: widget.waterTarget.toDouble(),
-              justIntValues: true,
-              unit: ' litres',
-            ),
+            rowData: SettingsDropDownConfig(
+                title: 'Daily Water Intake Target',
+                initialKey: widget.country,
+                choices: {
+                  '2': '2 litres',
+                  '2.5': '2.5 litres',
+                  '3': '3 litres',
+                  '3.5': '3.5 litres',
+                  '4': '4 litres',
+                  '4.5': '4.5 litres',
+                  '5': '5 litres',
+                  '5.5': '5.5 litres',
+                  '6': '6 litres',
+                }),
             onSettingDataRowChange: (double resultVal) {
               DatabaseService(uid: userId).updateWaterIntakeTarget(resultVal.toInt());
             },
