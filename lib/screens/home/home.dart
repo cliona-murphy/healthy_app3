@@ -105,77 +105,92 @@ class _HomeState extends State<Home> {
   }
 
   Widget build(BuildContext context){
-          return StreamProvider.value(
-              value: DatabaseService(uid: userId).allFoods,
-            child: Scaffold(
-            appBar: AppBar(
-              leading: GestureDetector(
-                onTap: () {
-                  renderCalendar();
-                },
-                child: Icon(
-                  Icons.calendar_today_outlined,
+    return StreamProvider.value(
+        value: DatabaseService(uid: userId).allFoods,
+        child: StreamProvider.value(
+          value: DatabaseService(uid: userId).activities,
+          child: StreamProvider.value(
+            value: DatabaseService(uid: userId).getLoggedNutrients(),
+            child: StreamProvider.value(
+              value: DatabaseService(uid: userId).getLoggedMedications(),
+              child: StreamProvider.value(
+                value: DatabaseService(uid: userId).settings,
+                child: StreamProvider.value(
+                  value: DatabaseService(uid: userId).nutrientContent,
+                  child: StreamProvider.value(
+                    value: DatabaseService(uid: userId).medications,
+                    child: Scaffold(
+                    appBar: AppBar(
+                      leading: GestureDetector(
+                        onTap: () {
+                          renderCalendar();
+                        },
+                        child: Icon(
+                          Icons.calendar_today_outlined,
+                        ),
+                      ),
+                      title: newDate ? new Text(globals.selectedDate) : new Text(getCurrentDate()),
+                      centerTitle: true,
+                      actions: <Widget>[
+                        PopupMenuButton<String>(
+                          onSelected: choiceAction,
+                          itemBuilder: (BuildContext context){
+                            return ConstantVars.choices.map((String choice){
+                              return PopupMenuItem<String>(
+                                value: choice,
+                                child: Text(choice),
+                              );
+                            }).toList();
+                          }
+                          ,)],
+                    ),
+                    backgroundColor: Colors.white,
+                    body: PageView(
+                      controller: _pageController,
+                      children: _screens,
+                      physics: NeverScrollableScrollPhysics(),
+                    ),
+                    bottomNavigationBar: BottomNavigationBar(
+                      onTap: _onItemTapped,
+                      type: BottomNavigationBarType.fixed,
+                      items: <BottomNavigationBarItem>[
+                        BottomNavigationBarItem(
+                          icon: Icon(Icons.bar_chart,
+                              color: getSelectedIndex() == 0 ? Colors.blue: Colors.grey),
+                          label: 'Progress',
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Icon(Icons.fastfood),
+                          label: 'Food',
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Icon(Icons.directions_run_outlined),
+                          label: 'Activity',
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Icon(Icons.check),
+                          label: 'Nutrients',
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Icon(Icons.medical_services_outlined),
+                          label: 'Meds',
+                        ),
+                      ],
+                      currentIndex: _selectedIndex,
+                    ),
+                   ),
+                  ),
                 ),
               ),
-              title: newDate ? new Text(globals.selectedDate) : new Text(getCurrentDate()),
-              centerTitle: true,
-              actions: <Widget>[
-                PopupMenuButton<String>(
-                  onSelected: choiceAction,
-                  itemBuilder: (BuildContext context){
-                    return ConstantVars.choices.map((String choice){
-                      return PopupMenuItem<String>(
-                        value: choice,
-                        child: Text(choice),
-                      );
-                    }).toList();
-                  }
-                  ,)],
             ),
-            backgroundColor: Colors.white,
-            body: PageView(
-              controller: _pageController,
-              children: _screens,
-              physics: NeverScrollableScrollPhysics(),
-            ),
-            bottomNavigationBar: BottomNavigationBar(
-              onTap: _onItemTapped,
-              type: BottomNavigationBarType.fixed,
-              items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.bar_chart,
-                      color: getSelectedIndex() == 0 ? Colors.blue: Colors.grey),
-                  label: 'Progress',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.fastfood),
-                  label: 'Food',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.directions_run_outlined),
-                  label: 'Activity',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.check),
-                  label: 'Nutrients',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.medical_services_outlined),
-                  label: 'Meds',
-                ),
-              ],
-              currentIndex: _selectedIndex,
-            ),
-          )
-          );
+          ),
+        )
+    );
   }
   void choiceAction(String choice){
     if(choice == ConstantVars.Settings){
       renderSettingsPage();
       print('Settings');
-    }
-    else if(choice == ConstantVars.Subscribe){
-      print('Subscribe');
     }
     else if(choice == ConstantVars.SignOut){
       _auth.signOut();
