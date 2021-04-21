@@ -6,6 +6,7 @@ import 'package:cupertino_setting_control/cupertino_setting_control.dart';
 import 'package:healthy_app/screens/home/settings_widgets.dart';
 import 'package:healthy_app/services/database.dart';
 import 'package:healthy_app/shared/loading.dart';
+import 'package:healthy_app/shared/globals.dart' as globals;
 
 class SettingsPage extends StatefulWidget {
 
@@ -17,6 +18,14 @@ class _SettingsPageState extends State<SettingsPage> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   String userId = "";
   bool loading = true;
+  String _searchAreaResult = "";
+  double _age = 0;
+  double _weight = 0;
+  double _kcalIntake = 0;
+  double _kcalOutput = 0;
+  double _waterIntake = 0;
+  String waterIntake = "";
+  String settingsUpdated = "false";
 
 
   void initState() {
@@ -83,8 +92,24 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  void onSearchAreaChange(String data) {
+    setState(() {
+      _searchAreaResult = data;
+    });
+    //DatabaseService(uid: userId).enterUserCountry(_searchAreaResult);
+  }
+
+  void onWaterSearchAreaChange(String data){
+    setState(() {
+      waterIntake = data;
+    });
+    //DatabaseService(uid: userId).enterUserCountry(waterIntake);
+  }
+
+
   @override
   Widget build(BuildContext context) {
+
     return StreamBuilder(
       stream: Firestore.instance.collection('settings').document(userId).snapshots(),
       builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -107,7 +132,15 @@ class _SettingsPageState extends State<SettingsPage> {
           return Scaffold(
           appBar: AppBar(
             leading: IconButton(icon:Icon(Icons.arrow_back),
-              onPressed:() => Navigator.pushNamedAndRemoveUntil(context, '/second', (r) => false)),
+              onPressed:() {
+              if(globals.settingsChanged) {
+                setState(() {
+                  settingsUpdated = "true";
+                });
+              }
+                Navigator.pop(context, settingsUpdated);
+              }),
+                  // Navigator.pushNamedAndRemoveUntil(context, '/second', (r) => false, arguments: "test")),
             title: Text('Settings'),
           ),
             body: Padding(

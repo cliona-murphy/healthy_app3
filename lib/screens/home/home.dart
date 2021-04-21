@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/models/arguments.dart';
 import 'package:healthy_app/screens/home/settings_list.dart';
@@ -96,12 +97,20 @@ class _HomeState extends State<Home> {
           builder: (context) => SettingsPage(),
         ));
     if(result.isNotEmpty){
-      setState(() {
-        // selectedDate = result;
-        // newDate = true;
-        // globals.selectedDate = selectedDate;
-      });
+      print(result);
+      if(result == "true") {
+        showSnackBarUpdate();
+      }
     }
+  }
+
+  showSnackBarUpdate() {
+    return Flushbar(
+      duration: Duration(seconds: 2),
+      flushbarPosition: FlushbarPosition.TOP,
+      title: 'Success',
+      message: "Your settings were successfully updated!",
+    )..show(context);
   }
 
   Widget build(BuildContext context){

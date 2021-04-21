@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/services/database.dart';
+import 'package:healthy_app/shared/globals.dart' as globals;
 
 class SettingsWidgets extends StatefulWidget {
   final String country;
@@ -27,9 +28,13 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
   double _kcalIntake = 0;
   double _kcalOutput = 0;
   double _waterIntake = 0;
+  String waterIntake = "";
 
 
   void initState() {
+    setState(() {
+      globals.settingsChanged = false;
+    });
     super.initState();
     getUid();
   }
@@ -47,8 +52,17 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
   void onSearchAreaChange(String data) {
     setState(() {
       _searchAreaResult = data;
+      globals.settingsChanged = true;
     });
-    DatabaseService(uid: userId).enterUserCountry(_searchAreaResult);
+    //DatabaseService(uid: userId).enterUserCountry(_searchAreaResult);
+  }
+
+  void onWaterSearchAreaChange(String data){
+    setState(() {
+      waterIntake = data;
+      globals.settingsChanged = true;
+    });
+    //DatabaseService(uid: userId).enterUserCountry(waterIntake);
   }
 
   void pushChangesToDatabase(){
@@ -106,6 +120,9 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
               unit: ' years',
             ),
             onSettingDataRowChange: (double resultVal) {
+              setState(() {
+                globals.settingsChanged = true;
+              });
               DatabaseService(uid: userId).enterUserAge(resultVal.toInt());
             },
             config: SettingsRowConfiguration(
@@ -125,6 +142,9 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
               unit: ' kg',
             ),
             onSettingDataRowChange: (double resultVal) {
+              setState(() {
+                globals.settingsChanged = true;
+              });
               DatabaseService(uid: userId).enterUserWeight(resultVal.toInt());
             },
             config: SettingsRowConfiguration(
@@ -164,6 +184,9 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
               unit: ' kcal',
             ),
             onSettingDataRowChange: (double resultVal) {
+              setState(() {
+                globals.settingsChanged = true;
+              });
               DatabaseService(uid: userId).updateKcalIntakeTarget(resultVal.toInt());
             },
             config: SettingsRowConfiguration(
@@ -183,6 +206,9 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
               unit: ' kcal',
             ),
             onSettingDataRowChange: (double resultVal) {
+              setState(() {
+                globals.settingsChanged = true;
+              });
               DatabaseService(uid: userId).updateKcalOutputTarget(resultVal.toInt());
             },
             config: SettingsRowConfiguration(
@@ -193,15 +219,24 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
           ),
           SizedBox(height: _titleOnTop ? 10.0 : 0.0),
           new SettingRow(
-            rowData: SettingsSliderConfig(
-              title: 'Daily Water Intake Target',
-              from: 2,
-              to: 5,
-              initialValue: widget.waterTarget.toDouble(),
-              justIntValues: true,
-              unit: ' litres',
-            ),
+            rowData: SettingsDropDownConfig(
+                title: 'Daily Water Intake Target',
+                initialKey: widget.country,
+                choices: {
+                  '2': '2 litres',
+                  '2.5': '2.5 litres',
+                  '3': '3 litres',
+                  '3.5': '3.5 litres',
+                  '4': '4 litres',
+                  '4.5': '4.5 litres',
+                  '5': '5 litres',
+                  '5.5': '5.5 litres',
+                  '6': '6 litres',
+                }),
             onSettingDataRowChange: (double resultVal) {
+              setState(() {
+                globals.settingsChanged = true;
+              });
               DatabaseService(uid: userId).updateWaterIntakeTarget(resultVal.toInt());
             },
             config: SettingsRowConfiguration(

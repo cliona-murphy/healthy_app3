@@ -40,7 +40,7 @@ class _FoodDiaryState extends State<FoodDiary> {
     });
   }
   Future <String> onContainerTapped(BuildContext context, String mealId){
-    return showDialog(context: context, builder: (context) {
+    return showDialog(context: context, barrierDismissible: false, builder: (context) {
       return AlertDialog(
           title: Text("What did you eat?"),
           content: Container(
@@ -74,14 +74,21 @@ class _FoodDiaryState extends State<FoodDiary> {
         actions: <Widget> [
           MaterialButton(
               elevation: 5.0,
-              child: Text("Submit"),
+              child: Text("Cancel"),
               onPressed: () {
-                foodLogged = true;
-                updateDatabase(customController.text, int.parse(calorieController.text), mealId);
-                customController.clear();
-                calorieController.clear();
                 Navigator.pop(context);
               },
+          ),
+          MaterialButton(
+            elevation: 5.0,
+            child: Text("Submit"),
+            onPressed: () {
+              foodLogged = true;
+              updateDatabase(customController.text, int.parse(calorieController.text), mealId);
+              customController.clear();
+              calorieController.clear();
+              Navigator.pop(context);
+            },
           ),
         ],
       );
@@ -89,7 +96,7 @@ class _FoodDiaryState extends State<FoodDiary> {
   }
 
   Future <String> onWaterContainerTapped(BuildContext context, String mealId){
-    return showDialog(context: context, builder: (context) {
+    return showDialog(context: context, barrierDismissible: false, builder: (context) {
       return AlertDialog(
         title: Text("How much did you drink?"),
         content: Container(
@@ -190,7 +197,7 @@ class _FoodDiaryState extends State<FoodDiary> {
                           value: DatabaseService(uid:userId).breakFastFoods,
                           child: Container(
                             width: 320,
-                            height: 80,
+                            height: 100,
                             decoration: BoxDecoration(
                                 border: Border.all(color: Colors.blueAccent)
                             ),
@@ -212,7 +219,7 @@ class _FoodDiaryState extends State<FoodDiary> {
                           value: DatabaseService(uid:userId).lunchFoods,
                           child: Container(
                             width: 320,
-                            height: 80,
+                            height: 100,
                             decoration: BoxDecoration(
                                 border: Border.all(color: Colors.blueAccent)
                             ),
@@ -234,7 +241,7 @@ class _FoodDiaryState extends State<FoodDiary> {
                             value: DatabaseService(uid:userId).dinnerFoods,
                           child: Container(
                             width: 320,
-                            height: 80,
+                            height: 100,
                             decoration: BoxDecoration(
                                 border: Border.all(color: Colors.blueAccent)
                             ),
@@ -256,7 +263,7 @@ class _FoodDiaryState extends State<FoodDiary> {
                             value: DatabaseService(uid:userId).snacks,
                           child: Container(
                             width: 320,
-                            height: 80,
+                            height: 100,
                             decoration: BoxDecoration(
                                 border: Border.all(color: Colors.blueAccent)
                             ),

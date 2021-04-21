@@ -17,7 +17,11 @@ class myApp extends StatelessWidget {
     return StreamProvider<User>.value(
       value: AuthService().user,
       child: MaterialApp(
-          debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+            //color for scrollbar
+            highlightColor: Color(0xffffc600)
+        ),
+        debugShowCheckedModeBanner: false,
            initialRoute: '/',
            routes: {
             '/second': (context) => Home(),

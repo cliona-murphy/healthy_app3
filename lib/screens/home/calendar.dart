@@ -50,7 +50,7 @@ class _CalendarViewState extends State<CalendarView> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("AlertDialog"),
+      title: Text("Confirm Action"),
       content: Text("Would you like to view data you entered on ${selectedDay}?"),
       actions: [
         cancelButton,
@@ -58,6 +58,7 @@ class _CalendarViewState extends State<CalendarView> {
       ],
     );
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return alert;
@@ -76,7 +77,7 @@ class _CalendarViewState extends State<CalendarView> {
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: new AppBar(
-          title: new Text("Calendar"),
+          title: new Text("View Previously Entered Logs"),
         ),
         body: SingleChildScrollView(
           child: Column(

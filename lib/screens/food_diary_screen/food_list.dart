@@ -16,16 +16,21 @@ class _FoodListState extends State<FoodList> {
     final foods = Provider.of<List<Food>>(context) ?? [];
 
     if(foods.isNotEmpty){
-      return ListView.builder(
-        itemCount: foods.length,
-        itemBuilder: (context, index) {
-          return FoodTile(food: foods[index]);
-        },
+      return RawScrollbar(
+        thumbColor: Colors.blueAccent,
+        radius: Radius.circular(20),
+        thickness: 5,
+        child: ListView.builder(
+          itemCount: foods.length,
+          itemBuilder: (context, index) {
+            return FoodTile(food: foods[index]);
+          },
+        ),
       );
     } else {
       return Container(
         height: 80,
-        width: 300,
+        width: 320,
         padding: const EdgeInsets.fromLTRB(30, 10, 30, 15),
         child: Column(
           children: [
@@ -38,6 +43,11 @@ class _FoodListState extends State<FoodList> {
               textAlign: TextAlign.center,
               style: new TextStyle(
                   color: Colors.grey, fontSize: 20.0),
+            ),
+            Text('You can log multiple foods.',
+              textAlign: TextAlign.center,
+              style: new TextStyle(
+                  color: Colors.grey, fontSize: 15.0),
             ),
         ]),
       );
