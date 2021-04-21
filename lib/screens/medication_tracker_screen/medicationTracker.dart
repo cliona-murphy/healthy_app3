@@ -56,7 +56,7 @@ class _MedicationTrackerState extends State<MedicationTracker> {
 
 
   Future<String> addItem(BuildContext context) {
-      return showDialog(context: context, builder: (context) {
+      return showDialog(context: context, barrierDismissible: false, builder: (context) {
         return AlertDialog(
           title: Text("Enter details here:"),
           content: Container(
@@ -88,6 +88,13 @@ class _MedicationTrackerState extends State<MedicationTracker> {
             ),
           ),
           actions: <Widget> [
+            MaterialButton(
+              elevation: 5.0,
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
             MaterialButton(
               elevation: 5.0,
               child: Text("Submit"),
@@ -136,6 +143,7 @@ class _MedicationTrackerState extends State<MedicationTracker> {
     );
 
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return alert;

@@ -114,6 +114,7 @@ class _MedicationTileState extends State<MedicationTile> {
     );
 
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return alert;
@@ -122,7 +123,7 @@ class _MedicationTileState extends State<MedicationTile> {
   }
 
   Future<String> editItem(BuildContext context, String medName, String timeToTake) {
-    return showDialog(context: context, builder: (context) {
+    return showDialog(context: context, barrierDismissible: false, builder: (context) {
       return AlertDialog(
         title: Text("Edit "+medName+" details here:"),
         content: Container(
@@ -148,6 +149,13 @@ class _MedicationTileState extends State<MedicationTile> {
           ),
         ),
         actions: <Widget> [
+          MaterialButton(
+            elevation: 5.0,
+            child: Text("Cancel"),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
           IconButton(
             icon: Icon(Icons.delete),
             color: Colors.red,

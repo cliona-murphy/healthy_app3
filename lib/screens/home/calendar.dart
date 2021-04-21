@@ -58,6 +58,7 @@ class _CalendarViewState extends State<CalendarView> {
       ],
     );
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return alert;
