@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/services/database.dart';
+import 'package:healthy_app/shared/globals.dart' as globals;
 
 class SettingsWidgets extends StatefulWidget {
   final String country;
@@ -31,6 +32,9 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
 
 
   void initState() {
+    setState(() {
+      globals.settingsChanged = false;
+    });
     super.initState();
     getUid();
   }
@@ -48,6 +52,7 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
   void onSearchAreaChange(String data) {
     setState(() {
       _searchAreaResult = data;
+      globals.settingsChanged = true;
     });
     //DatabaseService(uid: userId).enterUserCountry(_searchAreaResult);
   }
@@ -55,6 +60,7 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
   void onWaterSearchAreaChange(String data){
     setState(() {
       waterIntake = data;
+      globals.settingsChanged = true;
     });
     //DatabaseService(uid: userId).enterUserCountry(waterIntake);
   }
@@ -114,6 +120,9 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
               unit: ' years',
             ),
             onSettingDataRowChange: (double resultVal) {
+              setState(() {
+                globals.settingsChanged = true;
+              });
               DatabaseService(uid: userId).enterUserAge(resultVal.toInt());
             },
             config: SettingsRowConfiguration(
@@ -133,6 +142,9 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
               unit: ' kg',
             ),
             onSettingDataRowChange: (double resultVal) {
+              setState(() {
+                globals.settingsChanged = true;
+              });
               DatabaseService(uid: userId).enterUserWeight(resultVal.toInt());
             },
             config: SettingsRowConfiguration(
@@ -172,6 +184,9 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
               unit: ' kcal',
             ),
             onSettingDataRowChange: (double resultVal) {
+              setState(() {
+                globals.settingsChanged = true;
+              });
               DatabaseService(uid: userId).updateKcalIntakeTarget(resultVal.toInt());
             },
             config: SettingsRowConfiguration(
@@ -191,6 +206,9 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
               unit: ' kcal',
             ),
             onSettingDataRowChange: (double resultVal) {
+              setState(() {
+                globals.settingsChanged = true;
+              });
               DatabaseService(uid: userId).updateKcalOutputTarget(resultVal.toInt());
             },
             config: SettingsRowConfiguration(
@@ -216,6 +234,9 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
                   '6': '6 litres',
                 }),
             onSettingDataRowChange: (double resultVal) {
+              setState(() {
+                globals.settingsChanged = true;
+              });
               DatabaseService(uid: userId).updateWaterIntakeTarget(resultVal.toInt());
             },
             config: SettingsRowConfiguration(

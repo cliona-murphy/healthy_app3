@@ -75,23 +75,6 @@ class _ActivityFormState extends State<ActivityForm> {
     DatabaseService(uid: userId).updateActivity(widget.activity.docId, activityType, distance, duration, calories);
   }
 
-  // void calculateCalories(){
-  //   switch (activityType){
-  //     case 'Walking': {
-  //       break;
-  //     }
-  //     case 'Running': {
-  //       break;
-  //     }
-  //     case 'Cycling': {
-  //       break;
-  //     }
-  //     case 'Swimming': {
-  //       break;
-  //     }
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

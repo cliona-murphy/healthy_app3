@@ -6,6 +6,7 @@ int kcalIntakeTarget = 2000;
 int kcalOutputTarget = 2000;
 int waterIntakeTarget = 0;
 DateTime newDate = new DateTime.now();
+bool settingsChanged = false;
 
 String getCurrentDate(){
   var date = new DateTime.now().toString();
