@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:healthy_app/models/arguments.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:healthy_app/screens/home/home.dart' as HomePage;
 import 'package:healthy_app/shared/globals.dart' as globals;
+import 'package:provider/provider.dart';
 
 class CalendarView extends StatefulWidget {
 
@@ -23,10 +26,33 @@ class _CalendarViewState extends State<CalendarView> {
   DateTime newDate;
   String error = "";
   bool dateChanged = false;
+  Map<DateTime, List<dynamic>> _events;
+  List<dynamic> _selectedEvents;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
+  var userId;
 
   void initState() {
     super.initState();
+    getUid();
     selectedDay = getCurrentDate();
+    _events = {};
+    _selectedEvents = [];
+    markDatesThatHaveData();
+  }
+
+  Future<String> getUid() async {
+    final FirebaseUser user = await auth.currentUser();
+    final uid = user.uid;
+    setState(() {
+      userId = uid;
+    });
+    return uid;
+  }
+
+  markDatesThatHaveData(){
+
+    _events[globals.newDate] = ["hi"];
   }
 
   showAlertDialog(BuildContext context) {
@@ -90,57 +116,71 @@ class _CalendarViewState extends State<CalendarView> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        appBar: new AppBar(
-          title: new Text("View Previously Entered Logs"),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                child: TableCalendar(
-                  calendarController: _controller,
-                  initialSelectedDay: globals.newDate,
-                  availableCalendarFormats: const {
-                    CalendarFormat.week: 'Two Weeks',
-                    CalendarFormat.month: 'Week',
-                    CalendarFormat.twoWeeks: "Month",
-                  },
-                  startingDayOfWeek: StartingDayOfWeek.monday,
-                    onDaySelected: (date, events,e) {
-                      newDate = date;
-                      selectedDay = "${date.day}/${date.month}/${date.year}";
-                      if(selectedDay != globals.selectedDate){
-                        dateChanged = true;
-                      } else {
-                        dateChanged = false;
-                      }
-
-                    },
-                ),
-              ),
-              Center(
-                child: Container(
-                  padding: const EdgeInsets.all(10.0),
-                  child: ElevatedButton(
-                    onPressed: (){
-                      if(dateChanged) {
-                        showAlertDialog(context);
-                      } else {
-                        setState(() {
-                          showSnackBar("Error", "You have not selected a new date.");
-                        });
-                      }
-
-                    },
-                    child: Text("Select date"),
+    // final dates = Provider.of<List<DateTime>>(context) ?? '';
+    return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance.collection('users').document(userId).collection('entries').snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          //
+          if(snapshot.hasData) {
+            for (var data in snapshot.data.documents) {
+              DateTime date = data['entryDate'].toDate();
+              _events[date] = ["x"];
+            }
+          }
+          return Scaffold(
+            appBar: new AppBar(
+              title: new Text("View Previously Entered Logs"),
+            ),
+            body: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    child: TableCalendar(
+                      calendarController: _controller,
+                      initialSelectedDay: globals.newDate,
+                      events: _events,
+                      availableCalendarFormats: const {
+                        CalendarFormat.week: 'Two Weeks',
+                        CalendarFormat.month: 'Week',
+                        CalendarFormat.twoWeeks: "Month",
+                      },
+                      startingDayOfWeek: StartingDayOfWeek.monday,
+                        onDaySelected: (date, events,e) {
+                          newDate = date;
+                          selectedDay = "${date.day}/${date.month}/${date.year}";
+                          if(selectedDay != globals.selectedDate){
+                            dateChanged = true;
+                          } else {
+                            dateChanged = false;
+                          }
+                        },
+                    ),
                   ),
-                ),
+                  Center(
+                    child: Container(
+                      padding: const EdgeInsets.all(10.0),
+                      child: ElevatedButton(
+                        onPressed: (){
+                          if(dateChanged) {
+                            showAlertDialog(context);
+                          } else {
+                            setState(() {
+                              showSnackBar("Error", "You have not selected a new date.");
+                            });
+                          }
+
+                        },
+                        child: Text("Select date"),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ));
+            ),
+            );
+          },
+        );
   }
 }

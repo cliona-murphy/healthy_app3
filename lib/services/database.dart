@@ -118,7 +118,7 @@ class DatabaseService {
         .collection('entries')
         .document(entryName)
         .setData({
-      'entryDate': date,
+      'entryDate': DateTime.now(),
     });
   }
 
@@ -579,6 +579,20 @@ class DatabaseService {
     });
   }
 
+  //List<String>
+  Stream<List<DateTime>> get entryDates {
+    return userCollection.document(uid)
+        .collection('entries')
+        .snapshots()
+       .map(entriesListFromSnapshot);
+  }
+
+  List<DateTime> entriesListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.documents.map((doc) {
+      DateTime date = doc.data['entryDate'] ?? 0;
+      return date;
+    }).toList();
+  }
     //misc
   String getEntryName(){
     var entryName;
