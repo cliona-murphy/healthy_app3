@@ -1,3 +1,4 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -19,6 +20,8 @@ class _CalendarViewState extends State<CalendarView> {
   CalendarController _controller = CalendarController();
   String selectedDay = "";
   DateTime newDate;
+  String error = "";
+  bool dateChanged = false;
 
   void initState() {
     super.initState();
@@ -73,6 +76,17 @@ class _CalendarViewState extends State<CalendarView> {
     return formattedDate;
   }
 
+  showSnackBar(String title, String message) {
+    return Flushbar(
+      duration: Duration(seconds: 2),
+      flushbarPosition: FlushbarPosition.TOP,
+      backgroundColor: Colors.redAccent,
+      title: title,
+      message: message,
+    )
+      ..show(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -97,6 +111,7 @@ class _CalendarViewState extends State<CalendarView> {
                     onDaySelected: (date, events,e) {
                       newDate = date;
                       selectedDay = "${date.day}/${date.month}/${date.year}";
+                      dateChanged = true;
                     },
                 ),
               ),
@@ -105,7 +120,14 @@ class _CalendarViewState extends State<CalendarView> {
                   padding: const EdgeInsets.all(10.0),
                   child: ElevatedButton(
                     onPressed: (){
-                      showAlertDialog(context);
+                      if(dateChanged) {
+                        showAlertDialog(context);
+                      } else {
+                        setState(() {
+                          showSnackBar("Error", "You have not selected a new date.");
+                        });
+                      }
+
                     },
                     child: Text("Select date"),
                   ),
