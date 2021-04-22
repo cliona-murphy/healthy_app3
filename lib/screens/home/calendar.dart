@@ -2,6 +2,7 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:healthy_app/models/arguments.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:healthy_app/screens/home/home.dart' as HomePage;
@@ -111,7 +112,12 @@ class _CalendarViewState extends State<CalendarView> {
                     onDaySelected: (date, events,e) {
                       newDate = date;
                       selectedDay = "${date.day}/${date.month}/${date.year}";
-                      dateChanged = true;
+                      if(selectedDay != globals.selectedDate){
+                        dateChanged = true;
+                      } else {
+                        dateChanged = false;
+                      }
+
                     },
                 ),
               ),
