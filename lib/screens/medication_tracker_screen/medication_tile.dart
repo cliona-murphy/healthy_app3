@@ -46,21 +46,22 @@ class _MedicationTileState extends State<MedicationTile> {
   }
   updateDatabase(bool checked, String medName) async {
     String userId = await getUserid();
-    DatabaseService(uid: userId).medTaken(medName, checked);
+    bool documentExists = await DatabaseService(uid: userId).doesNameAlreadyExist(medName);
+    DatabaseService(uid: userId).medTaken(medName, checked, documentExists);
   }
 
-  updateDetails(String originalMedName, String newMedName, String timeToTake) async {
+  updateDetails(String newMedName, String timeToTake) async {
     String userId = await getUserid();
-    DatabaseService(uid: userId).updateMedicationDetails(originalMedName, newMedName, timeToTake);
+    DatabaseService(uid: userId).updateMedicationDetails(widget.medication.docId, newMedName, timeToTake);
   }
-  updateTime(String medName, String timeToTake) async {
+  updateTime(String timeToTake) async {
     String userId = await getUserid();
-    DatabaseService(uid: userId).updateMedicationTime(medName, timeToTake);
+    DatabaseService(uid: userId).updateMedicationTime(widget.medication.docId, timeToTake);
   }
 
-  deleteMedication(String medName) async {
+  deleteMedication() async {
     String userId = await getUserid();
-    DatabaseService(uid: userId).deleteMedication(medName);
+    DatabaseService(uid: userId).deleteMedication(widget.medication.docId);
   }
 
   updateTimeTaken(String medName) async {
@@ -95,7 +96,7 @@ class _MedicationTileState extends State<MedicationTile> {
         child: Text("Confirm"),
         onPressed:  () {
          // if (medName == ""){
-            updateTime(widget.medication.medicineName, timeString);
+            updateTime(timeString);
           //} else {
            // updateDetails(widget.medication.medicineName, medName, timeString);
           //}
@@ -160,7 +161,7 @@ class _MedicationTileState extends State<MedicationTile> {
             icon: Icon(Icons.delete),
             color: Colors.red,
             onPressed: () {
-              deleteMedication(widget.medication.medicineName);
+              deleteMedication();
               nameController.clear();
               timeController.clear();
               Navigator.pop(context);

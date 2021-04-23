@@ -32,12 +32,12 @@ class _FoodTileState extends State<FoodTile> {
 
   updateDetails(String foodName, int calories) async {
     String userId = await getUserid();
-    DatabaseService(uid: userId).updateFoodDetails(foodName, calories);
+    DatabaseService(uid: userId).updateFoodDetails(widget.food.docId, foodName, calories);
   }
 
   deleteFood(String foodName) async {
     String userId = await getUserid();
-    DatabaseService(uid: userId).deleteFood(foodName);
+    DatabaseService(uid: userId).deleteFood(widget.food.docId);
   }
 
   String validateNameEntry(String value) {
