@@ -170,12 +170,7 @@ class DatabaseService {
   //       //.map(foodListFromSnapshot);
   // }
   Stream<List<Food>> get allFoods {
-    var entryName;
-    if (globals.selectedDate != getCurrentDate()){
-      entryName = reformatDate(globals.selectedDate);
-    } else {
-      entryName = reformatDate(getCurrentDate());
-    }
+    var entryName = getEntryName();
     return Firestore.instance
         .collection('users')
         .document(uid)
@@ -188,12 +183,7 @@ class DatabaseService {
 
   Stream<List<Food>> get breakFastFoods {
     //check if entry exists before trying to retrieve it?
-    var entryName;
-    if (globals.selectedDate != getCurrentDate()){
-      entryName = reformatDate(globals.selectedDate);
-    } else {
-      entryName = reformatDate(getCurrentDate());
-    }
+    var entryName = getEntryName();
     return Firestore.instance
         .collection("users")
         .document(uid)
@@ -206,12 +196,7 @@ class DatabaseService {
     }
 
   Stream<List<Food>> get lunchFoods {
-    var entryName;
-    if (globals.selectedDate != getCurrentDate()){
-      entryName = reformatDate(globals.selectedDate);
-    } else {
-      entryName = reformatDate(getCurrentDate());
-    }
+    var entryName = getEntryName();
     return Firestore.instance
         .collection("users")
         .document(uid)
@@ -224,12 +209,7 @@ class DatabaseService {
   }
 
   Stream<List<Food>> get dinnerFoods {
-    var entryName;
-    if (globals.selectedDate != getCurrentDate()){
-      entryName = reformatDate(globals.selectedDate);
-    } else {
-      entryName = reformatDate(getCurrentDate());
-    }
+    var entryName = getEntryName();
     return Firestore.instance
         .collection("users")
         .document(uid)
@@ -242,12 +222,7 @@ class DatabaseService {
   }
 
   Stream<List<Food>> get snacks {
-    var entryName;
-    if (globals.selectedDate != getCurrentDate()){
-      entryName = reformatDate(globals.selectedDate);
-    } else {
-      entryName = reformatDate(getCurrentDate());
-    }
+    var entryName = getEntryName();
     return Firestore.instance
         .collection("users")
         .document(uid)
