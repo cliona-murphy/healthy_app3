@@ -29,7 +29,7 @@ class _CalendarViewState extends State<CalendarView> {
   Map<DateTime, List<dynamic>> _events;
   List<dynamic> _selectedEvents;
   final FirebaseAuth auth = FirebaseAuth.instance;
-
+  bool dataOnThisDate = false;
   var userId;
 
   void initState() {
@@ -150,6 +150,7 @@ class _CalendarViewState extends State<CalendarView> {
                         onDaySelected: (date, events,e) {
                           newDate = date;
                           selectedDay = "${date.day}/${date.month}/${date.year}";
+                          dataOnThisDate = false;
                           if(selectedDay != globals.selectedDate){
                             dateChanged = true;
                           } else {
@@ -164,7 +165,16 @@ class _CalendarViewState extends State<CalendarView> {
                       child: ElevatedButton(
                         onPressed: (){
                           if(dateChanged) {
-                            showAlertDialog(context);
+                            for (var date in _events.keys) {
+                              if ((newDate.day == date.day) && (newDate.month == date.month) && (newDate.year == date.year)){
+                                //entry exists for this date
+                                showAlertDialog(context);
+                                dataOnThisDate = true;
+                              }
+                            }
+                            if (!dataOnThisDate){
+                              showSnackBar("Error", "You did not enter any data on this date.");
+                            }
                           } else {
                             setState(() {
                               showSnackBar("Error", "You have not selected a new date.");
