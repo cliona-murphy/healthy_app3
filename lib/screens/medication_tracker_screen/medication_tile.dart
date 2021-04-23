@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:healthy_app/models/medication.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/services/database.dart';
@@ -99,11 +100,11 @@ class _MedicationTileState extends State<MedicationTile> {
     Widget continueButton = FlatButton(
         child: Text("Confirm"),
         onPressed:  () {
-         // if (medName == ""){
+         if (medName == ""){
             updateTime(timeString);
-          //} else {
-           // updateDetails(widget.medication.medicineName, medName, timeString);
-          //}
+          } else {
+           updateDetails(widget.medication.medicineName, timeString);
+          }
           Navigator.pop(context);
         }
     );
@@ -132,11 +133,23 @@ class _MedicationTileState extends State<MedicationTile> {
       return AlertDialog(
         title: Text("Edit "+medName+" details here:"),
         content: Container(
-          height: 60,
+          height: 130,
           child : SingleChildScrollView(
             child: Column(
               children: [
                 Padding(padding: EdgeInsets.only(top: 15.0),),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextField(
+                    controller: nameController,
+                    inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[0-9]")),],
+                    maxLength: 15,
+                    maxLengthEnforced: true,
+                    decoration: InputDecoration(
+                      hintText: "Edit name",
+                    ),
+                  ),
+                ),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
