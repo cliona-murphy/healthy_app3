@@ -112,13 +112,20 @@ class DatabaseService {
   //entry creation
   Future createNewEntry(String date) async {
     //creating a new document in collection for user with id = uid
-    var entryName = getEntryName();
+    var entryName = reformatDate(date);
+    var newDateArr = date.split("/");
+    DateTime entryDate;
+    if (date != getCurrentDate()) {
+      entryDate = DateTime(int.parse(newDateArr[2]), int.parse(newDateArr[1]), int.parse(newDateArr[0]));
+    } else {
+      entryDate = DateTime.now();
+    }
     return await Firestore.instance.collection('users')
         .document(uid)
         .collection('entries')
         .document(entryName)
         .setData({
-      'entryDate': DateTime.now(),
+      'entryDate': entryDate,
     });
   }
 

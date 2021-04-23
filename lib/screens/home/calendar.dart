@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:healthy_app/models/arguments.dart';
+import 'package:healthy_app/services/database.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:healthy_app/screens/home/home.dart' as HomePage;
 import 'package:healthy_app/shared/globals.dart' as globals;
@@ -55,7 +56,7 @@ class _CalendarViewState extends State<CalendarView> {
     _events[globals.newDate] = ["hi"];
   }
 
-  showAlertDialog(BuildContext context) {
+  showAlertDialog(BuildContext context, String message) {
     // set up the buttons
     Widget cancelButton = FlatButton(
       child: Text("Cancel"),
@@ -71,6 +72,7 @@ class _CalendarViewState extends State<CalendarView> {
           globals.newDateSelected = true;
           globals.newDate = newDate;
         });
+        DatabaseService(uid: userId).createNewEntry(selectedDay);
         Navigator.pushNamedAndRemoveUntil(context,
             "/second",
               (r) => false,
@@ -81,7 +83,7 @@ class _CalendarViewState extends State<CalendarView> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Confirm Action"),
-      content: Text("Would you like to view data you entered on ${selectedDay}?"),
+      content: Text(message),
       actions: [
         cancelButton,
         continueButton,
@@ -168,12 +170,13 @@ class _CalendarViewState extends State<CalendarView> {
                             for (var date in _events.keys) {
                               if ((newDate.day == date.day) && (newDate.month == date.month) && (newDate.year == date.year)){
                                 //entry exists for this date
-                                showAlertDialog(context);
+                                showAlertDialog(context, "Would you like to view data you entered on ${selectedDay}?");
                                 dataOnThisDate = true;
                               }
                             }
                             if (!dataOnThisDate){
-                              showSnackBar("Error", "You did not enter any data on this date.");
+                              showAlertDialog(context, "You did not enter any data on ${selectedDay}. Would you like to go back and log some data?");
+                              // showSnackBar("Error", "You did not enter any data on this date.");
                             }
                           } else {
                             setState(() {
