@@ -79,14 +79,15 @@ class _HomeState extends State<Home> {
         MaterialPageRoute(
           builder: (context) => CalendarView(),
         ));
-    if(result.isNotEmpty){
-      setState(() {
-        selectedDate = result;
-        newDate = true;
-        globals.selectedDate = selectedDate;
-      });
+    if (result != null) {
+      if (result.isNotEmpty) {
+        setState(() {
+          selectedDate = result;
+          newDate = true;
+          globals.selectedDate = selectedDate;
+        });
+      }
     }
-    //print(result);
   }
 
   renderSettingsPage() async {
@@ -96,9 +97,9 @@ class _HomeState extends State<Home> {
         MaterialPageRoute(
           builder: (context) => SettingsPage(),
         ));
-    if(result.isNotEmpty){
+    if (result.isNotEmpty) {
       print(result);
-      if(result == "true") {
+      if (result == "true") {
         showSnackBarUpdate();
       }
     }
@@ -128,66 +129,69 @@ class _HomeState extends State<Home> {
                   value: DatabaseService(uid: userId).nutrientContent,
                   child: StreamProvider.value(
                     value: DatabaseService(uid: userId).medications,
-                    child: Scaffold(
-                    appBar: AppBar(
-                      leading: GestureDetector(
-                        onTap: () {
-                          renderCalendar();
-                        },
-                        child: Icon(
-                          Icons.calendar_today_outlined,
+                    child: StreamProvider.value(
+                      value: DatabaseService(uid: userId).entryDates,
+                      child: Scaffold(
+                      appBar: AppBar(
+                        leading: GestureDetector(
+                          onTap: () {
+                            renderCalendar();
+                          },
+                          child: Icon(
+                            Icons.calendar_today_outlined,
+                          ),
                         ),
+                        title: newDate ? new Text(globals.selectedDate) : new Text(getCurrentDate()),
+                        centerTitle: true,
+                        actions: <Widget>[
+                          PopupMenuButton<String>(
+                            onSelected: choiceAction,
+                            itemBuilder: (BuildContext context){
+                              return ConstantVars.choices.map((String choice){
+                                return PopupMenuItem<String>(
+                                  value: choice,
+                                  child: Text(choice),
+                                );
+                              }).toList();
+                            }
+                            ,)],
                       ),
-                      title: newDate ? new Text(globals.selectedDate) : new Text(getCurrentDate()),
-                      centerTitle: true,
-                      actions: <Widget>[
-                        PopupMenuButton<String>(
-                          onSelected: choiceAction,
-                          itemBuilder: (BuildContext context){
-                            return ConstantVars.choices.map((String choice){
-                              return PopupMenuItem<String>(
-                                value: choice,
-                                child: Text(choice),
-                              );
-                            }).toList();
-                          }
-                          ,)],
-                    ),
-                    backgroundColor: Colors.white,
-                    body: PageView(
-                      controller: _pageController,
-                      children: _screens,
-                      physics: NeverScrollableScrollPhysics(),
-                    ),
-                    bottomNavigationBar: BottomNavigationBar(
-                      onTap: _onItemTapped,
-                      type: BottomNavigationBarType.fixed,
-                      items: <BottomNavigationBarItem>[
-                        BottomNavigationBarItem(
-                          icon: Icon(Icons.bar_chart,
-                              color: getSelectedIndex() == 0 ? Colors.blue: Colors.grey),
-                          label: 'Progress',
-                        ),
-                        BottomNavigationBarItem(
-                          icon: Icon(Icons.fastfood),
-                          label: 'Food',
-                        ),
-                        BottomNavigationBarItem(
-                          icon: Icon(Icons.directions_run_outlined),
-                          label: 'Activity',
-                        ),
-                        BottomNavigationBarItem(
-                          icon: Icon(Icons.check),
-                          label: 'Nutrients',
-                        ),
-                        BottomNavigationBarItem(
-                          icon: Icon(Icons.medical_services_outlined),
-                          label: 'Meds',
-                        ),
-                      ],
-                      currentIndex: _selectedIndex,
-                    ),
+                      backgroundColor: Colors.white,
+                      body: PageView(
+                        controller: _pageController,
+                        children: _screens,
+                        physics: NeverScrollableScrollPhysics(),
+                      ),
+                      bottomNavigationBar: BottomNavigationBar(
+                        onTap: _onItemTapped,
+                        type: BottomNavigationBarType.fixed,
+                        items: <BottomNavigationBarItem>[
+                          BottomNavigationBarItem(
+                            icon: Icon(Icons.bar_chart,
+                                color: getSelectedIndex() == 0 ? Colors.blue: Colors.grey),
+                            label: 'Progress',
+                          ),
+                          BottomNavigationBarItem(
+                            icon: Icon(Icons.fastfood),
+                            label: 'Food',
+                          ),
+                          BottomNavigationBarItem(
+                            icon: Icon(Icons.directions_run_outlined),
+                            label: 'Activity',
+                          ),
+                          BottomNavigationBarItem(
+                            icon: Icon(Icons.check),
+                            label: 'Nutrients',
+                          ),
+                          BottomNavigationBarItem(
+                            icon: Icon(Icons.medical_services_outlined),
+                            label: 'Meds',
+                          ),
+                        ],
+                        currentIndex: _selectedIndex,
+                      ),
                    ),
+                    ),
                   ),
                 ),
               ),

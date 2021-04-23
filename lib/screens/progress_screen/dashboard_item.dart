@@ -22,13 +22,10 @@ class _DashboardItemState extends State<DashboardItem> {
   void initState (){
     super.initState();
     percentageIntakeValue = (int.parse(widget.data)) / widget.target;
-    print("hi" + percentageIntakeValue.toString());
   }
 
   double calculatePercentage(){
     percentageIntakeValue = ((int.parse(widget.data)) / widget.target);
-
-    print("hi" + percentageIntakeValue.toString());
     return percentageIntakeValue;
   }
 
