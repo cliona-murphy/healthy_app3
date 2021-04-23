@@ -59,8 +59,12 @@ class _MedicationTileState extends State<MedicationTile> {
     DatabaseService(uid: userId).updateMedicationTime(widget.medication.docId, timeToTake);
   }
 
-  deleteMedication() async {
+  deleteMedication(String medName) async {
     String userId = await getUserid();
+    bool documentExists = await DatabaseService(uid: userId).doesNameAlreadyExist(medName);
+    if (documentExists) {
+      DatabaseService(uid: userId).deleteMedicationEntryFromChecklist(medName);
+    }
     DatabaseService(uid: userId).deleteMedication(widget.medication.docId);
   }
 
@@ -161,7 +165,7 @@ class _MedicationTileState extends State<MedicationTile> {
             icon: Icon(Icons.delete),
             color: Colors.red,
             onPressed: () {
-              deleteMedication();
+              deleteMedication(widget.medication.medicineName);
               nameController.clear();
               timeController.clear();
               Navigator.pop(context);

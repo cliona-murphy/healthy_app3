@@ -380,6 +380,21 @@ class DatabaseService {
         .document(docId)
         .delete();
   }
+
+  deleteMedicationEntryFromChecklist(String medName) async {
+    return await Firestore.instance.collection('users')
+        .document(uid)
+        .collection('entries')
+        .document(getEntryName())
+        .collection('medChecklist')
+        .where('medicationName', isEqualTo: medName)
+        .getDocuments()
+        .then((value) {
+      value.documents.forEach((doc) {
+        doc.reference.delete();
+      });
+    });
+  }
   Stream<List<MedicationChecklist>> getLoggedMedications() {
     var entryName = getEntryName();
     return Firestore.instance.collection('users')
