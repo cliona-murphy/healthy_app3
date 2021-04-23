@@ -1,15 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:healthy_app/models/arguments.dart';
-import 'package:healthy_app/screens/home/settings_list.dart';
 import 'package:healthy_app/screens/home/settings_page.dart';
 import 'package:healthy_app/screens/home/wrapper.dart';
 import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/services/database.dart';
 import 'package:healthy_app/shared/ConstantVars.dart';
 import 'package:provider/provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'calendar.dart';
 import '../food_diary_screen/foodDiary.dart';
 import '../activity_diary_screen/activityDiary.dart';
@@ -17,6 +14,8 @@ import '../medication_tracker_screen/medicationTracker.dart';
 import '../nutrient_screen/nutrientChecklist.dart';
 import '../progress_screen/progress.dart';
 import 'package:healthy_app/shared/globals.dart' as globals;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 // ignore: must_be_immutable
 class Home extends StatefulWidget {
   String date;
@@ -167,24 +166,24 @@ class _HomeState extends State<Home> {
                         type: BottomNavigationBarType.fixed,
                         items: <BottomNavigationBarItem>[
                           BottomNavigationBarItem(
-                            icon: Icon(Icons.bar_chart,
-                                color: getSelectedIndex() == 0 ? Colors.blue: Colors.grey),
+                            icon: Icon(FontAwesomeIcons.chartArea),
+                                // color: getSelectedIndex() == 0 ? Colors.blue: Colors.grey),
                             label: 'Progress',
                           ),
                           BottomNavigationBarItem(
-                            icon: Icon(Icons.fastfood),
+                            icon: Icon(FontAwesomeIcons.utensils),
                             label: 'Food',
                           ),
                           BottomNavigationBarItem(
-                            icon: Icon(Icons.directions_run_outlined),
+                            icon: Icon(FontAwesomeIcons.running),
                             label: 'Activity',
                           ),
                           BottomNavigationBarItem(
-                            icon: Icon(Icons.check),
+                            icon: Icon(FontAwesomeIcons.tasks),
                             label: 'Nutrients',
                           ),
                           BottomNavigationBarItem(
-                            icon: Icon(Icons.medical_services_outlined),
+                            icon: Icon(FontAwesomeIcons.pills),
                             label: 'Meds',
                           ),
                         ],
