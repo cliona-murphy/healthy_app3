@@ -112,7 +112,7 @@ class DatabaseService {
   //entry creation
   Future createNewEntry(String date) async {
     //creating a new document in collection for user with id = uid
-    var entryName = reformatDate(getCurrentDate());
+    var entryName = getEntryName();
     return await Firestore.instance.collection('users')
         .document(uid)
         .collection('entries')
@@ -125,18 +125,7 @@ class DatabaseService {
   //food
   Future addNewFood(String foodName, int calories, String mealId, String date) async {
     //creating a new document in collection for user with id = uid
-    await Firestore.instance.collection("users")
-        .document(uid)
-        .collection("entries")
-        .where('entryDate', isEqualTo: date)
-        .getDocuments()
-        .then((querySnapshot) {
-          print(querySnapshot.documents);
-          querySnapshot.documents.forEach((result) {
-            docId = result.documentID;
-           });
-        });
-    var entryName = reformatDate(getCurrentDate());
+    var entryName = getEntryName();
     return await Firestore
         .instance
         .collection('users')
@@ -149,16 +138,12 @@ class DatabaseService {
       'foodName': foodName,
       'calories': calories,
       'mealId': mealId,
+      // 'timeStamp': DateTime.now(),
     });
   }
 
   Future addWater(int quantity, String date) async {
-    var entryName;
-    if (globals.selectedDate != getCurrentDate()){
-      entryName = reformatDate(globals.selectedDate);
-    } else {
-      entryName = reformatDate(getCurrentDate());
-    }
+    var entryName = getEntryName();
     return await Firestore
         .instance
         .collection('users')
@@ -286,12 +271,7 @@ class DatabaseService {
   }
 
   updateFoodDetails(String foodName, int calories) async {
-    var entryName;
-    if (globals.selectedDate != getCurrentDate()){
-      entryName = reformatDate(globals.selectedDate);
-    } else {
-      entryName = reformatDate(getCurrentDate());
-    }
+    var entryName = getEntryName();
     return await Firestore.instance.collection('users')
         .document(uid)
         .collection('entries')
@@ -305,12 +285,7 @@ class DatabaseService {
   }
 
   deleteFood(foodName) async {
-    var entryName;
-    if (globals.selectedDate != getCurrentDate()){
-      entryName = reformatDate(globals.selectedDate);
-    } else {
-      entryName = reformatDate(getCurrentDate());
-    }
+    var entryName = getEntryName();
     return await Firestore.instance.collection('users')
         .document(uid)
         .collection('entries')
@@ -329,6 +304,7 @@ class DatabaseService {
         .setData({
       'medicationName': medName,
       'timeToTake': time,
+      'timeStamp': DateTime.now(),
     });
   }
 
@@ -337,6 +313,7 @@ class DatabaseService {
         .collection("users")
         .document(uid)
         .collection('medications')
+        .orderBy('timeStamp', descending: false)
         .snapshots()
         .map(medicationListFromSnapshot);
   }
@@ -351,12 +328,7 @@ class DatabaseService {
   }
 
   medTaken(String medName, bool checked) async {
-    var entryName;
-    if (globals.selectedDate != getCurrentDate()){
-      entryName = reformatDate(globals.selectedDate);
-    } else {
-      entryName = reformatDate(getCurrentDate());
-    }
+    var entryName = getEntryName();
     return await Firestore.instance.collection('users')
         .document(uid)
         .collection('entries')
@@ -415,12 +387,7 @@ class DatabaseService {
         .delete();
   }
   Stream<List<MedicationChecklist>> getLoggedMedications() {
-    var entryName;
-    if (globals.selectedDate != getCurrentDate()){
-      entryName = reformatDate(globals.selectedDate);
-    } else {
-      entryName = reformatDate(getCurrentDate());
-    }
+    var entryName = getEntryName();
     return Firestore.instance.collection('users')
         .document(uid)
         .collection('entries')
@@ -458,12 +425,7 @@ class DatabaseService {
   }
 
   checkNutrientTile(String id, bool checked) async {
-      var entryName;
-      if (globals.selectedDate != getCurrentDate()){
-        entryName = reformatDate(globals.selectedDate);
-      } else {
-        entryName = reformatDate(getCurrentDate());
-      }
+      var entryName = getEntryName();
       return await Firestore.instance.collection('users')
           .document(uid)
           .collection('entries')
@@ -477,12 +439,7 @@ class DatabaseService {
     }
 
   Stream<List<LoggedNutrient>> getLoggedNutrients() {
-    var entryName;
-    if (globals.selectedDate != getCurrentDate()){
-      entryName = reformatDate(globals.selectedDate);
-    } else {
-      entryName = reformatDate(getCurrentDate());
-    }
+    var entryName = getEntryName();
     return Firestore.instance.collection('users')
         .document(uid)
         .collection('entries')
@@ -524,6 +481,7 @@ class DatabaseService {
       'distance': roundedDistance,
       'duration': roundedDuration,
       'calories': roundedCalories,
+      'timeStamp': DateTime.now(),
     });
   }
 
@@ -536,6 +494,7 @@ class DatabaseService {
         .collection('entries')
         .document(entryName)
         .collection('activities')
+        .orderBy('timeStamp', descending: false)
         .snapshots()
         .map(activityListFromSnapshot);
   }

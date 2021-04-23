@@ -79,14 +79,15 @@ class _HomeState extends State<Home> {
         MaterialPageRoute(
           builder: (context) => CalendarView(),
         ));
-    if(result.isNotEmpty){
-      setState(() {
-        selectedDate = result;
-        newDate = true;
-        globals.selectedDate = selectedDate;
-      });
+    if (result != null) {
+      if (result.isNotEmpty) {
+        setState(() {
+          selectedDate = result;
+          newDate = true;
+          globals.selectedDate = selectedDate;
+        });
+      }
     }
-    //print(result);
   }
 
   renderSettingsPage() async {
@@ -96,9 +97,9 @@ class _HomeState extends State<Home> {
         MaterialPageRoute(
           builder: (context) => SettingsPage(),
         ));
-    if(result.isNotEmpty){
+    if (result.isNotEmpty) {
       print(result);
-      if(result == "true") {
+      if (result == "true") {
         showSnackBarUpdate();
       }
     }
