@@ -4,7 +4,7 @@ import 'package:healthy_app/models/medication.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'activity_form.dart';
 
 class ActivityTile extends StatefulWidget {
@@ -216,6 +216,26 @@ class _ActivityTileState extends State<ActivityTile> {
     return string;
   }
 
+  Icon getIcon(String activityType) {
+    Icon icon;
+    switch(activityType){
+      case 'Walking':
+        icon = Icon(FontAwesomeIcons.walking);
+        break;
+      case 'Running':
+        icon = Icon(FontAwesomeIcons.running);
+        break;
+      case 'Cycling':
+        icon = Icon(FontAwesomeIcons.biking);
+        break;
+      case 'Swimming':
+        icon = Icon(FontAwesomeIcons.swimmer);
+        break;
+    }
+    return icon;
+
+  }
+
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
@@ -224,7 +244,7 @@ class _ActivityTileState extends State<ActivityTile> {
         child: Column(
           children: [
             ListTile(
-              leading: Icon(Icons.arrow_drop_down_circle),
+              leading: getIcon(widget.activity.activityType.toString()),
               title: Text(widget.activity.activityType.toString(), style: TextStyle(fontSize: 23),),
               subtitle: Text("${widget.activity.calories.toInt()} calories",
                 style: TextStyle(color: Colors.black.withOpacity(0.6), fontSize: 17),
