@@ -32,6 +32,7 @@ class _CalendarViewState extends State<CalendarView> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   bool dataOnThisDate = false;
   var userId;
+  bool todaysDate = false;
 
   void initState() {
     super.initState();
@@ -170,8 +171,15 @@ class _CalendarViewState extends State<CalendarView> {
                             for (var date in _events.keys) {
                               if ((newDate.day == date.day) && (newDate.month == date.month) && (newDate.year == date.year)){
                                 //entry exists for this date
-                                showAlertDialog(context, "Would you like to view data you entered on ${selectedDay}?");
-                                dataOnThisDate = true;
+                                setState(() {
+                                  dataOnThisDate = true;
+                                });
+
+                                if(newDate.year == DateTime.now().year && newDate.month == DateTime.now().month && newDate.day == DateTime.now().day){
+                                  showAlertDialog(context, "Go back to today?");
+                                } else {
+                                  showAlertDialog(context, "Would you like to view data you entered on ${selectedDay}?");
+                                }
                               }
                             }
                             if (!dataOnThisDate){

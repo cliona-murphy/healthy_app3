@@ -8,6 +8,7 @@ import 'package:healthy_app/models/settings.dart';
 import 'package:healthy_app/screens/progress_screen/calorie_count.dart';
 import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/models/food.dart';
+import 'package:healthy_app/shared/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:healthy_app/models/activity.dart';
 import 'package:healthy_app/models/medication_checklist.dart';
@@ -107,7 +108,7 @@ class _ProgressState extends State<Progress> {
               targetIntake = 2000;
               targetOutput = 2000;
             }
-            return Container(
+            return loading ? Loading() : Container(
               padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 2.0),
               child: GridView.count(
                 crossAxisCount: 2,
@@ -117,8 +118,6 @@ class _ProgressState extends State<Progress> {
                   DashboardItem(title: "Burned", data: totalCaloriesBurned.toString(), units:"kcal", target: targetOutput),
                   DashboardItem(title: "Checked", data: noLoggedNutrients.toString(), units: noLoggedNutrients != 1 ? "nutrients" : "nutrient", target: totalNutrients),
                   DashboardItem(title: "Taken", data: noLoggedMedications.toString(), units: noLoggedMedications != 1 ? "medications" : "medication", target: totalMedications),
-                  // makeDashboardItem("Alphabet", Icons.alarm),
-                  // makeDashboardItem("Alphabet", Icons.alarm)
                 ],
               ),
             );

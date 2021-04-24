@@ -66,7 +66,7 @@ class _MedicationTrackerState extends State<MedicationTracker> {
                 children: [
                   TextField(
                     controller: nameController,
-                    maxLength: 15,
+                    maxLength: 30,
                     maxLengthEnforced: true,
                     inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[a-zA-Z 0-9]")),],
                     decoration: InputDecoration(
