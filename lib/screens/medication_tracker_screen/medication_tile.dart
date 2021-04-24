@@ -133,23 +133,23 @@ class _MedicationTileState extends State<MedicationTile> {
       return AlertDialog(
         title: Text("Edit "+medName+" details here:"),
         content: Container(
-          height: 130,
+          height: 100,
           child : SingleChildScrollView(
             child: Column(
               children: [
                 Padding(padding: EdgeInsets.only(top: 15.0),),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: TextField(
-                    controller: nameController,
-                    inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[0-9]")),],
-                    maxLength: 15,
-                    maxLengthEnforced: true,
-                    decoration: InputDecoration(
-                      hintText: "Edit name",
-                    ),
-                  ),
-                ),
+                // Align(
+                //   alignment: Alignment.centerLeft,
+                //   child: TextField(
+                //     controller: nameController,
+                //     inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[0-9]")),],
+                //     maxLength: 15,
+                //     maxLengthEnforced: true,
+                //     decoration: InputDecoration(
+                //       hintText: "Edit name",
+                //     ),
+                //   ),
+                // ),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(

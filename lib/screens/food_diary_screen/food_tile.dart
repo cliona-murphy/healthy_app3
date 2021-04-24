@@ -56,7 +56,7 @@ class _FoodTileState extends State<FoodTile> {
   }
 
   Future<String> editItem(BuildContext context, String foodName, int calories) {
-    return showDialog(context: context, builder: (context) {
+    return showDialog(context: context, barrierDismissible: false, builder: (context) {
       return AlertDialog(
         title: Text("Edit the calories for '${widget.food.foodName}' here:", textAlign: TextAlign.left),
         content: Container(
@@ -88,6 +88,13 @@ class _FoodTileState extends State<FoodTile> {
           ),
         ),
         actions: <Widget> [
+          MaterialButton(
+            elevation: 5.0,
+            child: Text("Cancel"),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
           IconButton(
             icon: Icon(Icons.delete),
             //elevation: 5.0,
