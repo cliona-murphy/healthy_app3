@@ -140,8 +140,7 @@ class DatabaseService {
         .collection('entries')
         .document(entryName)
         .collection('foods')
-        .document(foodName)
-        .setData({
+        .add({
       'foodName': foodName,
       'calories': calories,
       'mealId': mealId,
@@ -248,32 +247,33 @@ class DatabaseService {
         foodName: doc.data['foodName'] ?? '',
         calories: doc.data['calories'] ?? 0,
         mealId: doc.data['mealId'] ?? '',
+        docId: doc.documentID ?? '',
       );
     }).toList();
   }
 
-  updateFoodDetails(String foodName, int calories) async {
+  updateFoodDetails(String docId, String foodName, int calories) async {
     var entryName = getEntryName();
     return await Firestore.instance.collection('users')
         .document(uid)
         .collection('entries')
         .document(entryName)
         .collection('foods')
-        .document(foodName)
+        .document(docId)
         .updateData({
       'foodName': foodName,
       'calories': calories,
     });
   }
 
-  deleteFood(foodName) async {
+  deleteFood(docId) async {
     var entryName = getEntryName();
     return await Firestore.instance.collection('users')
         .document(uid)
         .collection('entries')
         .document(entryName)
         .collection('foods')
-        .document(foodName)
+        .document(docId)
         .delete();
   }
 
@@ -282,8 +282,7 @@ class DatabaseService {
     return await Firestore.instance.collection('users')
         .document(uid)
         .collection('medications')
-        .document(medName)
-        .setData({
+        .add({
       'medicationName': medName,
       'timeToTake': time,
       'timeStamp': DateTime.now(),
@@ -305,68 +304,96 @@ class DatabaseService {
       return Medication(
         medicineName: doc.data['medicationName'] ?? '',
         timeToTake: doc.data['timeToTake'] ?? '',
+        docId: doc.documentID ?? '',
       );
     }).toList();
   }
 
-  medTaken(String medName, bool checked) async {
+  medTaken(String medName, bool checked, bool documentExists) async {
     var entryName = getEntryName();
-    return await Firestore.instance.collection('users')
-        .document(uid)
-        .collection('entries')
-        .document(entryName)
-        .collection('medChecklist')
-        .document(medName)
-        .setData({
-      'medicationName': medName,
-      'taken': checked,
-      'timeTaken': getCurrentTime(),
-    });
+    if(!documentExists) {
+      return await Firestore.instance.collection('users')
+          .document(uid)
+          .collection('entries')
+          .document(entryName)
+          .collection('medChecklist')
+          .add({
+        'medicationName': medName,
+        'taken': checked,
+        'timeTaken': getCurrentTime(),
+      });
+    } else {
+      return await Firestore.instance.collection('users')
+          .document(uid)
+          .collection('entries')
+          .document(entryName)
+          .collection('medChecklist')
+          .where('medicationName', isEqualTo: medName)
+          .getDocuments()
+          .then((value) {
+            value.documents.forEach((doc) {
+              doc.reference.updateData({
+              'medicationName': medName,
+              'taken': checked,
+              'timeTaken': getCurrentTime(),
+              });
+            });
+      });
+    }
   }
 
-  updateMedicationDetails(String originalMedName, String newMedName, String timeToTake) async {
-    await Firestore.instance.collection('users')
-        .document(uid)
-        .collection('medications')
-        .document(originalMedName)
-        .delete();
+  updateMedicationDetails(String docId, String newMedName, String timeToTake) async {
     return await Firestore.instance.collection('users')
         .document(uid)
         .collection('medications')
-        .document(newMedName)
+        .document(docId)
         .updateData({
       'medicationName': newMedName,
       'timeToTake': timeToTake,
     });
   }
 
-  updateMedicationTime(String medName, String timeToTake) async {
+  updateMedicationTime(String docId, String timeToTake) async {
     return await Firestore.instance.collection('users')
         .document(uid)
         .collection('medications')
-        .document(medName)
+        .document(docId)
         .updateData({
-      'medicationName': medName,
       'timeToTake': timeToTake,
     });
   }
 
-  updateTimeTaken(String medName) async {
+  updateTimeTaken(String docId) async {
     return await Firestore.instance.collection('users')
         .document(uid)
         .collection('medications')
-        .document(medName)
+        .document(docId)
         .updateData({
       'timeTaken': getCurrentTime(),
     });
   }
   //this function works if the med name has not been previously edited
-  deleteMedication(String medName) async {
+  deleteMedication(String docId) async {
     return await Firestore.instance.collection('users')
         .document(uid)
         .collection('medications')
-        .document(medName)
+        .document(docId)
         .delete();
+  }
+
+  deleteMedicationEntryFromChecklist(String medName) async {
+    return await Firestore.instance.collection('users')
+        .document(uid)
+        .collection('entries')
+        .document(getEntryName())
+        .collection('medChecklist')
+        .where('medicationName', isEqualTo: medName)
+        .getDocuments()
+        .then((value) {
+      value.documents.forEach((doc) {
+        doc.reference.delete();
+      });
+    });
   }
   Stream<List<MedicationChecklist>> getLoggedMedications() {
     var entryName = getEntryName();
@@ -385,6 +412,7 @@ class DatabaseService {
         medicineName: doc.data['medicationName'] ?? '',
         taken: doc.data['taken'] ?? '',
         timeTaken: doc.data['timeTaken'] ?? '',
+        docId: doc.documentID,
       );
     }).toList();
   }
@@ -535,6 +563,20 @@ class DatabaseService {
     }).toList();
   }
     //misc
+  Future<bool> doesNameAlreadyExist(String name) async {
+    final QuerySnapshot result = await Firestore.instance
+        .collection('users')
+        .document(uid)
+        .collection('entries')
+        .document(getEntryName())
+        .collection('medChecklist')
+        .where('medicationName', isEqualTo: name)
+        .limit(1)
+        .getDocuments();
+    final List<DocumentSnapshot> documents = result.documents;
+    return documents.length == 1;
+  }
+  
   String getEntryName(){
     var entryName;
     if (globals.selectedDate != getCurrentDate()){

@@ -59,20 +59,6 @@ class _ActivityTileState extends State<ActivityTile> {
     )..show(context);
   }
 
-  updateDatabase(bool checked, String medName) async {
-    String userId = await getUserid();
-    DatabaseService(uid: userId).medTaken(medName, checked);
-  }
-
-  updateDetails(String originalMedName, String newMedName, String timeToTake) async {
-    String userId = await getUserid();
-    DatabaseService(uid: userId).updateMedicationDetails(originalMedName, newMedName, timeToTake);
-  }
-  updateTime(String medName, String timeToTake) async {
-    String userId = await getUserid();
-    DatabaseService(uid: userId).updateMedicationTime(medName, timeToTake);
-  }
-
   deleteActivity() async {
     String userId = await getUserid();
     DatabaseService(uid: userId).deleteActivity(widget.activity.docId);

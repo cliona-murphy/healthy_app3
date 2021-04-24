@@ -197,7 +197,7 @@ class _FoodDiaryState extends State<FoodDiary> {
                           value: DatabaseService(uid:userId).breakFastFoods,
                           child: Container(
                             width: 320,
-                            height: 100,
+                            height: 80,
                             decoration: BoxDecoration(
                                 border: Border.all(color: Colors.blueAccent)
                             ),
@@ -219,7 +219,7 @@ class _FoodDiaryState extends State<FoodDiary> {
                           value: DatabaseService(uid:userId).lunchFoods,
                           child: Container(
                             width: 320,
-                            height: 100,
+                            height: 80,
                             decoration: BoxDecoration(
                                 border: Border.all(color: Colors.blueAccent)
                             ),
@@ -241,7 +241,7 @@ class _FoodDiaryState extends State<FoodDiary> {
                             value: DatabaseService(uid:userId).dinnerFoods,
                           child: Container(
                             width: 320,
-                            height: 100,
+                            height: 80,
                             decoration: BoxDecoration(
                                 border: Border.all(color: Colors.blueAccent)
                             ),
@@ -263,7 +263,7 @@ class _FoodDiaryState extends State<FoodDiary> {
                             value: DatabaseService(uid:userId).snacks,
                           child: Container(
                             width: 320,
-                            height: 100,
+                            height: 80,
                             decoration: BoxDecoration(
                                 border: Border.all(color: Colors.blueAccent)
                             ),
