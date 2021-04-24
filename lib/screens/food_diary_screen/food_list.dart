@@ -44,11 +44,11 @@ class _FoodListState extends State<FoodList> {
               style: new TextStyle(
                   color: Colors.grey, fontSize: 20.0),
             ),
-            Text('You can log multiple foods.',
-              textAlign: TextAlign.center,
-              style: new TextStyle(
-                  color: Colors.grey, fontSize: 15.0),
-            ),
+            // Text('You can log multiple foods.',
+            //   textAlign: TextAlign.center,
+            //   style: new TextStyle(
+            //       color: Colors.grey, fontSize: 15.0),
+            // ),
         ]),
       );
     }
