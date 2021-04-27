@@ -21,11 +21,20 @@ class _DashboardItemState extends State<DashboardItem> {
 
   void initState (){
     super.initState();
-    percentageIntakeValue = (int.parse(widget.data)) / widget.target;
+    if (widget.target != 0) {
+      percentageIntakeValue = (int.parse(widget.data)) / widget.target;
+    } else {
+      percentageIntakeValue = 0.0;
+    }
+
   }
 
   double calculatePercentage(){
-    percentageIntakeValue = ((int.parse(widget.data)) / widget.target);
+    if (widget.target != 0) {
+      percentageIntakeValue = ((int.parse(widget.data)) / widget.target);
+    } else {
+      percentageIntakeValue = 0.0;
+    }
     return percentageIntakeValue;
   }
 
