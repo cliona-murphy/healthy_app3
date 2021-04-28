@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_app/models/activity.dart';
 import 'package:healthy_app/models/bar_chart_model.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:provider/provider.dart';
 
 import 'my_bar_chart.dart';
 
@@ -53,16 +55,26 @@ class _BarChartBuilderState extends State<BarChartBuilder> {
 
   @override
   Widget build(BuildContext context) {
+    final activities = Provider.of<List<Activity>>(context) ?? [];
+    var minutesOfActivity = 0;
+     if (activities.isNotEmpty) {
+       for (var act in activities) {
+         minutesOfActivity += act.duration.toInt();
+       }
+        print(minutesOfActivity);
+     }
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Container(
+            // decoration: BoxDecoration(color: Color.fromRGBO(220, 220, 220, 1.0)),
             height: 400,
             width: double.infinity,
             padding: const EdgeInsets.all(12),
             child: Card(
+              color: Color.fromRGBO(220, 220, 220, 1.0),
               child: MyBarChart(data: data),
             ),
           ),

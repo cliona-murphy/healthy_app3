@@ -62,11 +62,13 @@ class _MyBarChartState extends State<MyBarChart> {
                     child: charts.BarChart(
                       series,
                       animate: true,
-                      behaviors: [
-                        new charts.PercentInjector(
-                            totalType: charts.PercentInjectorTotalType.series)
-                      ],
-                      primaryMeasureAxis: new charts.PercentAxisSpec(),
+                      // behaviors: [
+                      //   domainAxis: new charts.NumericAxisSpec(),
+
+                        // new charts.PercentInjector(
+                        //     totalType: charts.PercentInjectorTotalType.series)
+                      // ],
+                      // primaryMeasureAxis: new charts.PercentAxisSpec(),
                     )),
             )
           ],

@@ -131,7 +131,7 @@ class _ProgressState extends State<Progress> {
               child: Column(
                 children: [
                   Container(
-                  height: 1000,
+                  height: 1500,
                   padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 2.0),
                     child: Column(
                       children: [
@@ -162,6 +162,18 @@ class _ProgressState extends State<Progress> {
                             burned: calculatePercentage(totalCaloriesBurned, targetOutput),
                             nutrients: calculatePercentage(noLoggedNutrients, totalNutrients),
                             meds: calculatePercentage(noLoggedMedications, totalMedications),
+                          ),
+                        ),
+                        Container(
+                          height: 400,
+                          child: StreamProvider.value(
+                            value: DatabaseService(uid: userId).getActivitiesForSpecificDate("28/4/2021"),
+                            child: BarChartBuilder(
+                              consumed: calculatePercentage(totalCaloriesConsumed, targetIntake),
+                              burned: calculatePercentage(totalCaloriesBurned, targetOutput),
+                              nutrients: calculatePercentage(noLoggedNutrients, totalNutrients),
+                              meds: calculatePercentage(noLoggedMedications, totalMedications),
+                            ),
                           ),
                         ),
                     ])

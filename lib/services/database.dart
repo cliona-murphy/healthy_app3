@@ -518,16 +518,32 @@ class DatabaseService {
 
   //not working but same functionality as med checklist
   Stream<List<Activity>> get activities {
-    var entryName = getEntryName();
     return  Firestore.instance
         .collection("users")
         .document(uid)
         .collection('entries')
-        .document(entryName)
+        .document(getEntryName())
         .collection('activities')
         .orderBy('timeStamp', descending: false)
         .snapshots()
         .map(activityListFromSnapshot);
+  }
+
+  Stream<List<Activity>> getActivitiesForSpecificDate(String date) {
+    var dateArr = date.split("/");
+    int day = int.parse(dateArr[0]);
+    int iterations = day - 5;
+    for (var i = iterations; i < day; i++){
+      return  Firestore.instance
+          .collection("users")
+          .document(uid)
+          .collection('entries')
+          .document('${iterations}${dateArr[1]}${dateArr[2]}')
+          .collection('activities')
+          .orderBy('timeStamp', descending: false)
+          .snapshots()
+          .map(activityListFromSnapshot);
+    }
   }
 
   List<Activity> activityListFromSnapshot(QuerySnapshot snapshot) {
