@@ -114,7 +114,7 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
             rowData: SettingsSliderConfig(
               title: 'Age',
               from: 18,
-              to: 120,
+              to: 110,
               initialValue: widget.age,
               justIntValues: true,
               unit: ' years',

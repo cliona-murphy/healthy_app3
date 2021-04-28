@@ -406,6 +406,27 @@ class DatabaseService {
         .map(medicationChecklistFromSnapshot);
   }
 
+  Future<List<MedicationChecklist>> getLoggedMedicationsOverPastWeek() async {
+    //count how many entries in past 7 days and the limit should be set to this value
+    final QuerySnapshot result = await Firestore.instance
+        .collection('users')
+        .document(uid)
+        .collection('entries')
+        .document(getEntryName())
+        .collection('medChecklist')
+        .limit(7)
+        .getDocuments();
+    final List<DocumentSnapshot> documents = result.documents;
+    return documents.map((doc) {
+      return MedicationChecklist(
+        medicineName: doc.data['medicationName'] ?? '',
+        taken: doc.data['taken'] ?? '',
+        timeTaken: doc.data['timeTaken'] ?? '',
+        docId: doc.documentID,
+      );
+    }).toList();
+  }
+
   List<MedicationChecklist> medicationChecklistFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {
       return MedicationChecklist(

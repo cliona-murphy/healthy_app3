@@ -123,8 +123,8 @@ class _SettingsPageState extends State<SettingsPage> {
           waterTarget = snapshot.data['waterIntakeTarget'].toDouble();
         } else {
           country = '';
-          age = 0.0;
-          weight = 0.0;
+          age = 18;
+          weight = 60;
         }
         if (loading) {
           return Loading();
@@ -136,11 +136,14 @@ class _SettingsPageState extends State<SettingsPage> {
               if(globals.settingsChanged) {
                 setState(() {
                   settingsUpdated = "true";
+                  Navigator.pushNamedAndRemoveUntil(context, '/second', (r) => false, arguments: "test");
                 });
-              }
+              } else {
                 Navigator.pop(context, settingsUpdated);
+              }
+
               }),
-                  // Navigator.pushNamedAndRemoveUntil(context, '/second', (r) => false, arguments: "test")),
+
             title: Text('Settings'),
           ),
             body: Padding(

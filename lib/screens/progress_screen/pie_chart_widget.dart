@@ -9,16 +9,18 @@ import 'package:provider/provider.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:healthy_app/models/settings.dart';
 
-class CalorieCount extends StatefulWidget {
+class PieChart extends StatefulWidget {
 
-  final calorieTarget;
-  CalorieCount({ this.calorieTarget });
+  final int data;
+  final int target;
+
+  PieChart({ this.data, this.target });
 
   @override
-  _CalorieCountState createState() => _CalorieCountState();
+  _PieChartState createState() => _PieChartState();
 }
 
-class _CalorieCountState extends State<CalorieCount> {
+class _PieChartState extends State<PieChart> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   int totalCalories = 0;
   List<charts.Series<PieData, String>> _pieData;
@@ -61,7 +63,7 @@ class _CalorieCountState extends State<CalorieCount> {
     }
 
     var piedata = [
-      new PieData('Consumed', percentageIntake),
+      new PieData('Complete', percentageIntake),
       new PieData('Remaining', 100 - percentageIntake),
     ];
 
@@ -69,7 +71,7 @@ class _CalorieCountState extends State<CalorieCount> {
       charts.Series(
         domainFn: (PieData data, _) => data.activity,
         measureFn: (PieData data, _) => data.time,
-        id: 'Time spent',
+        id: 'Percentage Complete',
         data: piedata,
         labelAccessorFn: (PieData row, _) => '${row.activity}',
       ),
@@ -78,8 +80,8 @@ class _CalorieCountState extends State<CalorieCount> {
   }
 
   double calculatePercentage() {
-    double kcalTarget = widget.calorieTarget.toDouble();
-    double percentage = (totalCalories.toDouble() / kcalTarget);
+    double kcalTarget = widget.target.toDouble();
+    double percentage = (widget.data.toDouble() / kcalTarget);
 
     setState(() {
       totalCalories = 0;
@@ -89,29 +91,19 @@ class _CalorieCountState extends State<CalorieCount> {
   }
   @override
   Widget build(BuildContext context) {
-    final foods = Provider.of<List<Food>>(context) ?? [];
-
-    if (foods.isNotEmpty) {
-      for (var food in foods)
-        totalCalories += food.calories;
-
+    if (widget.data != 0) {
       return Container(
-        width: 175,
-        height: 175,
+        width: 150,
+        height: 150,
         child: charts.PieChart(
-        generateData(500),
-        animate: true,
-        animationDuration: Duration(milliseconds: 500),
-          // defaultRenderer: charts.ArcRendererConfig(
-
-          // ),
-          // defaultRenderer: new charts.ArcRendererConfig(arcWidth: 60),
-          ),
-      );
+          generateData(500),
+          animate: true,
+          animationDuration: Duration(milliseconds: 500),
+    ));
     } else {
-      return loading ? Loading() : Container(
-        width: 175,
-        height: 175,
+      return Container(
+        width: 150,
+        height: 150,
         //child: Text("test"),
         child: charts.PieChart(
           generateData(0),

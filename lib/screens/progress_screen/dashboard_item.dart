@@ -1,14 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:healthy_app/models/food.dart';
+import 'package:healthy_app/screens/progress_screen/pie_chart_widget.dart';
+import 'package:healthy_app/shared/loading.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
+
+import 'calorie_count.dart';
 
 class DashboardItem extends StatefulWidget {
   final String title;
   final String data;
   final String units;
   final int target;
+
   DashboardItem({this.title, this.data, this.units, this.target});
 
   @override
@@ -18,15 +24,25 @@ class DashboardItem extends StatefulWidget {
 class _DashboardItemState extends State<DashboardItem> {
   double percentageIntakeValue = 0;
   String percentage = "";
+  bool loading = true;
 
   void initState (){
     super.initState();
+    loading = true;
     if (widget.target != 0) {
       percentageIntakeValue = (int.parse(widget.data)) / widget.target;
     } else {
       percentageIntakeValue = 0.0;
     }
+    updateBoolean();
+  }
 
+  updateBoolean() {
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      setState(() {
+        loading = false;
+      });
+    });
   }
 
   double calculatePercentage(){
@@ -60,14 +76,16 @@ class _DashboardItemState extends State<DashboardItem> {
               mainAxisSize: MainAxisSize.min,
               verticalDirection: VerticalDirection.down,
               children: <Widget>[
-                SizedBox(height: 20.0),
-                new CircularPercentIndicator(
-                  radius: 80.0,
-                  lineWidth: 10.0,
-                  percent: calculatePercentage(),
-                  center: new Text("${convertPercentageToString()}%"),
-                  progressColor: Colors.green,
+                SizedBox(height: 5.0),
+                PieChart(data: int.parse(widget.data), target: widget.target,),
+                Center(
+                    child: Text("${convertPercentageToString()}%",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),)
                 ),
+                SizedBox(height: 5.0),
                 Center(
                     child: Text("${widget.data} ${widget.units}",
                       style: TextStyle(
@@ -75,7 +93,6 @@ class _DashboardItemState extends State<DashboardItem> {
                         fontWeight: FontWeight.bold,
                       ),)
                 ),
-                SizedBox(height: 10.0),
                 new Center(
                   child: new Text(widget.title,
                       style:
