@@ -10,6 +10,7 @@ import 'package:healthy_app/services/database.dart';
 import 'package:healthy_app/shared/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:flushbar/flushbar.dart';
+import'package:healthy_app/shared/globals.dart' as globals;
 
 import 'activity_form.dart';
 
@@ -57,20 +58,10 @@ class _ActivityDiaryState extends State<ActivityDiary> {
         ));
     if(result.isNotEmpty){
       setState(() {
-        showSnackBar();
+        globals.showSnackBar(context, "Success", "Your activity was successfully logged.");
       });
     }
   }
-
-  showSnackBar(){
-    return Flushbar(
-      duration: Duration(seconds: 2),
-      flushbarPosition: FlushbarPosition.TOP,
-      title: 'Success',
-      message: "Your activity was successfully logged!",
-    )..show(context);
-  }
-
 
   void addItem(BuildContext context){
     renderActivityForm(context);
