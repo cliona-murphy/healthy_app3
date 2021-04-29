@@ -29,10 +29,12 @@ class DatabaseService {
     });
   }
   
-  Future updateUserData(int age, double weight, String country, int kcalIntakeTarget, int kcalOutputTarget, double waterIntakeTarget) async {
+  Future updateUserData(String fName, String sName, int age, double weight, String country, int kcalIntakeTarget, int kcalOutputTarget, double waterIntakeTarget) async {
     //creating a new document in collection for user with id = uid
     return await settingsCollection.document(uid).setData({
       'kcalIntakeTarget': kcalIntakeTarget,
+      'firstName': fName,
+      'surname': sName,
       'age': age,
       'weight': weight,
       'country': country,
