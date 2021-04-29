@@ -22,6 +22,8 @@ class _RegisterState extends State<Register> {
   bool loading = false;
 
   //text field state
+  String fName = "";
+  String sName = "";
   String email = "";
   String password = "";
   String error = "";
@@ -53,6 +55,40 @@ class _RegisterState extends State<Register> {
                   key: _formKey,
                   child: Column(
                     children: <Widget>[
+                      SizedBox(height: 20.0),
+                      TextFormField(
+                          decoration: textInputDecoration.copyWith(hintText: "first name"),
+                          validator: (val) {
+                            if (val.isEmpty){
+                              return "Enter your name";
+                            } else if (val.contains(RegExp("[0-9!.,{}@?/]"))) {
+                              return "Please supply a valid name";
+                            }
+                            else {
+                              return null;
+                            }
+                          },
+                          onChanged: (val) {
+                            setState(() => fName = val);
+                          }
+                      ),
+                      SizedBox(height: 20.0),
+                      TextFormField(
+                          decoration: textInputDecoration.copyWith(hintText: "surname"),
+                          validator: (val) {
+                            if (val.isEmpty){
+                              return "Enter your name";
+                            } else if (val.contains(RegExp("[0-9!.,{}@?/]"))) {
+                              return "Please supply a valid name";
+                            }
+                            else {
+                              return null;
+                            }
+                          },
+                          onChanged: (val) {
+                            setState(() => sName = val);
+                          }
+                      ),
                       SizedBox(height: 20.0),
                       TextFormField(
                         decoration: textInputDecoration.copyWith(hintText: "email"),
@@ -102,7 +138,7 @@ class _RegisterState extends State<Register> {
                             onPressed: () async {
                               if (_formKey.currentState.validate()){
                                 setState(() => loading = true);
-                                dynamic result = await _auth.registerWithEmail(email, password);
+                                dynamic result = await _auth.registerWithEmail(email, password, fName, sName);
                                 if (result == null) {
                                   setState(() {
                                     error  = "please supply valid email";
