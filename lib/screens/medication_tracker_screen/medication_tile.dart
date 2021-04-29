@@ -3,6 +3,7 @@ import 'package:healthy_app/models/medication.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:healthy_app/shared/globals.dart' as globals;
 
 class MedicationTile extends StatefulWidget {
 
@@ -52,6 +53,7 @@ class _MedicationTileState extends State<MedicationTile> {
   }
 
   updateDetails(String newMedName, String timeToTake) async {
+    print("updateDetails called");
     String userId = await getUserid();
     DatabaseService(uid: userId).updateMedicationDetails(widget.medication.docId, newMedName, timeToTake);
   }
@@ -100,10 +102,14 @@ class _MedicationTileState extends State<MedicationTile> {
     Widget continueButton = FlatButton(
         child: Text("Confirm"),
         onPressed:  () {
-         if (medName == ""){
+         // if (nameController.text.isNotEmpty){
+         //    updateTime(timeString);
+         //  } else {
+         // print();
+          if(nameController.text.isNotEmpty) {
+            updateDetails(nameController.text, timeString);
+          } else if (nameController.text.isEmpty){
             updateTime(timeString);
-          } else {
-           updateDetails(widget.medication.medicineName, timeString);
           }
           Navigator.pop(context);
         }
@@ -111,7 +117,7 @@ class _MedicationTileState extends State<MedicationTile> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Confirm Action"),
+      title: Text("Confirm Action ${nameController.text}"),
       content: Text("Update time to take "+widget.medication.medicineName+" to "+timeString+"?"),
       actions: [
         cancelButton,
@@ -142,14 +148,15 @@ class _MedicationTileState extends State<MedicationTile> {
                 //   alignment: Alignment.centerLeft,
                 //   child: TextField(
                 //     controller: nameController,
-                //     inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[0-9]")),],
-                //     maxLength: 15,
-                //     maxLengthEnforced: true,
+                //     // inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[0-9]")),],
+                //     // maxLength: 15,
+                //     // maxLengthEnforced: true,
                 //     decoration: InputDecoration(
-                //       hintText: "Edit name",
+                //       hintText: "Type new name here",
                 //     ),
                 //   ),
                 // ),
+                Padding(padding: EdgeInsets.only(top: 15.0),),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
@@ -171,6 +178,8 @@ class _MedicationTileState extends State<MedicationTile> {
             elevation: 5.0,
             child: Text("Cancel"),
             onPressed: () {
+              nameController.clear();
+              timeController.clear();
               Navigator.pop(context);
             },
           ),
@@ -189,7 +198,11 @@ class _MedicationTileState extends State<MedicationTile> {
             child: Text("Update"),
             onPressed: () {
               setState(() {
-                medName = nameController.text;
+                if(nameController.text.isNotEmpty){
+                  medName = nameController.text;
+                } else {
+                  medName = "";
+                }
               });
               nameController.clear();
               timeController.clear();
@@ -223,10 +236,17 @@ class _MedicationTileState extends State<MedicationTile> {
             ),
             secondary: IconButton(
               icon: Icon(Icons.edit),
-              onPressed: (){
-                editItem(context, widget.medication.medicineName, widget.medication.timeToTake);
+              onPressed: () async {
+                selectedTime = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+                String selectedTimeMinuteString = selectedTime.minute.toString();
+                if (selectedTime.minute < 10){
+                  selectedTimeMinuteString = "0${selectedTime.minute}";
+                }
+                timeString = "${selectedTime.hour}:${selectedTimeMinuteString}";
                 setState(() {
+                  globals.selectedTime = timeString;
                 });
+                updateTime(timeString);
               },
             ),
             value: isSelected,
