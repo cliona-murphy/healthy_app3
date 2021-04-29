@@ -533,17 +533,18 @@ class DatabaseService {
     var dateArr = date.split("/");
     int day = int.parse(dateArr[0]);
     int iterations = day - 5;
-    for (var i = iterations; i < day; i++){
+    // for (var i = iterations; i < day; i++){
       return  Firestore.instance
           .collection("users")
           .document(uid)
           .collection('entries')
-          .document('${iterations}${dateArr[1]}${dateArr[2]}')
+          // .document('${iterations}${dateArr[1]}${dateArr[2]}')
+          .document(reformatDate(date))
           .collection('activities')
           .orderBy('timeStamp', descending: false)
           .snapshots()
           .map(activityListFromSnapshot);
-    }
+    // }
   }
 
   List<Activity> activityListFromSnapshot(QuerySnapshot snapshot) {
@@ -553,6 +554,7 @@ class DatabaseService {
         distance: doc.data['distance'] ?? 0,
         duration: doc.data['duration'] ?? 0,
         calories: doc.data['calories'] ?? 0,
+        timestamp: doc.data['timestamp'],
         docId: doc.documentID,
       );
     }).toList();

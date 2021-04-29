@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/models/activity.dart';
@@ -59,36 +60,43 @@ class _BarChartBuilderState extends State<BarChartBuilder> {
     var minutesOfActivity = 0;
      if (activities.isNotEmpty) {
        for (var act in activities) {
+         print(act.docId);
          minutesOfActivity += act.duration.toInt();
        }
         print(minutesOfActivity);
      }
-    return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            // decoration: BoxDecoration(color: Color.fromRGBO(220, 220, 220, 1.0)),
-            height: 400,
-            width: double.infinity,
-            padding: const EdgeInsets.all(12),
-            child: Card(
-              color: Color.fromRGBO(220, 220, 220, 1.0),
-              child: MyBarChart(data: data),
+    return StreamBuilder(
+        stream: Firestore.instance.collection('users').document('4IpROkoBeqZfyek4c6KK0Vmhsua2')
+        .collection('entries').document("29/4/2021").collection('activities').snapshots(),
+         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          return Scaffold(
+               body: Column(
+               mainAxisAlignment:
+           MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              // decoration: BoxDecoration(color: Color.fromRGBO(220, 220, 220, 1.0)),
+              height: 400,
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              child: Card(
+                color: Color.fromRGBO(220, 220, 220, 1.0),
+                child: MyBarChart(data: data),
+              ),
             ),
-          ),
-          // Padding(
-          //   padding: const EdgeInsets.all(16.0),
-          //   child: Center(
-          //     child: Text(
-          //       'Number of Mobile App Downloads in past 3 years (Data Source: Statista)',
-          //       textAlign: TextAlign.center,
-          //     ),
-          //   ),
-          // ),
-        ],
-      ),
-    );
+            // Padding(
+            //   padding: const EdgeInsets.all(16.0),
+            //   child: Center(
+            //     child: Text(
+            //       'Number of Mobile App Downloads in past 3 years (Data Source: Statista)',
+            //       textAlign: TextAlign.center,
+            //     ),
+            //   ),
+            // ),
+          ],
+        ),
+      );
+  });
   }
 }
