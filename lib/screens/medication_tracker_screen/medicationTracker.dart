@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:healthy_app/models/medication.dart';
@@ -32,26 +33,45 @@ class _MedicationTrackerState extends State<MedicationTracker> {
   String timeString;
   bool timeSelected = false;
   String medName;
+  String stringtest = "";
+  bool test = false;
 
   void initState(){
     super.initState();
     getUid();
     updateBoolean();
+    stringtest = "";
   }
 
   void selectTime(BuildContext context) async {
-    //animate this?
       selectedTime = await showTimePicker(
         context: context,
         initialTime: _time,
         initialEntryMode: TimePickerEntryMode.input,
       );
-      timeSelected = true;
+      setState(() {
+        timeSelected = true;
+      });
       String selectedTimeMinuteString = selectedTime.minute.toString();
       if (selectedTime.minute < 10){
         selectedTimeMinuteString = "0${selectedTime.minute}";
       }
       timeString = "${selectedTime.hour}:${selectedTimeMinuteString}";
+      setState(() {
+        globals.selectedTime = timeString;
+      });
+
+      showSnackBar("Success!", "You selected ${timeString}");
+
+  }
+
+  showSnackBar(String title, String message){
+    return Flushbar(
+      duration: Duration(seconds: 2),
+      flushbarPosition: FlushbarPosition.TOP,
+      title: title,
+      message: message,
+    )..show(context);
   }
 
 
@@ -59,39 +79,59 @@ class _MedicationTrackerState extends State<MedicationTracker> {
       return showDialog(context: context, barrierDismissible: false, builder: (context) {
         return AlertDialog(
           title: Text("Enter details here:"),
-          content: Container(
-            height: 130,
-            child : SingleChildScrollView(
-              child: Column(
-                children: [
-                  TextField(
-                    controller: nameController,
-                    maxLength: 30,
-                    maxLengthEnforced: true,
-                    inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[a-zA-Z 0-9]")),],
-                    decoration: InputDecoration(
-                      hintText: "medication/supplement name",
+          content: StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+           return Container(
+              height: 150,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: nameController,
+                      maxLength: 30,
+                      maxLengthEnforced: true,
+                      inputFormatters: [new WhitelistingTextInputFormatter(
+                          RegExp("[a-zA-Z 0-9]")),
+                      ],
+                      decoration: InputDecoration(
+                        hintText: "medication/supplement name",
+                      ),
                     ),
-                  ),
-                  Padding(padding: EdgeInsets.only(top: 15.0)),
-                  Container(
-                    child: FlatButton(
-                      color: Colors.grey,
-                      child: Text("Select Time"),
-                      onPressed: () {
-                        selectTime(context);
-                      },
+                    Padding(padding: EdgeInsets.only(top: 15.0)),
+                    // Align(
+                    //     alignment: Alignment.centerLeft,
+                    //     child: Text(stringtest)
+                    // ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        child: FlatButton(
+                          color: Colors.grey,
+                          child: Text("Select Time"),
+                          onPressed: () {
+                            selectTime(context);
+                            if (timeSelected){
+                              setState(() {
+                                stringtest = timeString;
+                              });
+                            }
+                          },
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ),
+            );
+          }),
           actions: <Widget> [
             MaterialButton(
               elevation: 5.0,
               child: Text("Cancel"),
               onPressed: () {
+                setState(() {
+                  stringtest = "";
+                });
                 Navigator.pop(context);
               },
             ),
@@ -104,6 +144,9 @@ class _MedicationTrackerState extends State<MedicationTracker> {
                 });
                 nameController.clear();
                 timeController.clear();
+                setState(() {
+                  stringtest = "";
+                });
                 Navigator.pop(context);
                 showConfirmationDialog();
 
@@ -176,7 +219,17 @@ class _MedicationTrackerState extends State<MedicationTracker> {
     });
   }
 
+  updateBooleanTest(){
+    Future.delayed(const Duration(milliseconds: 500), () {
+      setState(() {
+        test = true;
+      });
+    });
+  }
+
   Widget build(BuildContext context){
+    final medications = Provider.of<List<Medication>>(context) ?? [];
+
     return StreamProvider<List<Medication>>.value(
       value: DatabaseService(uid: userId).medications,
       child: Scaffold(
@@ -200,6 +253,9 @@ class _MedicationTrackerState extends State<MedicationTracker> {
                         child: ElevatedButton(
                           onPressed: (){
                             addItem(context);
+                            setState(() {
+                              stringtest = "";
+                            });
                           },
                           child: Text("Add Item",
                           style: TextStyle(
