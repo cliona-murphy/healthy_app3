@@ -406,6 +406,27 @@ class DatabaseService {
         .map(medicationChecklistFromSnapshot);
   }
 
+  Future<List<MedicationChecklist>> getLoggedMedicationsOverPastWeek() async {
+    //count how many entries in past 7 days and the limit should be set to this value
+    final QuerySnapshot result = await Firestore.instance
+        .collection('users')
+        .document(uid)
+        .collection('entries')
+        .document(getEntryName())
+        .collection('medChecklist')
+        .limit(7)
+        .getDocuments();
+    final List<DocumentSnapshot> documents = result.documents;
+    return documents.map((doc) {
+      return MedicationChecklist(
+        medicineName: doc.data['medicationName'] ?? '',
+        taken: doc.data['taken'] ?? '',
+        timeTaken: doc.data['timeTaken'] ?? '',
+        docId: doc.documentID,
+      );
+    }).toList();
+  }
+
   List<MedicationChecklist> medicationChecklistFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {
       return MedicationChecklist(
@@ -497,16 +518,33 @@ class DatabaseService {
 
   //not working but same functionality as med checklist
   Stream<List<Activity>> get activities {
-    var entryName = getEntryName();
     return  Firestore.instance
         .collection("users")
         .document(uid)
         .collection('entries')
-        .document(entryName)
+        .document(getEntryName())
         .collection('activities')
         .orderBy('timeStamp', descending: false)
         .snapshots()
         .map(activityListFromSnapshot);
+  }
+
+  Stream<List<Activity>> getActivitiesForSpecificDate(String date) {
+    var dateArr = date.split("/");
+    int day = int.parse(dateArr[0]);
+    int iterations = day - 5;
+    // for (var i = iterations; i < day; i++){
+      return  Firestore.instance
+          .collection("users")
+          .document(uid)
+          .collection('entries')
+          // .document('${iterations}${dateArr[1]}${dateArr[2]}')
+          .document(reformatDate(date))
+          .collection('activities')
+          .orderBy('timeStamp', descending: false)
+          .snapshots()
+          .map(activityListFromSnapshot);
+    // }
   }
 
   List<Activity> activityListFromSnapshot(QuerySnapshot snapshot) {
@@ -516,6 +554,7 @@ class DatabaseService {
         distance: doc.data['distance'] ?? 0,
         duration: doc.data['duration'] ?? 0,
         calories: doc.data['calories'] ?? 0,
+        timestamp: doc.data['timestamp'],
         docId: doc.documentID,
       );
     }).toList();

@@ -4,6 +4,7 @@ class Activity {
   double duration;
   double calories;
   String docId;
+  DateTime timestamp;
 
-  Activity({this.activityType, this.distance, this.duration, this.calories, this.docId});
+  Activity({this.activityType, this.distance, this.duration, this.calories, this.docId, this.timestamp});
 }
