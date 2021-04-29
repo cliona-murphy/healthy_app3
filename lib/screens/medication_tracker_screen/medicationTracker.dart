@@ -61,19 +61,9 @@ class _MedicationTrackerState extends State<MedicationTracker> {
         globals.selectedTime = timeString;
       });
 
-      showSnackBar("Success!", "You selected ${timeString}");
+      globals.showSnackBar(context, "Success!", "You selected ${timeString}");
 
   }
-
-  showSnackBar(String title, String message){
-    return Flushbar(
-      duration: Duration(seconds: 2),
-      flushbarPosition: FlushbarPosition.TOP,
-      title: title,
-      message: message,
-    )..show(context);
-  }
-
 
   Future<String> addItem(BuildContext context) {
       return showDialog(context: context, barrierDismissible: false, builder: (context) {

@@ -237,7 +237,7 @@ class _MedicationTileState extends State<MedicationTile> {
             secondary: IconButton(
               icon: Icon(Icons.edit),
               onPressed: () async {
-                selectedTime = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+                selectedTime = await showTimePicker(context: context, initialTime: TimeOfDay.now(), initialEntryMode: TimePickerEntryMode.input,);
                 String selectedTimeMinuteString = selectedTime.minute.toString();
                 if (selectedTime.minute < 10){
                   selectedTimeMinuteString = "0${selectedTime.minute}";
@@ -247,6 +247,7 @@ class _MedicationTileState extends State<MedicationTile> {
                   globals.selectedTime = timeString;
                 });
                 updateTime(timeString);
+                globals.showSnackBar(context, "Success", "Time to take ${widget.medication.medicineName} was updated to ${timeString}.");
               },
             ),
             value: isSelected,

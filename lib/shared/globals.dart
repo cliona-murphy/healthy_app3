@@ -1,5 +1,8 @@
 library healthy_app.globals;
 
+import 'package:flushbar/flushbar.dart';
+import 'package:flutter/cupertino.dart';
+
 bool newDateSelected = false;
 String selectedDate = getCurrentDate();
 int kcalIntakeTarget = 2000;
@@ -9,9 +12,18 @@ DateTime newDate = new DateTime.now();
 bool settingsChanged = false;
 String selectedTime = "";
 
-String getCurrentDate(){
+String getCurrentDate() {
   var date = new DateTime.now().toString();
   var dateParse = DateTime.parse(date);
   var formattedDate = "${dateParse.day}/${dateParse.month}/${dateParse.year}";
   return formattedDate;
+}
+
+showSnackBar(BuildContext context, String title, String message){
+  return Flushbar(
+    duration: Duration(seconds: 2),
+    flushbarPosition: FlushbarPosition.TOP,
+    title: title,
+    message: message,
+  )..show(context);
 }

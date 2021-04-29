@@ -6,6 +6,7 @@ import 'package:healthy_app/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'activity_form.dart';
+import 'package:healthy_app/shared/globals.dart' as globals;
 
 class ActivityTile extends StatefulWidget {
 
@@ -41,28 +42,10 @@ class _ActivityTileState extends State<ActivityTile> {
     return uid;
   }
 
-  showSnackBarDelete(){
-    return Flushbar(
-      duration: Duration(seconds: 2),
-      flushbarPosition: FlushbarPosition.TOP,
-      title: 'Success',
-      message: "Your activity was successfully deleted!",
-    )..show(context);
-  }
-
-  showSnackBarUpdate(){
-    return Flushbar(
-      duration: Duration(seconds: 2),
-      flushbarPosition: FlushbarPosition.TOP,
-      title: 'Success',
-      message: "Your activity was successfully updated!",
-    )..show(context);
-  }
-
   deleteActivity() async {
     String userId = await getUserid();
     DatabaseService(uid: userId).deleteActivity(widget.activity.docId);
-    showSnackBarDelete();
+    globals.showSnackBar(context, "Success!", "Your activity was successfully deleted.");
   }
 
   renderActivityFormToEdit(BuildContext context) async{
@@ -74,17 +57,9 @@ class _ActivityTileState extends State<ActivityTile> {
         ));
     if(result.isNotEmpty){
       setState(() {
-        showSnackBar();
+        globals.showSnackBar(context, "Success!", "Your activity was successfully edited.");
       });
     }
-  }
-  showSnackBar(){
-    return Flushbar(
-      duration: Duration(seconds: 2),
-      flushbarPosition: FlushbarPosition.TOP,
-      title: 'Success',
-      message: "Your activity was successfully edited!",
-    )..show(context);
   }
 
   Future<String> editItem(BuildContext context, String medName, String timeToTake) {
