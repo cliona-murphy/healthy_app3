@@ -241,15 +241,7 @@ class _MedicationTrackerState extends State<MedicationTracker> {
                         height: 60,
                         padding: const EdgeInsets.all(10.0),
                         child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed))
-                                  return globals.lightPurple;
-                                return Color.fromRGBO(107, 90, 143, 1.0); // Use the component's default.
-                              },
-                            ),
-                          ),
+                          style: globals.buttonstyle,
                           onPressed: (){
                             addItem(context);
                             setState(() {

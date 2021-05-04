@@ -166,6 +166,7 @@ class _CalendarViewState extends State<CalendarView> {
                     child: Container(
                       padding: const EdgeInsets.all(10.0),
                       child: ElevatedButton(
+                        style: globals.buttonstyle,
                         onPressed: (){
                           if(dateChanged) {
                             for (var date in _events.keys) {

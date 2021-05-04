@@ -27,6 +27,16 @@ SettingsRowStyle settingsStyle = SettingsRowStyle(
   fontSize: 20,
 );
 
+ButtonStyle buttonstyle = ButtonStyle(
+    backgroundColor: MaterialStateProperty.resolveWith<Color>(
+          (Set<MaterialState> states) {
+        if (states.contains(MaterialState.pressed))
+          return lightPurple;
+        return Color.fromRGBO(107, 90, 143, 1.0); // Use the component's default.
+      },
+    ),
+);
+
 String getCurrentDate() {
   var date = new DateTime.now().toString();
   var dateParse = DateTime.parse(date);
