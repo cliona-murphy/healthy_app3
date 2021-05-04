@@ -162,7 +162,7 @@ class _HomeState extends State<Home> {
                         physics: NeverScrollableScrollPhysics(),
                       ),
                         bottomNavigationBar: BottomNavigationBar(
-                          backgroundColor: Color(0xFF151026),
+                          backgroundColor: globals.bottomNavigationBarColor,
                           selectedItemColor: Colors.white,
                           unselectedItemColor: Colors.white54,
                         onTap: _onItemTapped,
