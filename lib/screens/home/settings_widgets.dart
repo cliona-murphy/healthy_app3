@@ -2,6 +2,7 @@ import 'package:cupertino_setting_control/cupertino_setting_control.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:healthy_app/services/database.dart';
 import 'package:healthy_app/shared/globals.dart' as globals;
 
@@ -29,6 +30,9 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
   double _kcalOutput = 0;
   double _waterIntake = 0;
   String waterIntake = "";
+  TextEditingController intakeController;
+  String intakeError = "";
+  TextEditingController outputController;
 
 
   void initState() {
@@ -37,6 +41,9 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
     });
     super.initState();
     getUid();
+    intakeController = TextEditingController();
+    outputController = TextEditingController();
+    // intakeController.addListener(updateIntakeTarget);
   }
 
   Future<String> getUid() async {
@@ -67,6 +74,10 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
 
   void pushChangesToDatabase(){
 
+  }
+
+  void updateIntakeTarget() {
+    DatabaseService(uid: userId).updateKcalIntakeTarget(int.parse(intakeController.text));
   }
 
   @override
@@ -166,6 +177,7 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
       child: new Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          // Text(intakeError),
           const Padding(
               padding: EdgeInsets.fromLTRB(25.0, 5.0, 25.0, 5.0),
               child: const Text(
@@ -177,52 +189,94 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
                 ),
               )),
           SizedBox(height: _titleOnTop ? 10.0 : 0.0),
-          new SettingRow(
-            style: globals.settingsStyle,
-            rowData: SettingsSliderConfig(
-              title: 'Daily Calorie Intake Target',
-              from: 1500,
-              to: 5000,
-              initialValue: widget.intakeTarget.toDouble(),
-              justIntValues: true,
-              unit: ' kcal',
+          Container(
+            width: 600,
+            height: 60,
+            child: Row(
+              children: [
+                Container(
+                    padding: EdgeInsets.fromLTRB(25.0, 5.0, 25.0, 5.0),
+                    width: 250,
+                    child: Text("Daily Kcal Intake Target (1500-5000)",
+                style: TextStyle(
+                  fontSize: 20,
+                ))),
+                Container(
+                    width: 140,
+                    child: TextField(
+                      // inputFormatters: [FilteringTextInputFormatter.allow(RegExp("^[0-9]")),],
+                      onChanged: (text) async {
+                        int value = int.parse(text);
+                        if (value > 1500) {
+                          if (value < 5000) {
+                            globals.settingsChanged = true;
+                            DatabaseService(uid: userId).updateKcalIntakeTarget(int.parse(text));
+                          }
+
+                        } else {
+                          setState(() {
+                            intakeError = "Enter value in range 1500-5000";
+                              // globals.showSnackBar(context, "Error", "Please enter a value in the range [1500, 5000]");
+                          });
+                        }
+                      },
+                      controller: intakeController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: widget.intakeTarget.toInt().toString(),
+                      ),
+                    ),
+                ),
+              ],
             ),
-            onSettingDataRowChange: (double resultVal) {
-              setState(() {
-                globals.settingsChanged = true;
-              });
-              DatabaseService(uid: userId).updateKcalIntakeTarget(resultVal.toInt());
-            },
-            config: SettingsRowConfiguration(
-                showAsTextField: false,
-                showTitleLeft: !_titleOnTop,
-                showTopTitle: _titleOnTop,
-                showAsSingleSetting: false),
           ),
-          SizedBox(height: _titleOnTop ? 10.0 : 0.0),
-          new SettingRow(
-            style: globals.settingsStyle,
-            rowData: SettingsSliderConfig(
-              title: 'Daily Calorie Output Target',
-              from: 1000,
-              to: 4000,
-              initialValue: widget.outputTarget.toDouble(),
-              justIntValues: true,
-              unit: ' kcal',
+
+          SizedBox(height: 10.0),
+          Container(
+            width: 600,
+            height: 60,
+            child: Row(
+              children: [
+                Container(
+                    padding: EdgeInsets.fromLTRB(25.0, 5.0, 25.0, 5.0),
+                    width: 250,
+                    child: Text("Daily Kcal Output Target (500-3000)",
+                        style: TextStyle(
+                          fontSize: 20,
+                        ))),
+                Container(
+                  width: 140,
+                  child: TextField(
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[a-zA-Z ]")),],
+                    // inputFormatters: [FilteringTextInputFormatter.allow(RegExp("^[0-9]")),],
+                    onChanged: (text) async {
+                      int value = int.parse(text);
+                      if (value > 500) {
+                        if(value < 3000) {
+                          print(text);
+                          globals.settingsChanged = true;
+                          DatabaseService(uid: userId).updateKcalOutputTarget(int.parse(text));
+                        }
+
+                      } else {
+                        setState(() {
+                          intakeError = "Enter value in range 1500-5000";
+                          // globals.showSnackBar(context, "Error", "Please enter a value in the range [1500, 5000]");
+                        });
+                      }
+                    },
+                    controller: outputController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: widget.outputTarget.toInt().toString(),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            onSettingDataRowChange: (double resultVal) {
-              setState(() {
-                globals.settingsChanged = true;
-              });
-              DatabaseService(uid: userId).updateKcalOutputTarget(resultVal.toInt());
-            },
-            config: SettingsRowConfiguration(
-                showAsTextField: false,
-                showTitleLeft: !_titleOnTop,
-                showTopTitle: _titleOnTop,
-                showAsSingleSetting: false),
           ),
-          SizedBox(height: _titleOnTop ? 10.0 : 0.0),
+          SizedBox(height: 10.0),
           new SettingRow(
             style: globals.settingsStyle,
             rowData: SettingsDropDownConfig(
@@ -287,8 +341,6 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
             ]));
 
     final List<Widget> widgetList = [
-      // titleOnTopSwitch,
-      // const SizedBox(height: 15.0),
       profileSettingsTile,
       const SizedBox(height: 15.0),
       accountSettingsTile,
@@ -303,3 +355,44 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
         physics: const AlwaysScrollableScrollPhysics());
   }
 }
+// new SettingRow(
+//   style: globals.settingsStyle,
+//   rowData: SettingsTextFieldConfig(
+//     title: 'Daily Kcal Intake Target',
+//     initialValue: widget.intakeTarget.toString(),
+//     unit: ' kcal',
+//   ),
+//   onSettingDataRowChange: (String resultVal) {
+//     setState(() {
+//       globals.settingsChanged = true;
+//     });
+//     int result = int.parse(resultVal);
+//     DatabaseService(uid: userId).updateKcalIntakeTarget(result);
+//   },
+//   config: SettingsRowConfiguration(
+//       showAsTextField: false,
+//       showTitleLeft: !_titleOnTop,
+//       showTopTitle: _titleOnTop,
+//       showAsSingleSetting: false),
+// ),
+// new SettingRow(
+//   style: globals.settingsStyle,
+//   rowData: SettingsTextFieldConfig(
+//     title: 'Daily Kcal Output Target',
+//     textInputType: TextInputType.text,
+//     initialValue: '2500',
+//     unit: ' kcal',
+//   ),
+//   onSettingDataRowChange: (String resultVal) {
+//     setState(() {
+//       globals.settingsChanged = true;
+//     });
+//     int result = int.parse(resultVal);
+//     DatabaseService(uid: userId).updateKcalOutputTarget(result);
+//   },
+//   config: SettingsRowConfiguration(
+//       showAsTextField: false,
+//       showTitleLeft: !_titleOnTop,
+//       showTopTitle: _titleOnTop,
+//       showAsSingleSetting: false),
+// ),
