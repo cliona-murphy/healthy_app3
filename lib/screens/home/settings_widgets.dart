@@ -207,8 +207,8 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
                       // inputFormatters: [FilteringTextInputFormatter.allow(RegExp("^[0-9]")),],
                       onChanged: (text) async {
                         int value = int.parse(text);
-                        if (value > 1500) {
-                          if (value < 5000) {
+                        if (value >= 1500) {
+                          if (value <= 5000) {
                             globals.settingsChanged = true;
                             DatabaseService(uid: userId).updateKcalIntakeTarget(int.parse(text));
                           }
@@ -252,8 +252,8 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
                     // inputFormatters: [FilteringTextInputFormatter.allow(RegExp("^[0-9]")),],
                     onChanged: (text) async {
                       int value = int.parse(text);
-                      if (value > 500) {
-                        if(value < 3000) {
+                      if (value >= 500) {
+                        if(value <= 3000) {
                           print(text);
                           globals.settingsChanged = true;
                           DatabaseService(uid: userId).updateKcalOutputTarget(int.parse(text));
