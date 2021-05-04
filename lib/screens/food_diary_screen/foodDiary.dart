@@ -6,6 +6,7 @@ import 'package:healthy_app/shared/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'food_list.dart';
+import 'package:healthy_app/shared/globals.dart' as globals;
 
 class FoodDiary extends StatefulWidget {
 
@@ -185,8 +186,7 @@ class _FoodDiaryState extends State<FoodDiary> {
                     children: <Widget>[
                       Padding(padding: EdgeInsets.only(top: 0.0)),
                       Text('Breakfast',
-                        style: new TextStyle(
-                            color: Colors.blue, fontSize: 25.0),
+                        style: globals.foodDiary,
                       ),
                       Padding(padding: EdgeInsets.only(top: 10.0)),
                       InkWell(
@@ -198,17 +198,14 @@ class _FoodDiaryState extends State<FoodDiary> {
                           child: Container(
                             width: 320,
                             height: 80,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.blueAccent)
-                            ),
+                            decoration: globals.foodDiaryBox,
                             child: FoodList(),
                           ),
                         ),
                       ),
                       Padding(padding: EdgeInsets.only(top: 30.0)),
                       Text('Lunch',
-                        style: new TextStyle(
-                            color: Colors.blue, fontSize: 25.0),
+                        style: globals.foodDiary,
                       ),
                       Padding(padding: EdgeInsets.only(top: 10.0)),
                       InkWell(
@@ -220,17 +217,14 @@ class _FoodDiaryState extends State<FoodDiary> {
                           child: Container(
                             width: 320,
                             height: 80,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.blueAccent)
-                            ),
+                            decoration: globals.foodDiaryBox,
                             child: FoodList(),
                           ),
                         ),
                       ),
                       Padding(padding: EdgeInsets.only(top: 30.0)),
                       Text('Dinner',
-                        style: new TextStyle(
-                            color: Colors.blue, fontSize: 25.0),
+                        style: globals.foodDiary,
                       ),
                       Padding(padding: EdgeInsets.only(top: 10.0)),
                       InkWell(
@@ -242,17 +236,14 @@ class _FoodDiaryState extends State<FoodDiary> {
                           child: Container(
                             width: 320,
                             height: 80,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.blueAccent)
-                            ),
+                            decoration: globals.foodDiaryBox,
                             child: FoodList(),
                           ),
                         ),
                       ),
                       Padding(padding: EdgeInsets.only(top: 30.0)),
                       Text('Snacks',
-                        style: new TextStyle(
-                            color: Colors.blue, fontSize: 25.0),
+                        style: globals.foodDiary,
                       ),
                       Padding(padding: EdgeInsets.only(top: 10.0)),
                       InkWell(
@@ -264,9 +255,7 @@ class _FoodDiaryState extends State<FoodDiary> {
                           child: Container(
                             width: 320,
                             height: 80,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.blueAccent)
-                            ),
+                            decoration: globals.foodDiaryBox,
                             child: FoodList(),
                           ),
                         ),
