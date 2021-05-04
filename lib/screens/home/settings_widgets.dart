@@ -80,6 +80,16 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
     DatabaseService(uid: userId).updateKcalIntakeTarget(int.parse(intakeController.text));
   }
 
+  Future showPopUp(String title, String message){
+    return showDialog(context: context, builder: (context) {
+      return AlertDialog(
+        title: Text(title),
+        content: Container(
+          child: Text(message),
+        ),
+      );
+    });
+  }
   @override
   Widget build(BuildContext context) {
     final titleOnTopSwitch = SettingRow(
@@ -196,12 +206,23 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
               children: [
                 Container(
                     padding: EdgeInsets.fromLTRB(25.0, 5.0, 25.0, 5.0),
-                    width: 250,
+                    width: 225,
                     child: Text("Daily Kcal Intake Target (1500-5000)",
                 style: TextStyle(
                   fontSize: 20,
                 ))),
                 Container(
+                width: 20,
+                child: GestureDetector(
+                    child: Icon(Icons.help),
+                  onTap: () => showPopUp("Target Calorie Intake", "The recommended daily calorie intake is 2500-3000 calories"
+                      " for a man and 2000-2500 calories for a woman. This is the amount that should be consumed to maintain your current weight."
+                      " In order to lose weight, you should be in a slight calorie deficit (burning more calories "
+                      "than you are eating)."),
+                ),
+                ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(25.0, 0.0, 0.0, 0.0),
                     width: 140,
                     child: TextField(
                       // inputFormatters: [FilteringTextInputFormatter.allow(RegExp("^[0-9]")),],
@@ -239,17 +260,27 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
               children: [
                 Container(
                     padding: EdgeInsets.fromLTRB(25.0, 5.0, 25.0, 5.0),
-                    width: 250,
+                    width: 225,
                     child: Text("Daily Kcal Output Target (500-3000)",
                         style: TextStyle(
                           fontSize: 20,
                         ))),
                 Container(
+                    width: 20,
+                    child: GestureDetector(
+                      child: Icon(Icons.help),
+                      onTap: () => showPopUp("Calorie Output Target", "The body burns a certain amount of calories each day even if you don't exercise."
+                          " You can find your resting metabolic rate online and calculate this figure. This target should be the amount of calories you"
+                          " want to burn through exercise throughout the day. In order to lose weight, you should be burning slightly more than you are"
+                          " consuming.")
+                    ),
+                ),
+                Container(
                   width: 140,
+                  padding: EdgeInsets.fromLTRB(25.0, 0.0, 0.0, 0.0),
                   child: TextField(
                     keyboardType: TextInputType.number,
                     inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[a-zA-Z ]")),],
-                    // inputFormatters: [FilteringTextInputFormatter.allow(RegExp("^[0-9]")),],
                     onChanged: (text) async {
                       int value = int.parse(text);
                       if (value >= 500) {
