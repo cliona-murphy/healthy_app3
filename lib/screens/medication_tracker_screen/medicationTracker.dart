@@ -246,7 +246,7 @@ class _MedicationTrackerState extends State<MedicationTracker> {
                                   (Set<MaterialState> states) {
                                 if (states.contains(MaterialState.pressed))
                                   return globals.lightPurple;
-                                return globals.darkPurple; // Use the component's default.
+                                return Color.fromRGBO(107, 90, 143, 1.0); // Use the component's default.
                               },
                             ),
                           ),

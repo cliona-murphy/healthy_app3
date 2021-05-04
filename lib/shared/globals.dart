@@ -1,7 +1,9 @@
 library healthy_app.globals;
 
+import 'package:cupertino_setting_control/cupertino_setting_control.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 bool newDateSelected = false;
 String selectedDate = getCurrentDate();
@@ -15,6 +17,16 @@ TextStyle foodDiary = TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold, col
 Color lightPurple = Color.fromRGBO(157, 131, 212, 1.0);
 Color darkPurple =  Color(0xFF151026);
 BoxDecoration foodDiaryBox = BoxDecoration(border: Border.all(color: Color.fromRGBO(157, 131, 212, 1.0), width: 2.0));
+TextStyle settingsHeading = TextStyle(
+  color: Color.fromRGBO(157, 131, 212, 1.0),
+  fontSize: 20.0,
+  fontWeight: FontWeight.bold,
+);
+SettingsRowStyle settingsStyle = SettingsRowStyle(
+  activeColor: darkPurple,
+  fontSize: 20,
+);
+
 String getCurrentDate() {
   var date = new DateTime.now().toString();
   var dateParse = DateTime.parse(date);

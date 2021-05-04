@@ -147,7 +147,7 @@ class _SettingsPageState extends State<SettingsPage> {
             title: Text('Settings'),
           ),
             body: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
+                padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                 child: SettingsWidgets(country: country, age: age, weight: weight, intakeTarget: intakeTarget, outputTarget: outputTarget, waterTarget: waterTarget),
                     //country: country, age: age, weight: weight),
             ),
