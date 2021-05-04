@@ -85,6 +85,15 @@ class _ActivityDiaryState extends State<ActivityDiary> {
                       width: 150,
                       padding: const EdgeInsets.all(10.0),
                       child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                (Set<MaterialState> states) {
+                              if (states.contains(MaterialState.pressed))
+                                return globals.lightPurple;
+                              return globals.darkPurple; // Use the component's default.
+                            },
+                          ),
+                        ),
                         onPressed: (){
                           addItem(context);
                           //addItem(context);

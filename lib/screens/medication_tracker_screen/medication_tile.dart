@@ -222,6 +222,8 @@ class _MedicationTileState extends State<MedicationTile> {
       child: Card(
         margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
           child: CheckboxListTile(
+            checkColor: Colors.white,
+            activeColor: globals.lightPurple,
             title: Text(widget.medication.medicineName,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),),
             subtitle: widget.taken ? Text("Taken at ${widget.timeTaken}",
