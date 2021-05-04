@@ -63,14 +63,15 @@ class _PieChartState extends State<PieChart> {
     }
 
     var piedata = [
-      new PieData('Complete', percentageIntake),
-      new PieData('Remaining', 100 - percentageIntake),
+      new PieData('Complete', percentageIntake, charts.Color.fromHex(code: '#170b30')),
+      new PieData('Remaining', 100 - percentageIntake, charts.Color.fromHex(code: '#9d83d4')),
     ];
 
     _pieData.add(
       charts.Series(
         domainFn: (PieData data, _) => data.activity,
         measureFn: (PieData data, _) => data.time,
+        colorFn: (PieData data,  _) => data.color,
         id: 'Percentage Complete',
         data: piedata,
         labelAccessorFn: (PieData row, _) => '${row.activity}',

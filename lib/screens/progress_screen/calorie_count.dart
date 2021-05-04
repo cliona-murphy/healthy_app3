@@ -61,8 +61,8 @@ class _CalorieCountState extends State<CalorieCount> {
     }
 
     var piedata = [
-      new PieData('Consumed', percentageIntake),
-      new PieData('Remaining', 100 - percentageIntake),
+      new PieData('Consumed', percentageIntake,charts.Color.white),
+      new PieData('Remaining', 100 - percentageIntake,charts.Color.white),
     ];
 
     _pieData.add(

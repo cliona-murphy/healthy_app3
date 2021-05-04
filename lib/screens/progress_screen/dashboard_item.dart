@@ -68,7 +68,8 @@ class _DashboardItemState extends State<DashboardItem> {
         elevation: 1.0,
         margin: new EdgeInsets.all(8.0),
         child: Container(
-          decoration: BoxDecoration(color: Color.fromRGBO(220, 220, 220, 1.0)),
+          height: 240,
+          decoration: BoxDecoration(color: Color.fromRGBO(157, 131, 212, 0.5)),
           child: new InkWell(
             onTap: () {},
             child: Column(
