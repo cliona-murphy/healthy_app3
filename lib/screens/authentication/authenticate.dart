@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:healthy_app/screens/authentication/register.dart';
 import 'package:healthy_app/screens/authentication/sign_in.dart';
+import 'package:healthy_app/shared/globals.dart' as globals;
 
 class Authenticate extends StatefulWidget {
 

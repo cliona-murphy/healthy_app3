@@ -85,6 +85,7 @@ class _ActivityDiaryState extends State<ActivityDiary> {
                       width: 150,
                       padding: const EdgeInsets.all(10.0),
                       child: ElevatedButton(
+                        style: globals.buttonstyle,
                         onPressed: (){
                           addItem(context);
                           //addItem(context);

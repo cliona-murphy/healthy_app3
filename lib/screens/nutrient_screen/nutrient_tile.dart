@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/services/database.dart';
 import 'package:healthy_app/models/nutrient.dart';
+import 'package:healthy_app/shared/globals.dart' as globals;
 
 class NutrientTile extends StatefulWidget {
   final Nutrient tile;
@@ -44,6 +45,8 @@ class _NutrientTileState extends State<NutrientTile> {
       child: Card(
         margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
         child: CheckboxListTile(
+          checkColor: Colors.white,
+          activeColor: globals.lightPurple,
           title: Text(widget.tile.tileContent,
             style: TextStyle(fontSize: 23.0),),
           subtitle: Text(widget.tile.hintText,

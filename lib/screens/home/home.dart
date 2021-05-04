@@ -161,7 +161,10 @@ class _HomeState extends State<Home> {
                         children: _screens,
                         physics: NeverScrollableScrollPhysics(),
                       ),
-                      bottomNavigationBar: BottomNavigationBar(
+                        bottomNavigationBar: BottomNavigationBar(
+                          backgroundColor: globals.bottomNavigationBarColor,
+                          selectedItemColor: Colors.white,
+                          unselectedItemColor: Colors.white54,
                         onTap: _onItemTapped,
                         type: BottomNavigationBarType.fixed,
                         items: <BottomNavigationBarItem>[
@@ -196,7 +199,8 @@ class _HomeState extends State<Home> {
               ),
             ),
           ),
-        )
+        ),
+        // ),
     );
   }
   void choiceAction(String choice){

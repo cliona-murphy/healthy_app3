@@ -89,12 +89,13 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
               child: const Text(
                 'Profile',
                 style: TextStyle(
-                  color: CupertinoColors.systemBlue,
-                  fontSize: 15.0,
+                  color: Color.fromRGBO(157, 131, 212, 1.0),
+                  fontSize: 20.0,
                   fontWeight: FontWeight.bold,
                 ),
               )),
           new SettingRow(
+            style: globals.settingsStyle,
             rowData: SettingsDropDownConfig(
                 title: 'User Area',
                 initialKey: widget.country,
@@ -111,6 +112,7 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
           ),
           SizedBox(height: _titleOnTop ? 10.0 : 0.0),
           new SettingRow(
+            style: globals.settingsStyle,
             rowData: SettingsSliderConfig(
               title: 'Age',
               from: 18,
@@ -133,6 +135,7 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
           ),
           SizedBox(height: _titleOnTop ? 10.0 : 0.0),
           new SettingRow(
+            style: globals.settingsStyle,
             rowData: SettingsSliderConfig(
               title: 'Weight',
               from: 40,
@@ -168,13 +171,14 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
               child: const Text(
                 'Account',
                 style: TextStyle(
-                  color: CupertinoColors.systemBlue,
-                  fontSize: 15.0,
+                  color: Color.fromRGBO(157, 131, 212, 1.0),
+                  fontSize: 20.0,
                   fontWeight: FontWeight.bold,
                 ),
               )),
           SizedBox(height: _titleOnTop ? 10.0 : 0.0),
           new SettingRow(
+            style: globals.settingsStyle,
             rowData: SettingsSliderConfig(
               title: 'Daily Calorie Intake Target',
               from: 1500,
@@ -197,6 +201,7 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
           ),
           SizedBox(height: _titleOnTop ? 10.0 : 0.0),
           new SettingRow(
+            style: globals.settingsStyle,
             rowData: SettingsSliderConfig(
               title: 'Daily Calorie Output Target',
               from: 1000,
@@ -219,6 +224,7 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
           ),
           SizedBox(height: _titleOnTop ? 10.0 : 0.0),
           new SettingRow(
+            style: globals.settingsStyle,
             rowData: SettingsDropDownConfig(
                 title: 'Daily Water Intake Target',
                 initialKey: widget.country,

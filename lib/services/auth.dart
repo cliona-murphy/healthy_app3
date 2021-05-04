@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:healthy_app/models/user.dart';
 import 'package:healthy_app/services/database.dart';
+import 'package:healthy_app/shared/globals.dart' as globals;
 
 class AuthService {
 
@@ -46,6 +47,7 @@ Future registerWithEmail(String email, String password, String fName, String sNa
         await DatabaseService(uid: user.uid).updateUserData(fName, sName, 18, 60, 'Ireland', 2500, 2500, 2.0);
         await DatabaseService(uid: user.uid).createNewEntry(getCurrentDate());
         return _userFromFirebaseUser(user);
+
       } catch(e){
         print(e.toString());
         return null;

@@ -137,7 +137,6 @@ class _ProgressState extends State<Progress> {
               child: Column(
                 children: [
                   Container(
-                  height: 1500,
                   padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 2.0),
                     child: Column(
                       children: [

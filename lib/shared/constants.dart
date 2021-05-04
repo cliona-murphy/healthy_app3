@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import'package:healthy_app/shared/globals.dart' as globals;
 
 const textInputDecoration =  InputDecoration(
   fillColor: Colors.white,
@@ -7,6 +8,6 @@ const textInputDecoration =  InputDecoration(
   borderSide: BorderSide(color: Colors.grey, width: 2.0)
   ),
   focusedBorder: OutlineInputBorder(
-  borderSide: BorderSide(color: Colors.pink, width: 2.0)
+  borderSide: BorderSide(color:  Color(0xFF151026), width: 2.0)
   ),
 );
