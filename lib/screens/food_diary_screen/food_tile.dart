@@ -59,6 +59,10 @@ class _FoodTileState extends State<FoodTile> {
   }
 
   Future<String> editItem(BuildContext context, String foodName, int calories) {
+    setState(() {
+      nameController.text = widget.food.foodName;
+      calorieController.text = widget.food.calories.toString();
+    });
     return showDialog(context: context, barrierDismissible: false, builder: (context) {
       return AlertDialog(
         title: Text("Edit the details for '${widget.food.foodName}' here:", textAlign: TextAlign.left),

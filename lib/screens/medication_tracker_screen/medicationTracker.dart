@@ -138,6 +138,7 @@ class _MedicationTrackerState extends State<MedicationTracker> {
                 setState(() {
                   medName = nameController.text;
                 });
+                updateDatabase(medName, timeString);
                 nameController.clear();
                 timeController.clear();
                 setState(() {
