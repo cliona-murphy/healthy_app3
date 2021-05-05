@@ -93,6 +93,7 @@ class _MedicationTrackerState extends State<MedicationTracker> {
                         alignment: Alignment.centerLeft,
                         child: TextField(
                           controller: timeController,
+                          enabled: false,
                           decoration: InputDecoration(
                             hintText: "time"
                           ),
@@ -109,7 +110,6 @@ class _MedicationTrackerState extends State<MedicationTracker> {
                             if (timeSelected){
                               setState(() {
                                 timeController.text = timeString;
-                                stringtest = timeString;
                               });
                             }
                           },
@@ -126,9 +126,6 @@ class _MedicationTrackerState extends State<MedicationTracker> {
               elevation: 5.0,
               child: Text("Cancel"),
               onPressed: () {
-                setState(() {
-                  stringtest = "";
-                });
                 nameController.clear();
                 timeController.clear();
                 Navigator.pop(context);
