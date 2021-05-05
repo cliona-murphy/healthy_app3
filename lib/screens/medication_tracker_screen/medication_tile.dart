@@ -34,6 +34,7 @@ class _MedicationTileState extends State<MedicationTile> {
     setState(() {
       isSelected = widget.taken;
     });
+    timeController.text = widget.medication.timeToTake.toString();
   }
 
   Future<String> getUserid() async {
@@ -89,6 +90,9 @@ class _MedicationTileState extends State<MedicationTile> {
       filler = "0";
     }
     timeString = "${selectedTime.hour}:${selectedTime.minute}${filler}";
+    setState(() {
+      timeController.text = timeString;
+    });
   }
 
   showConfirmationDialog() {
@@ -106,8 +110,8 @@ class _MedicationTileState extends State<MedicationTile> {
          //    updateTime(timeString);
          //  } else {
          // print();
-          if(nameController.text.isNotEmpty) {
-            updateDetails(nameController.text, timeString);
+          if(medName.isNotEmpty) {
+            updateDetails(medName, timeString);
           } else if (nameController.text.isEmpty){
             updateTime(timeString);
           }
@@ -139,23 +143,30 @@ class _MedicationTileState extends State<MedicationTile> {
       return AlertDialog(
         title: Text("Edit "+medName+" details here:"),
         content: Container(
-          height: 100,
+          height: 170,
           child : SingleChildScrollView(
             child: Column(
               children: [
                 Padding(padding: EdgeInsets.only(top: 15.0),),
-                // Align(
-                //   alignment: Alignment.centerLeft,
-                //   child: TextField(
-                //     controller: nameController,
-                //     // inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[0-9]")),],
-                //     // maxLength: 15,
-                //     // maxLengthEnforced: true,
-                //     decoration: InputDecoration(
-                //       hintText: "Type new name here",
-                //     ),
-                //   ),
-                // ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextField(
+                    controller: nameController,
+                    // inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[0-9]")),],
+                    // maxLength: 15,
+                    // maxLengthEnforced: true,
+                    decoration: InputDecoration(
+                      hintText: "type new name here",
+                    ),
+                  ),
+                ),
+                TextField(
+                  // enabled: false,
+                  controller: timeController,
+                  decoration: InputDecoration(
+                    hintText: timeController.text
+                  ),
+                ),
                 Padding(padding: EdgeInsets.only(top: 15.0),),
                 Align(
                   alignment: Alignment.centerLeft,
@@ -179,7 +190,7 @@ class _MedicationTileState extends State<MedicationTile> {
             child: Text("Cancel"),
             onPressed: () {
               nameController.clear();
-              timeController.clear();
+              // timeController.clear();
               Navigator.pop(context);
             },
           ),
@@ -200,14 +211,15 @@ class _MedicationTileState extends State<MedicationTile> {
               setState(() {
                 if(nameController.text.isNotEmpty){
                   medName = nameController.text;
+                  updateDetails(medName, timeString);
                 } else {
-                  medName = "";
+                  updateTime(timeString);
                 }
               });
               nameController.clear();
-              timeController.clear();
+              // timeController.clear();
               Navigator.pop(context);
-              showConfirmationDialog();
+              // showConfirmationDialog();
               //updateDetails(widget.medication.medicineName, nameController.text, timeController.text);
             },
           ),
@@ -239,17 +251,18 @@ class _MedicationTileState extends State<MedicationTile> {
             secondary: IconButton(
               icon: Icon(Icons.edit),
               onPressed: () async {
-                selectedTime = await showTimePicker(context: context, initialTime: TimeOfDay.now(), initialEntryMode: TimePickerEntryMode.input,);
-                String selectedTimeMinuteString = selectedTime.minute.toString();
-                if (selectedTime.minute < 10){
-                  selectedTimeMinuteString = "0${selectedTime.minute}";
-                }
-                timeString = "${selectedTime.hour}:${selectedTimeMinuteString}";
-                setState(() {
-                  globals.selectedTime = timeString;
-                });
-                updateTime(timeString);
-                globals.showSnackBar(context, "Success", "Time to take ${widget.medication.medicineName} was updated to ${timeString}.");
+                editItem(context, widget.medication.medicineName, widget.medication.timeToTake);
+                // selectedTime = await showTimePicker(context: context, initialTime: TimeOfDay.now(), initialEntryMode: TimePickerEntryMode.input,);
+                // String selectedTimeMinuteString = selectedTime.minute.toString();
+                // if (selectedTime.minute < 10){
+                //   selectedTimeMinuteString = "0${selectedTime.minute}";
+                // }
+                // timeString = "${selectedTime.hour}:${selectedTimeMinuteString}";
+                // setState(() {
+                //   globals.selectedTime = timeString;
+                // });
+                // updateTime(timeString);
+                // globals.showSnackBar(context, "Success", "Time to take ${widget.medication.medicineName} was updated to ${timeString}.");
               },
             ),
             value: isSelected,
