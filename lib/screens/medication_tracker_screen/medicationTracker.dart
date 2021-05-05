@@ -226,7 +226,6 @@ class _MedicationTrackerState extends State<MedicationTracker> {
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Container(
-            height: 600,
             child: Center(
               child: Column(
                   children: [
