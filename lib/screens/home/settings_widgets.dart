@@ -188,16 +188,28 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           // Text(intakeError),
-          const Padding(
-              padding: EdgeInsets.fromLTRB(25.0, 5.0, 25.0, 5.0),
-              child: const Text(
-                'Account',
-                style: TextStyle(
-                  color: Color.fromRGBO(157, 131, 212, 1.0),
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
+          Row(
+            children: [
+              const Padding(
+                padding: EdgeInsets.fromLTRB(25.0, 5.0, 25.0, 5.0),
+                child: const Text(
+                  'Account',
+                  style: TextStyle(
+                    color: Color.fromRGBO(157, 131, 212, 1.0),
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )),
+              Padding(
+                padding: const EdgeInsets.only(left: 40.0, top: 0.0),
+                child: Text(
+                  intakeError,
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
                 ),
-              )),
+              ),
+          ]),
           SizedBox(height: _titleOnTop ? 10.0 : 0.0),
           Container(
             width: 600,
@@ -225,14 +237,18 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
                   padding: EdgeInsets.fromLTRB(25.0, 0.0, 0.0, 0.0),
                     width: 140,
                     child: TextField(
-                      // inputFormatters: [FilteringTextInputFormatter.allow(RegExp("^[0-9]")),],
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[0-9]")),],
                       onChanged: (text) async {
                         int value = int.parse(text);
-                        if (value >= 1500) {
-                          if (value <= 5000) {
+                        if (value >= 1500 && value <= 5000) {
+                          // if (value <= 5000) {
+                            setState(() {
+                              intakeError = "";
+                            });
                             globals.settingsChanged = true;
                             DatabaseService(uid: userId).updateKcalIntakeTarget(int.parse(text));
-                          }
+                          // }
 
                         } else {
                           setState(() {
@@ -261,7 +277,7 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
                 Container(
                     padding: EdgeInsets.fromLTRB(25.0, 5.0, 25.0, 5.0),
                     width: 225,
-                    child: Text("Daily Kcal Output Target (500-3000)",
+                    child: Text("Daily Kcal Output Target (0-1000)",
                         style: TextStyle(
                           fontSize: 20,
                         ))),
@@ -272,7 +288,7 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
                       onTap: () => showPopUp("Calorie Output Target", "The body burns a certain amount of calories each day even if you don't exercise."
                           " You can find your resting metabolic rate online and calculate this figure. This target should be the amount of calories you"
                           " want to burn through exercise throughout the day. In order to lose weight, you should be burning slightly more than you are"
-                          " consuming.")
+                          " consuming. The amount of calories you burn in a day should not exceed 1000 kcal.")
                     ),
                 ),
                 Container(
@@ -280,19 +296,18 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
                   padding: EdgeInsets.fromLTRB(25.0, 0.0, 0.0, 0.0),
                   child: TextField(
                     keyboardType: TextInputType.number,
-                    inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[a-zA-Z ]")),],
+                    // inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[a-zA-Z ]")),],
                     onChanged: (text) async {
                       int value = int.parse(text);
-                      if (value >= 500) {
-                        if(value <= 3000) {
-                          print(text);
+                      if (value >= 200 && value <= 3000) {
+                          setState(() {
+                            intakeError = "";
+                          });
                           globals.settingsChanged = true;
                           DatabaseService(uid: userId).updateKcalOutputTarget(int.parse(text));
-                        }
-
                       } else {
                         setState(() {
-                          intakeError = "Enter value in range 1500-5000";
+                          intakeError = "Enter value in range 200-1000";
                           // globals.showSnackBar(context, "Error", "Please enter a value in the range [1500, 5000]");
                         });
                       }
