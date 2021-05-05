@@ -26,7 +26,13 @@ class _ActivityFormState extends State<ActivityForm> {
   String calorieError = "";
   String appBarAction = "";
   bool argsPassed = false;
-
+  int distanceFrom = 0;
+  int distanceTo = 100;
+  int durationFrom = 0;
+  int durationTo = 120;
+  int caloriesFrom = 0;
+  int caloriesTo = 1000;
+  ValueNotifier<int> test = ValueNotifier<int>(0);
   final FirebaseAuth auth = FirebaseAuth.instance;
   String userId = "";
 
@@ -63,8 +69,38 @@ class _ActivityFormState extends State<ActivityForm> {
     setState(() {
       activityType = data;
     });
+    updateValuesAccordingToActivity(activityType);
   }
 
+  updateValuesAccordingToActivity(String activityType) {
+    String string = "";
+    switch (activityType){
+      case 'Walking':
+        setState(() {
+          distanceTo = 50;
+          durationTo = 120;
+        });
+        break;
+      case 'Running':
+        setState(() {
+          distanceTo = 50;
+          durationTo = 120;
+        });
+        break;
+      case 'Cycling':
+        setState(() {
+          distanceTo = 300;
+          durationTo = 180;
+        });
+        break;
+      case 'Swimming':
+        setState(() {
+          string = "swam";
+        });
+        break;
+    }
+    return string;
+  }
   void addActivity() async {
     String userId = await getUserid();
     DatabaseService(uid: userId).addActivity(activityType, distance, duration, calories);
@@ -168,26 +204,32 @@ class _ActivityFormState extends State<ActivityForm> {
                     ),
                   ),
                   Padding(padding: const EdgeInsets.only(top: 10.0),),
-                  SettingRow(
-                    rowData: SettingsSliderConfig(
-                      title: 'Distance',
-                      from: 0,
-                      to: 100,
-                      initialValue: distance,
-                      justIntValues: true,
-                      unit: ' km',
-                    ),
-                    onSettingDataRowChange: (double resultVal) {
-                      setState(() {
-                        distance = resultVal;
-                      });
-                    },
-                    config: SettingsRowConfiguration(
-                        showAsTextField: false,
-                        // showTitleLeft: !_titleOnTop,
-                        // showTopTitle: _titleOnTop,
-                        showAsSingleSetting: false),
-                  ),
+                  // ValueListenableBuilder(
+                  //   builder: (BuildContext context, int value, Widget child) {
+                      SettingRow(
+                        rowData: SettingsSliderConfig(
+                          title: 'Distance',
+                          from: 0,
+                          to: 120,
+                          initialValue: distance,
+                          justIntValues: true,
+                          unit: ' km',
+                        ),
+                        onSettingDataRowChange: (double resultVal) {
+                          setState(() {
+                            distance = resultVal;
+                          });
+                        },
+                        config: SettingsRowConfiguration(
+                            showAsTextField: false,
+                            // showTitleLeft: !_titleOnTop,
+                            // showTopTitle: _titleOnTop,
+                            showAsSingleSetting: false),
+                      ),
+                    // },
+                    // valueListenable: test,
+                  // ),
+
                   Padding(
                     padding: const EdgeInsets.only(left: 40.0, top: 5.0),
                     child: Text(
@@ -210,7 +252,7 @@ class _ActivityFormState extends State<ActivityForm> {
                     rowData: SettingsSliderConfig(
                       title: 'Duration',
                       from: 0,
-                      to: 120,
+                      to: durationTo.toDouble(),
                       initialValue: duration,
                       justIntValues: true,
                       unit: ' minutes',

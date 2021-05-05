@@ -188,16 +188,28 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           // Text(intakeError),
-          const Padding(
-              padding: EdgeInsets.fromLTRB(25.0, 5.0, 25.0, 5.0),
-              child: const Text(
-                'Account',
-                style: TextStyle(
-                  color: Color.fromRGBO(157, 131, 212, 1.0),
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
+          Row(
+            children: [
+              const Padding(
+                padding: EdgeInsets.fromLTRB(25.0, 5.0, 25.0, 5.0),
+                child: const Text(
+                  'Account',
+                  style: TextStyle(
+                    color: Color.fromRGBO(157, 131, 212, 1.0),
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )),
+              Padding(
+                padding: const EdgeInsets.only(left: 40.0, top: 0.0),
+                child: Text(
+                  intakeError,
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
                 ),
-              )),
+              ),
+          ]),
           SizedBox(height: _titleOnTop ? 10.0 : 0.0),
           Container(
             width: 600,
@@ -230,6 +242,9 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
                         int value = int.parse(text);
                         if (value >= 1500) {
                           if (value <= 5000) {
+                            setState(() {
+                              intakeError = "";
+                            });
                             globals.settingsChanged = true;
                             DatabaseService(uid: userId).updateKcalIntakeTarget(int.parse(text));
                           }
@@ -280,12 +295,14 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
                   padding: EdgeInsets.fromLTRB(25.0, 0.0, 0.0, 0.0),
                   child: TextField(
                     keyboardType: TextInputType.number,
-                    inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[a-zA-Z ]")),],
+                    // inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[a-zA-Z ]")),],
                     onChanged: (text) async {
                       int value = int.parse(text);
                       if (value >= 500) {
                         if(value <= 3000) {
-                          print(text);
+                          setState(() {
+                            intakeError = "";
+                          });
                           globals.settingsChanged = true;
                           DatabaseService(uid: userId).updateKcalOutputTarget(int.parse(text));
                         }
