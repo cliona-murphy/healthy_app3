@@ -20,7 +20,7 @@ class _FoodTileState extends State<FoodTile> {
 
   void initState() {
     super.initState();
-    nameController = new TextEditingController(text: widget.food.foodName);
+    nameController = new TextEditingController(); //text: widget.food.foodName
   }
 
 
@@ -34,7 +34,10 @@ class _FoodTileState extends State<FoodTile> {
     String userId = await getUserid();
     DatabaseService(uid: userId).updateFoodDetails(widget.food.docId, foodName, calories);
   }
-
+  // updateBothDetails() async {
+  //   String userId = await getUserid();
+  //   DatabaseService(uid: userId).updateFoodDetails(widget.food.docId, foodName, calories);
+  // }
   deleteFood(String foodName) async {
     String userId = await getUserid();
     DatabaseService(uid: userId).deleteFood(widget.food.docId);
@@ -58,19 +61,19 @@ class _FoodTileState extends State<FoodTile> {
   Future<String> editItem(BuildContext context, String foodName, int calories) {
     return showDialog(context: context, barrierDismissible: false, builder: (context) {
       return AlertDialog(
-        title: Text("Edit the calories for '${widget.food.foodName}' here:", textAlign: TextAlign.left),
+        title: Text("Edit the details for '${widget.food.foodName}' here:", textAlign: TextAlign.left),
         content: Container(
           height: 90,
           child : SingleChildScrollView(
             child: Column(
               children: [
-                // TextFormField(
-                //   controller: nameController,
-                //   decoration: InputDecoration(
-                //     hintText: widget.food.foodName,
-                //     errorText: validateNameEntry(nameController.text),
-                //   ),
-                // ),
+                TextFormField(
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    hintText: "food name",
+                    // errorText: validateNameEntry(nameController.text),
+                  ),
+                ),
                 Padding(
                   padding: EdgeInsets.only(top: 10.0),
                 ),
@@ -110,7 +113,13 @@ class _FoodTileState extends State<FoodTile> {
             elevation: 5.0,
             child: Text("Update"),
             onPressed: () {
-              updateDetails(widget.food.foodName, int.parse(calorieController.text));
+              if(nameController.text.isNotEmpty && calorieController.text.isNotEmpty){
+                updateDetails(nameController.text, int.parse(calorieController.text));
+              } else if(nameController.text.isNotEmpty){
+                updateDetails(nameController.text, widget.food.calories);
+              } else if (calorieController.text.isNotEmpty){
+                updateDetails(widget.food.foodName, int.parse(calorieController.text));
+              }
               nameController.clear();
               calorieController.clear();
               Navigator.pop(context);
