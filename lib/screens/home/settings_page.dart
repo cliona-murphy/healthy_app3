@@ -99,14 +99,6 @@ class _SettingsPageState extends State<SettingsPage> {
     //DatabaseService(uid: userId).enterUserCountry(_searchAreaResult);
   }
 
-  void onWaterSearchAreaChange(String data){
-    setState(() {
-      waterIntake = data;
-    });
-    //DatabaseService(uid: userId).enterUserCountry(waterIntake);
-  }
-
-
   @override
   Widget build(BuildContext context) {
 
@@ -137,6 +129,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 setState(() {
                   settingsUpdated = "true";
                   Navigator.pushNamedAndRemoveUntil(context, '/second', (r) => false, arguments: "test");
+                  globals.showSnackBar(context, "Success!", "Your settings were successfully updated!");
                 });
               } else {
                 Navigator.pop(context, settingsUpdated);
