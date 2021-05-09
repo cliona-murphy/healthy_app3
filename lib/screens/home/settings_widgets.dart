@@ -94,13 +94,19 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
   showConfirmationDialog() {
     // set up the buttons
     Widget cancelButton = FlatButton(
-      child: Text("Cancel"),
+      child: Text("Cancel",
+        style: TextStyle(
+          color: globals.lightPurple,
+        ),),
       onPressed:  () {
         Navigator.pop(context);
       },
     );
     Widget continueButton = FlatButton(
-        child: Text("Confirm"),
+        child: Text("Confirm",
+        style: TextStyle(
+          color: globals.lightPurple,
+        ),),
         onPressed:  () {
           DatabaseService(uid: userId).deleteUser();
           Navigator.pop(context);

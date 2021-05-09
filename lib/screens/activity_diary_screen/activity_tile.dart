@@ -120,13 +120,19 @@ class _ActivityTileState extends State<ActivityTile> {
   showAlertDialog(BuildContext context) {
     // set up the buttons
     Widget cancelButton = FlatButton(
-      child: Text("Cancel"),
+      child: Text("Cancel",
+        style: TextStyle(
+          color: globals.lightPurple,
+        ),),
       onPressed:  () {
         Navigator.pop(context);
       },
     );
     Widget continueButton = FlatButton(
-        child: Text("Confirm"),
+        child: Text("Confirm",
+          style: TextStyle(
+            color: globals.lightPurple,
+          ),),
         onPressed:  () {
           deleteActivity();
           Navigator.pop(context);
@@ -135,7 +141,8 @@ class _ActivityTileState extends State<ActivityTile> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Confirm Action"),
+      title: Text("Confirm Action",
+      ),
       content: Text("Do you want to delete this activity? (${widget.activity.activityType})"),
       actions: [
         cancelButton,

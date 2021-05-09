@@ -98,13 +98,19 @@ class _MedicationTileState extends State<MedicationTile> {
   showConfirmationDialog() {
     // set up the buttons
     Widget cancelButton = FlatButton(
-      child: Text("Cancel"),
+      child: Text("Cancel",
+        style: TextStyle(
+          color: globals.lightPurple,
+        ),),
       onPressed:  () {
         Navigator.pop(context);
       },
     );
     Widget continueButton = FlatButton(
-        child: Text("Confirm"),
+        child: Text("Confirm",
+          style: TextStyle(
+            color: globals.lightPurple,
+          ),),
         onPressed:  () {
           deleteMedication(widget.medication.medicineName);
           Navigator.pop(context);
@@ -114,7 +120,7 @@ class _MedicationTileState extends State<MedicationTile> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Confirm Action"),
+      title: Text("Confirm Action",),
       content: Text("Do you want to delete "+widget.medication.medicineName+"?"),
       actions: [
         cancelButton,
