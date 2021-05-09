@@ -34,6 +34,7 @@ class _MedicationTileState extends State<MedicationTile> {
     setState(() {
       isSelected = widget.taken;
     });
+    timeController.text = widget.medication.timeToTake.toString();
   }
 
   Future<String> getUserid() async {
@@ -89,36 +90,38 @@ class _MedicationTileState extends State<MedicationTile> {
       filler = "0";
     }
     timeString = "${selectedTime.hour}:${selectedTime.minute}${filler}";
+    setState(() {
+      timeController.text = timeString;
+    });
   }
 
   showConfirmationDialog() {
     // set up the buttons
     Widget cancelButton = FlatButton(
-      child: Text("Cancel"),
+      child: Text("Cancel",
+        style: TextStyle(
+          color: globals.lightPurple,
+        ),),
       onPressed:  () {
         Navigator.pop(context);
       },
     );
     Widget continueButton = FlatButton(
-        child: Text("Confirm"),
+        child: Text("Confirm",
+          style: TextStyle(
+            color: globals.lightPurple,
+          ),),
         onPressed:  () {
-         // if (nameController.text.isNotEmpty){
-         //    updateTime(timeString);
-         //  } else {
-         // print();
-          if(nameController.text.isNotEmpty) {
-            updateDetails(nameController.text, timeString);
-          } else if (nameController.text.isEmpty){
-            updateTime(timeString);
-          }
+          deleteMedication(widget.medication.medicineName);
+          Navigator.pop(context);
           Navigator.pop(context);
         }
     );
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Confirm Action ${nameController.text}"),
-      content: Text("Update time to take "+widget.medication.medicineName+" to "+timeString+"?"),
+      title: Text("Confirm Action",),
+      content: Text("Do you want to delete "+widget.medication.medicineName+"?"),
       actions: [
         cancelButton,
         continueButton,
@@ -135,27 +138,32 @@ class _MedicationTileState extends State<MedicationTile> {
   }
 
   Future<String> editItem(BuildContext context, String medName, String timeToTake) {
+    setState(() {
+      nameController.text = widget.medication.medicineName;
+      timeController.text = widget.medication.timeToTake;
+    });
     return showDialog(context: context, barrierDismissible: false, builder: (context) {
       return AlertDialog(
         title: Text("Edit "+medName+" details here:"),
         content: Container(
-          height: 100,
+          height: 170,
           child : SingleChildScrollView(
             child: Column(
               children: [
                 Padding(padding: EdgeInsets.only(top: 15.0),),
-                // Align(
-                //   alignment: Alignment.centerLeft,
-                //   child: TextField(
-                //     controller: nameController,
-                //     // inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[0-9]")),],
-                //     // maxLength: 15,
-                //     // maxLengthEnforced: true,
-                //     decoration: InputDecoration(
-                //       hintText: "Type new name here",
-                //     ),
-                //   ),
-                // ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextField(
+                    controller: nameController,
+                  ),
+                ),
+                TextField(
+                  // enabled: false,
+                  controller: timeController,
+                  decoration: InputDecoration(
+                    hintText: timeController.text
+                  ),
+                ),
                 Padding(padding: EdgeInsets.only(top: 15.0),),
                 Align(
                   alignment: Alignment.centerLeft,
@@ -179,7 +187,7 @@ class _MedicationTileState extends State<MedicationTile> {
             child: Text("Cancel"),
             onPressed: () {
               nameController.clear();
-              timeController.clear();
+              // timeController.clear();
               Navigator.pop(context);
             },
           ),
@@ -187,10 +195,8 @@ class _MedicationTileState extends State<MedicationTile> {
             icon: Icon(Icons.delete),
             color: Colors.red,
             onPressed: () {
-              deleteMedication(widget.medication.medicineName);
-              nameController.clear();
-              timeController.clear();
-              Navigator.pop(context);
+              // globals.showAlertDialog(context, deleteMedication(widget.medication.medicineName), "Are you sure you want to delete this medication?", widget.medication.medicineName);
+              showConfirmationDialog();
             },
           ),
           MaterialButton(
@@ -198,16 +204,18 @@ class _MedicationTileState extends State<MedicationTile> {
             child: Text("Update"),
             onPressed: () {
               setState(() {
-                if(nameController.text.isNotEmpty){
+                print(timeString);
+                if(timeString != null && nameController.text.isNotEmpty){
                   medName = nameController.text;
-                } else {
-                  medName = "";
+                  updateDetails(medName, timeString);
+                } else if (nameController.text.isNotEmpty) {
+                  updateDetails(nameController.text, widget.medication.timeToTake);
                 }
               });
               nameController.clear();
-              timeController.clear();
+              // timeController.clear();
               Navigator.pop(context);
-              showConfirmationDialog();
+              // showConfirmationDialog();
               //updateDetails(widget.medication.medicineName, nameController.text, timeController.text);
             },
           ),
@@ -239,17 +247,18 @@ class _MedicationTileState extends State<MedicationTile> {
             secondary: IconButton(
               icon: Icon(Icons.edit),
               onPressed: () async {
-                selectedTime = await showTimePicker(context: context, initialTime: TimeOfDay.now(), initialEntryMode: TimePickerEntryMode.input,);
-                String selectedTimeMinuteString = selectedTime.minute.toString();
-                if (selectedTime.minute < 10){
-                  selectedTimeMinuteString = "0${selectedTime.minute}";
-                }
-                timeString = "${selectedTime.hour}:${selectedTimeMinuteString}";
-                setState(() {
-                  globals.selectedTime = timeString;
-                });
-                updateTime(timeString);
-                globals.showSnackBar(context, "Success", "Time to take ${widget.medication.medicineName} was updated to ${timeString}.");
+                editItem(context, widget.medication.medicineName, widget.medication.timeToTake);
+                // selectedTime = await showTimePicker(context: context, initialTime: TimeOfDay.now(), initialEntryMode: TimePickerEntryMode.input,);
+                // String selectedTimeMinuteString = selectedTime.minute.toString();
+                // if (selectedTime.minute < 10){
+                //   selectedTimeMinuteString = "0${selectedTime.minute}";
+                // }
+                // timeString = "${selectedTime.hour}:${selectedTimeMinuteString}";
+                // setState(() {
+                //   globals.selectedTime = timeString;
+                // });
+                // updateTime(timeString);
+                // globals.showSnackBar(context, "Success", "Time to take ${widget.medication.medicineName} was updated to ${timeString}.");
               },
             ),
             value: isSelected,

@@ -59,9 +59,10 @@ class _MedicationTrackerState extends State<MedicationTracker> {
       timeString = "${selectedTime.hour}:${selectedTimeMinuteString}";
       setState(() {
         globals.selectedTime = timeString;
+        timeController.text = timeString;
       });
 
-      globals.showSnackBar(context, "Success!", "You selected ${timeString}");
+      // globals.showSnackBar(context, "Success!", "You selected ${timeString}");
 
   }
 
@@ -72,7 +73,7 @@ class _MedicationTrackerState extends State<MedicationTracker> {
           content: StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
            return Container(
-              height: 150,
+              height: 160,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -84,14 +85,23 @@ class _MedicationTrackerState extends State<MedicationTracker> {
                           RegExp("[a-zA-Z 0-9]")),
                       ],
                       decoration: InputDecoration(
-                        hintText: "medication/supplement name",
+                        hintText: "name",
                       ),
                     ),
-                    Padding(padding: EdgeInsets.only(top: 15.0)),
-                    // Align(
-                    //     alignment: Alignment.centerLeft,
-                    //     child: Text(stringtest)
-                    // ),
+                    // Padding(padding: EdgeInsets.only(top: 5.0)),
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextField(
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                          controller: timeController,
+                          enabled: false,
+                          decoration: InputDecoration(
+                            hintText: "time",
+                          ),
+                        ),
+                    ),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Container(
@@ -102,7 +112,7 @@ class _MedicationTrackerState extends State<MedicationTracker> {
                             selectTime(context);
                             if (timeSelected){
                               setState(() {
-                                stringtest = timeString;
+                                timeController.text = timeString;
                               });
                             }
                           },
@@ -119,9 +129,8 @@ class _MedicationTrackerState extends State<MedicationTracker> {
               elevation: 5.0,
               child: Text("Cancel"),
               onPressed: () {
-                setState(() {
-                  stringtest = "";
-                });
+                nameController.clear();
+                timeController.clear();
                 Navigator.pop(context);
               },
             ),
@@ -132,13 +141,14 @@ class _MedicationTrackerState extends State<MedicationTracker> {
                 setState(() {
                   medName = nameController.text;
                 });
+                updateDatabase(medName, timeString);
                 nameController.clear();
                 timeController.clear();
                 setState(() {
                   stringtest = "";
                 });
                 Navigator.pop(context);
-                showConfirmationDialog();
+                // showConfirmationDialog();
 
                 //updateDatabase(nameController.text, timeString);
 
@@ -243,9 +253,6 @@ class _MedicationTrackerState extends State<MedicationTracker> {
                           style: globals.buttonstyle,
                           onPressed: (){
                             addItem(context);
-                            setState(() {
-                              stringtest = "";
-                            });
                           },
                           child: Text("Add Item",
                           style: TextStyle(

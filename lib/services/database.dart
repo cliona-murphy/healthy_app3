@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:healthy_app/models/activity.dart';
 import 'package:healthy_app/models/food.dart';
 import 'package:healthy_app/models/logged_nutrient.dart';
@@ -27,6 +28,12 @@ class DatabaseService {
     return await userCollection.document(uid).setData({
       'email': email,
     });
+  }
+
+  Future deleteUser() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    user.delete();
+    return userCollection.document(uid).delete();
   }
   
   Future updateUserData(String fName, String sName, int age, double weight, String country, int kcalIntakeTarget, int kcalOutputTarget, double waterIntakeTarget) async {

@@ -143,20 +143,20 @@ class _ProgressState extends State<Progress> {
                         Row(
                         children: [
                           Expanded(
-                            child: DashboardItem(title: "Consumed", data: totalCaloriesConsumed.toString(), units: "kcal", target: targetIntake,),
+                            child: DashboardItem(title: "Consumed", data: totalCaloriesConsumed.toString(), units: "kcal", target: targetIntake, route: '/food'),
                           ),
                           Expanded(
-                            child: DashboardItem(title: "Burned", data: totalCaloriesBurned.toString(), units:"kcal", target: targetOutput),
+                            child: DashboardItem(title: "Burned", data: totalCaloriesBurned.toString(), units:"kcal", target: targetOutput, route: '/activity',),
                           ),
                         ],
                         ),
                         Row(
                           children: [
                             Expanded(
-                              child: DashboardItem(title: "Checked", data: noLoggedNutrients.toString(), units: noLoggedNutrients != 1 ? "nutrients" : "nutrient", target: totalNutrients),
+                              child: DashboardItem(title: "Checked", data: noLoggedNutrients.toString(), units: noLoggedNutrients != 1 ? "nutrients" : "nutrient", target: totalNutrients, route: '/nutrients'),
                             ),
                             Expanded(
-                              child: DashboardItem(title: "Taken", data: noLoggedMedications.toString(), units: noLoggedMedications != 1 ? "medications" : "medication", target: totalMedications),
+                              child: DashboardItem(title: "Taken", data: noLoggedMedications.toString(), units: noLoggedMedications != 1 ? "medications" : "medication", target: totalMedications, route: '/medications'),
                             ),
                           ],
                         ),

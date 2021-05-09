@@ -24,6 +24,8 @@ class _FoodDiaryState extends State<FoodDiary> {
   bool foodLogged = false;
   bool userIdSet = false;
   bool loading = true;
+  String nameError = "";
+  String calorieError = "";
 
   TextEditingController customController = TextEditingController();
   TextEditingController calorieController = TextEditingController();
@@ -40,6 +42,22 @@ class _FoodDiaryState extends State<FoodDiary> {
       });
     });
   }
+
+  String validateNameEntry(String value) {
+    if (value.isNotEmpty) {
+      return "Please enter a valid food name";
+    }
+    return null;
+  }
+
+  String validateCalorieEntry(String value) {
+    print(value);
+    if (!(value.length > 5) && value.isNotEmpty) {
+      return "Please enter a valid value for calories";
+    }
+    return null;
+  }
+
   Future <String> onContainerTapped(BuildContext context, String mealId){
     return showDialog(context: context, barrierDismissible: false, builder: (context) {
       return AlertDialog(
@@ -56,8 +74,13 @@ class _FoodDiaryState extends State<FoodDiary> {
                     inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[a-zA-Z ]")),],
                     decoration: InputDecoration(
                       hintText: "food name",
+                      // errorText: validateNameEntry(customController.text)
                     ),
                   ),
+                  // Text(nameError,
+                  // style: TextStyle(
+                  //     color: Colors.red,
+                  // )),
                   TextField(
                     controller: calorieController,
                     keyboardType: TextInputType.number,
@@ -68,6 +91,10 @@ class _FoodDiaryState extends State<FoodDiary> {
                       hintText: "calories",
                     ),
                   ),
+                  // Text(calorieError,
+                  //     style: TextStyle(
+                  //       color: Colors.red,
+                  //     )),
                 ],
               ),
             ),
@@ -85,6 +112,16 @@ class _FoodDiaryState extends State<FoodDiary> {
             child: Text("Submit"),
             onPressed: () {
               foodLogged = true;
+              if(customController.text.isEmpty) {
+                setState(() {
+                  nameError = "enter the food name";
+                });
+              }
+              if(calorieController.text.isEmpty){
+                setState(() {
+                  calorieError = "enter the calories";
+                });
+              }
               updateDatabase(customController.text, int.parse(calorieController.text), mealId);
               customController.clear();
               calorieController.clear();

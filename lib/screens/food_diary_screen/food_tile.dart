@@ -20,7 +20,7 @@ class _FoodTileState extends State<FoodTile> {
 
   void initState() {
     super.initState();
-    nameController = new TextEditingController(text: widget.food.foodName);
+    nameController = new TextEditingController(); //text: widget.food.foodName
   }
 
 
@@ -32,16 +32,21 @@ class _FoodTileState extends State<FoodTile> {
 
   updateDetails(String foodName, int calories) async {
     String userId = await getUserid();
-    DatabaseService(uid: userId).updateFoodDetails(widget.food.docId, foodName, calories);
+    DatabaseService(uid: userId).updateFoodDetails(
+        widget.food.docId, foodName, calories);
   }
 
+  // updateBothDetails() async {
+  //   String userId = await getUserid();
+  //   DatabaseService(uid: userId).updateFoodDetails(widget.food.docId, foodName, calories);
+  // }
   deleteFood(String foodName) async {
     String userId = await getUserid();
     DatabaseService(uid: userId).deleteFood(widget.food.docId);
   }
 
   String validateNameEntry(String value) {
-    if (value.isNotEmpty) {
+    if (value.isEmpty) {
       return "Please enter a valid food name";
     }
     return null;
@@ -49,28 +54,69 @@ class _FoodTileState extends State<FoodTile> {
 
   String validateCalorieEntry(String value) {
     print(value);
-    if (!(value.length > 5) && value.isNotEmpty) {
+    if (value.isEmpty) {
       return "Please enter a valid value for calories";
     }
     return null;
   }
 
+  showConfirmationDialog(BuildContext context) {
+    print("here");
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = FlatButton(
+        child: Text("Confirm"),
+        onPressed: () {
+          deleteFood(widget.food.foodName);
+          Navigator.pop(context);
+          Navigator.pop(context);
+        }
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Confirm Action"),
+      content: Text("Do you want to delete " + widget.food.foodName + "?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   Future<String> editItem(BuildContext context, String foodName, int calories) {
+    setState(() {
+      nameController.text = widget.food.foodName;
+      calorieController.text = widget.food.calories.toString();
+    });
     return showDialog(context: context, barrierDismissible: false, builder: (context) {
       return AlertDialog(
-        title: Text("Edit the calories for '${widget.food.foodName}' here:", textAlign: TextAlign.left),
+        title: Text("Edit the details for '${widget.food.foodName}' here:", textAlign: TextAlign.left),
         content: Container(
-          height: 90,
+          height: 110,
           child : SingleChildScrollView(
             child: Column(
               children: [
-                // TextFormField(
-                //   controller: nameController,
-                //   decoration: InputDecoration(
-                //     hintText: widget.food.foodName,
-                //     errorText: validateNameEntry(nameController.text),
-                //   ),
-                // ),
+                TextFormField(
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    hintText: "food name",
+                    // errorText: validateNameEntry(nameController.text),
+                  ),
+                ),
                 Padding(
                   padding: EdgeInsets.only(top: 10.0),
                 ),
@@ -100,17 +146,20 @@ class _FoodTileState extends State<FoodTile> {
             //elevation: 5.0,
             color: Colors.red,
             onPressed: () {
-              deleteFood(widget.food.foodName);
-             // nameController.clear();
-             // calorieController.clear();
-              Navigator.pop(context);
+              showConfirmationDialog(context);
             },
           ),
           MaterialButton(
             elevation: 5.0,
             child: Text("Update"),
             onPressed: () {
-              updateDetails(widget.food.foodName, int.parse(calorieController.text));
+              if(nameController.text.isNotEmpty && calorieController.text.isNotEmpty){
+                updateDetails(nameController.text, int.parse(calorieController.text));
+              } else if(nameController.text.isNotEmpty){
+                updateDetails(nameController.text, widget.food.calories);
+              } else if (calorieController.text.isNotEmpty){
+                updateDetails(widget.food.foodName, int.parse(calorieController.text));
+              }
               nameController.clear();
               calorieController.clear();
               Navigator.pop(context);

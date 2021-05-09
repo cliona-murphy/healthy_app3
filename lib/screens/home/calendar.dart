@@ -60,13 +60,19 @@ class _CalendarViewState extends State<CalendarView> {
   showAlertDialog(BuildContext context, String message) {
     // set up the buttons
     Widget cancelButton = FlatButton(
-      child: Text("Cancel"),
+      child: Text("Cancel",
+        style: TextStyle(
+          color: globals.lightPurple,
+        ),),
       onPressed:  () {
         Navigator.pop(context);
       },
     );
     Widget continueButton = FlatButton(
-      child: Text("Continue"),
+      child: Text("Confirm",
+        style: TextStyle(
+          color: globals.lightPurple,
+        ),),
       onPressed:  () {
         setState(() {
           globals.selectedDate = selectedDay;
