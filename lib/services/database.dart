@@ -31,9 +31,10 @@ class DatabaseService {
   }
 
   Future deleteUser() async {
+    settingsCollection.document(uid).delete();
+    // userCollection.document(uid).delete();
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     user.delete();
-    return userCollection.document(uid).delete();
   }
   
   Future updateUserData(String fName, String sName, int age, double weight, String country, int kcalIntakeTarget, int kcalOutputTarget, double waterIntakeTarget) async {
