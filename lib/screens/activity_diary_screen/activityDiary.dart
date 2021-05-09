@@ -56,11 +56,11 @@ class _ActivityDiaryState extends State<ActivityDiary> {
         MaterialPageRoute(
           builder: (context) => ActivityForm(action: 'Log'),
         ));
-    if(result.isNotEmpty){
-      setState(() {
-        globals.showSnackBar(context, "Success", "Your activity was successfully logged.");
-      });
-    }
+    // if(result.isNotEmpty){
+    //   setState(() {
+    //     globals.showSnackBar(context, "Success", "Your activity was successfully logged.");
+    //   });
+    // }
   }
 
   void addItem(BuildContext context){
