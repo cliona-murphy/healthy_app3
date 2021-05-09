@@ -44,7 +44,7 @@ Future registerWithEmail(String email, String password, String fName, String sNa
         FirebaseUser user = result.user;
         //create userSettings document for the new user
         await DatabaseService(uid: user.uid).addUser(email);
-        await DatabaseService(uid: user.uid).updateUserData(fName, sName, 18, 60, 'Ireland', 2500, 2500, 2.0);
+        await DatabaseService(uid: user.uid).updateUserData(fName, sName, 18, 60, 'Ireland', 2500, 0, 2.0);
         await DatabaseService(uid: user.uid).createNewEntry(getCurrentDate());
         return _userFromFirebaseUser(user);
 
