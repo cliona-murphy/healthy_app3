@@ -1,8 +1,12 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/models/arguments.dart';
+import 'package:healthy_app/screens/activity_diary_screen/activityDiary.dart';
+import 'package:healthy_app/screens/food_diary_screen/foodDiary.dart';
 import 'package:healthy_app/screens/home/home.dart';
 import 'package:healthy_app/screens/home/wrapper.dart';
+import 'package:healthy_app/screens/medication_tracker_screen/medicationTracker.dart';
+import 'package:healthy_app/screens/nutrient_screen/nutrientChecklist.dart';
 import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/models/user.dart';
 import 'package:provider/provider.dart';
@@ -40,6 +44,10 @@ class myApp extends StatelessWidget {
            initialRoute: '/',
            routes: {
             '/second': (context) => Home(),
+             '/food': (context) => FoodDiary(),
+             '/activity': (context) => ActivityDiary(),
+             '/nutrients': (context) => NutrientChecklist(),
+             '/medications': (context) => MedicationTracker(),
            },
            home: Wrapper(),
       ),

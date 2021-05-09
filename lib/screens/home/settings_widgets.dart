@@ -90,6 +90,42 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
       );
     });
   }
+
+  showConfirmationDialog() {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed:  () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = FlatButton(
+        child: Text("Confirm"),
+        onPressed:  () {
+          DatabaseService(uid: userId).deleteUser();
+          Navigator.pop(context);
+          Navigator.pop(context);
+        }
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Confirm Action"),
+      content: Text("Do you want to permanently delete your account and all of its associated data?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
   @override
   Widget build(BuildContext context) {
     final titleOnTopSwitch = SettingRow(
@@ -123,6 +159,9 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
                 choices: {
                   'Ireland': 'Ireland',
                   'United Kingdom': 'United Kingdom',
+                  'Spain': 'Spain',
+                  'France': 'France',
+                  'Germany': 'Germany',
                 }),
             onSettingDataRowChange: onSearchAreaChange,
             config: SettingsRowConfiguration(
@@ -323,34 +362,34 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
             ),
           ),
           SizedBox(height: 10.0),
-          new SettingRow(
-            style: globals.settingsStyle,
-            rowData: SettingsDropDownConfig(
-                title: 'Daily Water Intake Target',
-                initialKey: widget.country,
-                choices: {
-                  '2': '2 litres',
-                  '2.5': '2.5 litres',
-                  '3': '3 litres',
-                  '3.5': '3.5 litres',
-                  '4': '4 litres',
-                  '4.5': '4.5 litres',
-                  '5': '5 litres',
-                  '5.5': '5.5 litres',
-                  '6': '6 litres',
-                }),
-            onSettingDataRowChange: (double resultVal) {
-              setState(() {
-                globals.settingsChanged = true;
-              });
-              DatabaseService(uid: userId).updateWaterIntakeTarget(resultVal.toInt());
-            },
-            config: SettingsRowConfiguration(
-                showAsTextField: false,
-                showTitleLeft: !_titleOnTop,
-                showTopTitle: _titleOnTop,
-                showAsSingleSetting: false),
-          ),
+          // new SettingRow(
+          //   style: globals.settingsStyle,
+          //   rowData: SettingsDropDownConfig(
+          //       title: 'Daily Water Intake Target',
+          //       initialKey: widget.country,
+          //       choices: {
+          //         '2': '2 litres',
+          //         '2.5': '2.5 litres',
+          //         '3': '3 litres',
+          //         '3.5': '3.5 litres',
+          //         '4': '4 litres',
+          //         '4.5': '4.5 litres',
+          //         '5': '5 litres',
+          //         '5.5': '5.5 litres',
+          //         '6': '6 litres',
+          //       }),
+          //   onSettingDataRowChange: (double resultVal) {
+          //     setState(() {
+          //       globals.settingsChanged = true;
+          //     });
+          //     DatabaseService(uid: userId).updateWaterIntakeTarget(resultVal.toInt());
+          //   },
+          //   config: SettingsRowConfiguration(
+          //       showAsTextField: false,
+          //       showTitleLeft: !_titleOnTop,
+          //       showTopTitle: _titleOnTop,
+          //       showAsSingleSetting: false),
+          // ),
         ],
       ),
     );
@@ -365,16 +404,19 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
                   child: const Text(
                     'Profile Options',
                     style: TextStyle(
-                      color: CupertinoColors.systemBlue,
+                      color: Color.fromRGBO(157, 131, 212, 1.0),
+                      fontSize: 20.0,
                       fontWeight: FontWeight.bold,
-                      fontSize: 15.0,
+
                     ),
                   )),
               SettingRow(
                 rowData: SettingsButtonConfig(
                   title: 'Delete Profile',
                   tick: true,
-                  functionToCall: () {},
+                  functionToCall: () {
+                    showConfirmationDialog();
+                  },
                 ),
                 style: const SettingsRowStyle(
                     backgroundColor: CupertinoColors.lightBackgroundGray),
@@ -390,6 +432,8 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
       profileSettingsTile,
       const SizedBox(height: 15.0),
       accountSettingsTile,
+      const SizedBox(height: 15.0),
+      modifyProfileTile,
       // const SizedBox(height: 15.0),
       // legalStuff,
       // const SizedBox(height: 15.0),

@@ -32,8 +32,10 @@ class _FoodTileState extends State<FoodTile> {
 
   updateDetails(String foodName, int calories) async {
     String userId = await getUserid();
-    DatabaseService(uid: userId).updateFoodDetails(widget.food.docId, foodName, calories);
+    DatabaseService(uid: userId).updateFoodDetails(
+        widget.food.docId, foodName, calories);
   }
+
   // updateBothDetails() async {
   //   String userId = await getUserid();
   //   DatabaseService(uid: userId).updateFoodDetails(widget.food.docId, foodName, calories);
@@ -44,7 +46,7 @@ class _FoodTileState extends State<FoodTile> {
   }
 
   String validateNameEntry(String value) {
-    if (value.isNotEmpty) {
+    if (value.isEmpty) {
       return "Please enter a valid food name";
     }
     return null;
@@ -52,10 +54,47 @@ class _FoodTileState extends State<FoodTile> {
 
   String validateCalorieEntry(String value) {
     print(value);
-    if (!(value.length > 5) && value.isNotEmpty) {
+    if (value.isEmpty) {
       return "Please enter a valid value for calories";
     }
     return null;
+  }
+
+  showConfirmationDialog(BuildContext context) {
+    print("here");
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = FlatButton(
+        child: Text("Confirm"),
+        onPressed: () {
+          deleteFood(widget.food.foodName);
+          Navigator.pop(context);
+          Navigator.pop(context);
+        }
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Confirm Action"),
+      content: Text("Do you want to delete " + widget.food.foodName + "?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   Future<String> editItem(BuildContext context, String foodName, int calories) {
@@ -67,7 +106,7 @@ class _FoodTileState extends State<FoodTile> {
       return AlertDialog(
         title: Text("Edit the details for '${widget.food.foodName}' here:", textAlign: TextAlign.left),
         content: Container(
-          height: 90,
+          height: 110,
           child : SingleChildScrollView(
             child: Column(
               children: [
@@ -107,10 +146,7 @@ class _FoodTileState extends State<FoodTile> {
             //elevation: 5.0,
             color: Colors.red,
             onPressed: () {
-              deleteFood(widget.food.foodName);
-             // nameController.clear();
-             // calorieController.clear();
-              Navigator.pop(context);
+              showConfirmationDialog(context);
             },
           ),
           MaterialButton(

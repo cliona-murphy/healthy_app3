@@ -106,23 +106,16 @@ class _MedicationTileState extends State<MedicationTile> {
     Widget continueButton = FlatButton(
         child: Text("Confirm"),
         onPressed:  () {
-         // if (nameController.text.isNotEmpty){
-         //    updateTime(timeString);
-         //  } else {
-         // print();
-          if(medName.isNotEmpty) {
-            updateDetails(medName, timeString);
-          } else if (nameController.text.isEmpty){
-            updateTime(timeString);
-          }
+          deleteMedication(widget.medication.medicineName);
+          Navigator.pop(context);
           Navigator.pop(context);
         }
     );
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Confirm Action ${nameController.text}"),
-      content: Text("Update time to take "+widget.medication.medicineName+" to "+timeString+"?"),
+      title: Text("Confirm Action"),
+      content: Text("Do you want to delete "+widget.medication.medicineName+"?"),
       actions: [
         cancelButton,
         continueButton,
@@ -139,6 +132,10 @@ class _MedicationTileState extends State<MedicationTile> {
   }
 
   Future<String> editItem(BuildContext context, String medName, String timeToTake) {
+    setState(() {
+      nameController.text = widget.medication.medicineName;
+      timeController.text = widget.medication.timeToTake;
+    });
     return showDialog(context: context, barrierDismissible: false, builder: (context) {
       return AlertDialog(
         title: Text("Edit "+medName+" details here:"),
@@ -152,12 +149,6 @@ class _MedicationTileState extends State<MedicationTile> {
                   alignment: Alignment.centerLeft,
                   child: TextField(
                     controller: nameController,
-                    // inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[0-9]")),],
-                    // maxLength: 15,
-                    // maxLengthEnforced: true,
-                    decoration: InputDecoration(
-                      hintText: "type new name here",
-                    ),
                   ),
                 ),
                 TextField(
@@ -198,10 +189,8 @@ class _MedicationTileState extends State<MedicationTile> {
             icon: Icon(Icons.delete),
             color: Colors.red,
             onPressed: () {
-              deleteMedication(widget.medication.medicineName);
-              nameController.clear();
-              timeController.clear();
-              Navigator.pop(context);
+              // globals.showAlertDialog(context, deleteMedication(widget.medication.medicineName), "Are you sure you want to delete this medication?", widget.medication.medicineName);
+              showConfirmationDialog();
             },
           ),
           MaterialButton(
@@ -209,11 +198,12 @@ class _MedicationTileState extends State<MedicationTile> {
             child: Text("Update"),
             onPressed: () {
               setState(() {
-                if(nameController.text.isNotEmpty){
+                print(timeString);
+                if(timeString != null && nameController.text.isNotEmpty){
                   medName = nameController.text;
                   updateDetails(medName, timeString);
-                } else {
-                  updateTime(timeString);
+                } else if (nameController.text.isNotEmpty) {
+                  updateDetails(nameController.text, widget.medication.timeToTake);
                 }
               });
               nameController.clear();

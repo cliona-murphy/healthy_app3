@@ -85,17 +85,20 @@ class _MedicationTrackerState extends State<MedicationTracker> {
                           RegExp("[a-zA-Z 0-9]")),
                       ],
                       decoration: InputDecoration(
-                        hintText: "medication/supplement name",
+                        hintText: "name",
                       ),
                     ),
                     // Padding(padding: EdgeInsets.only(top: 5.0)),
                     Align(
                         alignment: Alignment.centerLeft,
                         child: TextField(
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
                           controller: timeController,
                           enabled: false,
                           decoration: InputDecoration(
-                            hintText: "time"
+                            hintText: "time",
                           ),
                         ),
                     ),

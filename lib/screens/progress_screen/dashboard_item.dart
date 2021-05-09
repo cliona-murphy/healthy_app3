@@ -14,8 +14,9 @@ class DashboardItem extends StatefulWidget {
   final String data;
   final String units;
   final int target;
+  final String route;
 
-  DashboardItem({this.title, this.data, this.units, this.target});
+  DashboardItem({this.title, this.data, this.units, this.target, this.route});
 
   @override
   _DashboardItemState createState() => _DashboardItemState();
@@ -71,7 +72,9 @@ class _DashboardItemState extends State<DashboardItem> {
           height: 240,
           decoration: BoxDecoration(color: Color.fromRGBO(157, 131, 212, 0.5)),
           child: new InkWell(
-            onTap: () {},
+            onTap: () {
+              // Navigator.pushNamedAndRemoveUntil(context, widget.route, (r) => false);
+            },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
