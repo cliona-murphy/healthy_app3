@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/models/food.dart';
 import 'package:healthy_app/services/database.dart';
+import 'package:healthy_app/shared/globals.dart' as globals;
 
 class FoodTile extends StatefulWidget {
 
@@ -163,6 +164,7 @@ class _FoodTileState extends State<FoodTile> {
               nameController.clear();
               calorieController.clear();
               Navigator.pop(context);
+              globals.showSnackBar(context , "Success!", "Your food was successfully updated!");
             },
           ),
         ],
