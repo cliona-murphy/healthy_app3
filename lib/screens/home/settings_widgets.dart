@@ -344,7 +344,7 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
                     // inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[a-zA-Z ]")),],
                     onChanged: (text) async {
                       int value = int.parse(text);
-                      if (value >= 200 && value <= 3000) {
+                      if (value >= 0 && value <= 1000) {
                           setState(() {
                             intakeError = "";
                           });
@@ -352,7 +352,7 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
                           DatabaseService(uid: userId).updateKcalOutputTarget(int.parse(text));
                       } else {
                         setState(() {
-                          intakeError = "Enter value in range 200-1000";
+                          intakeError = "Enter value in range 0-1000";
                           // globals.showSnackBar(context, "Error", "Please enter a value in the range [1500, 5000]");
                         });
                       }
@@ -424,8 +424,8 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
                     showConfirmationDialog();
                   },
                 ),
-                style: const SettingsRowStyle(
-                    backgroundColor: CupertinoColors.lightBackgroundGray),
+                // style: const SettingsRowStyle(
+                //     backgroundColor: CupertinoColors.lightBackgroundGray),
                 config: SettingsRowConfiguration(
                     showAsTextField: false,
                     showTitleLeft: !_titleOnTop,
