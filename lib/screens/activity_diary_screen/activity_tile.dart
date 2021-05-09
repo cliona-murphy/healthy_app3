@@ -62,61 +62,6 @@ class _ActivityTileState extends State<ActivityTile> {
     }
   }
 
-  Future<String> editItem(BuildContext context, String medName, String timeToTake) {
-    return showDialog(context: context, builder: (context) {
-      return AlertDialog(
-        title: Text("Edit "+medName+" details here:"),
-        content: Container(
-          height: 60,
-          child : SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(padding: EdgeInsets.only(top: 15.0),),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    child: FlatButton(
-                      color: Colors.grey,
-                      child: Text("Edit Time"),
-                      onPressed: () {
-                        //selectTime(context);
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        actions: <Widget> [
-          IconButton(
-            icon: Icon(Icons.delete),
-            color: Colors.red,
-            onPressed: () {
-              //deleteMedication(widget.medication.medicineName);
-              nameController.clear();
-              timeController.clear();
-              Navigator.pop(context);
-            },
-          ),
-          MaterialButton(
-            elevation: 5.0,
-            child: Text("Update"),
-            onPressed: () {
-              setState(() {
-                medName = nameController.text;
-              });
-              nameController.clear();
-              timeController.clear();
-              Navigator.pop(context);
-              //updateDetails(widget.medication.medicineName, nameController.text, timeController.text);
-            },
-          ),
-        ],
-      );
-    });
-  }
-
   showAlertDialog(BuildContext context) {
     // set up the buttons
     Widget cancelButton = FlatButton(
@@ -232,16 +177,6 @@ class _ActivityTileState extends State<ActivityTile> {
                   textColor: const Color(0xFF6200EE),
                   onPressed: () {
                     renderActivityFormToEdit(context);
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) => ActivityForm(action: "Edit", activity: widget.activity),
-                    //     ));
-                    // if(result.isNotEmpty){
-                    //   setState(() {
-                    //     showSnackBar();
-                    //   });
-                    // }
                   },
                   child: const Text('EDIT'),
                 ),

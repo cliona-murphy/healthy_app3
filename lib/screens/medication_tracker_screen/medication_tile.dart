@@ -158,7 +158,7 @@ class _MedicationTileState extends State<MedicationTile> {
                   ),
                 ),
                 TextField(
-                  // enabled: false,
+                  enabled: false,
                   controller: timeController,
                   decoration: InputDecoration(
                     hintText: timeController.text
@@ -213,10 +213,9 @@ class _MedicationTileState extends State<MedicationTile> {
                 }
               });
               nameController.clear();
-              // timeController.clear();
+              timeController.clear();
               Navigator.pop(context);
-              // showConfirmationDialog();
-              //updateDetails(widget.medication.medicineName, nameController.text, timeController.text);
+              globals.showSnackBar(context, "Success!", "Your item was successfully edited!");
             },
           ),
         ],
